@@ -1,0 +1,18 @@
+{
+  "cliVersion": "5.64.0",
+  "generatorName": "fernapi/fern-go-sdk",
+  "generatorVersion": "1.46.2",
+  "generatorConfig": {
+    "module": {
+      "path": "github.com/namedotcom/core-api-go",
+      "version": "1.22"
+    },
+    "clientName": "Namecom",
+    "enableWireTests": true
+  },
+  "originGitCommit": "c3ab257628a7366dab6a8ad857854de9416d2338",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "manual",
+  "requestedVersion": "1.29.0",
+  "sdkVersion": "v1.29.0"
+}
