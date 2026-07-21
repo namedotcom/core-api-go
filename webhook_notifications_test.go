@@ -1404,11 +1404,25 @@ func TestEnumAvailableWebhooks(t *testing.T) {
 		assert.Equal(t, AvailableWebhooks("domain.transfer.internal_in"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_domain_transfer_internal_out", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAvailableWebhooksFromString("domain.transfer.internal_out")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AvailableWebhooks("domain.transfer.internal_out"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_domain_registry_rejection", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewAvailableWebhooksFromString("domain.registry.rejection")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, AvailableWebhooks("domain.registry.rejection"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_domain_expiration", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAvailableWebhooksFromString("domain.expiration")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AvailableWebhooks("domain.expiration"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_Invalid", func(t *testing.T) {

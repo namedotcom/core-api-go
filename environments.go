@@ -7,7 +7,9 @@ package api
 // RequestOption to override the client's default environment,
 // if any.
 var Environments = struct {
-	Default string
+	Sandbox    string
+	Production string
 }{
-	Default: "https://api.dev.name.com",
+	Sandbox:    "https://api.dev.name.com",
+	Production: "https://api.name.com",
 }

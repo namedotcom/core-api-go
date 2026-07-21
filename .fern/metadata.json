@@ -10,9 +10,8 @@
     "clientName": "Namecom",
     "enableWireTests": true
   },
-  "originGitCommit": "c3ab257628a7366dab6a8ad857854de9416d2338",
-  "originGitCommitIsDirty": true,
-  "invokedBy": "manual",
-  "requestedVersion": "1.29.0",
-  "sdkVersion": "v1.29.0"
+  "invokedBy": "ci",
+  "requestedVersion": "1.31.0",
+  "ciProvider": "gitlab",
+  "sdkVersion": "v1.31.0"
 }

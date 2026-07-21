@@ -151,7 +151,9 @@ const (
 	AvailableWebhooksDomainTransferOutStatusChange   AvailableWebhooks = "domain.transfer_out.status_change"
 	AvailableWebhooksContactVerificationStatusChange AvailableWebhooks = "contact.verification.status_change"
 	AvailableWebhooksDomainTransferInternalIn        AvailableWebhooks = "domain.transfer.internal_in"
+	AvailableWebhooksDomainTransferInternalOut       AvailableWebhooks = "domain.transfer.internal_out"
 	AvailableWebhooksDomainRegistryRejection         AvailableWebhooks = "domain.registry.rejection"
+	AvailableWebhooksDomainExpiration                AvailableWebhooks = "domain.expiration"
 )
 
 func NewAvailableWebhooksFromString(s string) (AvailableWebhooks, error) {
@@ -168,8 +170,12 @@ func NewAvailableWebhooksFromString(s string) (AvailableWebhooks, error) {
 		return AvailableWebhooksContactVerificationStatusChange, nil
 	case "domain.transfer.internal_in":
 		return AvailableWebhooksDomainTransferInternalIn, nil
+	case "domain.transfer.internal_out":
+		return AvailableWebhooksDomainTransferInternalOut, nil
 	case "domain.registry.rejection":
 		return AvailableWebhooksDomainRegistryRejection, nil
+	case "domain.expiration":
+		return AvailableWebhooksDomainExpiration, nil
 	}
 	var t AvailableWebhooks
 	return "", fmt.Errorf("%s is not a valid %T", s, t)

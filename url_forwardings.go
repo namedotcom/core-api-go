@@ -15,8 +15,8 @@ var (
 
 type CreateURLForwardingRequest struct {
 	// DomainName is the domain part of the hostname to forward.
-	DomainName string                  `json:"-" url:"-"`
-	Body       CreateURLForwardingBody `json:"-" url:"-"`
+	DomainName string              `json:"-" url:"-"`
+	Body       *URLForwardingInput `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -37,7 +37,7 @@ func (c *CreateURLForwardingRequest) SetDomainName(domainName string) {
 }
 
 func (c *CreateURLForwardingRequest) UnmarshalJSON(data []byte) error {
-	var body CreateURLForwardingBody
+	body := new(URLForwardingInput)
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -294,8 +294,8 @@ type UpdateURLForwardingRequest struct {
 	// DomainName is the domain part of the hostname to forward.
 	DomainName string `json:"-" url:"-"`
 	// The full hostname, including subdomain.
-	Host string                   `json:"-" url:"-"`
-	Body *UpdateURLForwardingBody `json:"-" url:"-"`
+	Host string              `json:"-" url:"-"`
+	Body *URLForwardingInput `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -323,7 +323,7 @@ func (u *UpdateURLForwardingRequest) SetHost(host string) {
 }
 
 func (u *UpdateURLForwardingRequest) UnmarshalJSON(data []byte) error {
-	body := new(UpdateURLForwardingBody)
+	body := new(URLForwardingInput)
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -344,8 +344,8 @@ type UpdateURLForwardingByIDRequest struct {
 	// DomainName is the domain that owns the URL forwarding entry. Must be owned by the authenticated account.
 	DomainName string `json:"-" url:"-"`
 	// ID is the server-assigned unique identifier for the URL forwarding record (returned in list responses).
-	ID   int                      `json:"-" url:"-"`
-	Body *UpdateURLForwardingBody `json:"-" url:"-"`
+	ID   int                 `json:"-" url:"-"`
+	Body *URLForwardingInput `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -373,7 +373,7 @@ func (u *UpdateURLForwardingByIDRequest) SetID(id int) {
 }
 
 func (u *UpdateURLForwardingByIDRequest) UnmarshalJSON(data []byte) error {
-	body := new(UpdateURLForwardingBody)
+	body := new(URLForwardingInput)
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
@@ -384,9 +384,6 @@ func (u *UpdateURLForwardingByIDRequest) UnmarshalJSON(data []byte) error {
 func (u *UpdateURLForwardingByIDRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(u.Body)
 }
-
-// The request body for creating a new URL forwarding entry.
-type CreateURLForwardingBody = *URLForwarding
 
 // ListURLForwardingsResponse is the response for the ListURLForwardings function.
 var (
@@ -508,196 +505,16 @@ func (l *ListURLForwardingsResponse) String() string {
 	return fmt.Sprintf("%#v", l)
 }
 
-// The request body for updating an existing URL forwarding entry.
+// Fields for creating or updating a URL forwarding entry.
 var (
-	updateURLForwardingBodyFieldHost       = big.NewInt(1 << 0)
-	updateURLForwardingBodyFieldDomainName = big.NewInt(1 << 1)
-	updateURLForwardingBodyFieldForwardsTo = big.NewInt(1 << 2)
-	updateURLForwardingBodyFieldMeta       = big.NewInt(1 << 3)
-	updateURLForwardingBodyFieldTitle      = big.NewInt(1 << 4)
-	updateURLForwardingBodyFieldType       = big.NewInt(1 << 5)
+	uRLForwardingInputFieldForwardsTo = big.NewInt(1 << 0)
+	uRLForwardingInputFieldHost       = big.NewInt(1 << 1)
+	uRLForwardingInputFieldMeta       = big.NewInt(1 << 2)
+	uRLForwardingInputFieldTitle      = big.NewInt(1 << 3)
+	uRLForwardingInputFieldType       = big.NewInt(1 << 4)
 )
 
-type UpdateURLForwardingBody struct {
-	// The subdomain portion of the hostname that is being forwarded.
-	Host *string `json:"host,omitempty" url:"host,omitempty"`
-	// The domain name (without subdomains) that is being forwarded.
-	DomainName *string `json:"domainName,omitempty" url:"domainName,omitempty"`
-	// The destination URL to which this hostname will be forwarded.
-	ForwardsTo string `json:"forwardsTo" url:"forwardsTo"`
-	// Meta tags to include in the HTML page when using "masked" forwarding.
-	// Ignored for other forwarding types.
-	// Example: `<meta name='keywords' content='fish, denver, platte'>`
-	Meta *string `json:"meta,omitempty" url:"meta,omitempty"`
-	// The title to be used for the HTML page when using "masked" forwarding.
-	// Ignored for other forwarding types.
-	Title *string `json:"title,omitempty" url:"title,omitempty"`
-	// The type of URL forwarding. Valid values:
-	//   - `masked`: Retains the original domain in the address bar, preventing the user from seeing the actual destination URL. Sometimes called iframe forwarding.
-	//   - `redirect`: Uses a standard HTTP redirect (301), which changes the address bar to the destination URL.
-	//   - `302`: Uses a temporary HTTP redirect (302), which changes the address bar to the destination URL but indicates the resource is temporarily located elsewhere.
-	Type URLForwardingType `json:"type" url:"type"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (u *UpdateURLForwardingBody) GetHost() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Host
-}
-
-func (u *UpdateURLForwardingBody) GetDomainName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.DomainName
-}
-
-func (u *UpdateURLForwardingBody) GetForwardsTo() string {
-	if u == nil {
-		return ""
-	}
-	return u.ForwardsTo
-}
-
-func (u *UpdateURLForwardingBody) GetMeta() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Meta
-}
-
-func (u *UpdateURLForwardingBody) GetTitle() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Title
-}
-
-func (u *UpdateURLForwardingBody) GetType() URLForwardingType {
-	if u == nil {
-		return ""
-	}
-	return u.Type
-}
-
-func (u *UpdateURLForwardingBody) GetExtraProperties() map[string]interface{} {
-	if u == nil {
-		return nil
-	}
-	return u.extraProperties
-}
-
-func (u *UpdateURLForwardingBody) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
-	}
-	u.explicitFields.Or(u.explicitFields, field)
-}
-
-// SetHost sets the Host field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateURLForwardingBody) SetHost(host *string) {
-	u.Host = host
-	u.require(updateURLForwardingBodyFieldHost)
-}
-
-// SetDomainName sets the DomainName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateURLForwardingBody) SetDomainName(domainName *string) {
-	u.DomainName = domainName
-	u.require(updateURLForwardingBodyFieldDomainName)
-}
-
-// SetForwardsTo sets the ForwardsTo field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateURLForwardingBody) SetForwardsTo(forwardsTo string) {
-	u.ForwardsTo = forwardsTo
-	u.require(updateURLForwardingBodyFieldForwardsTo)
-}
-
-// SetMeta sets the Meta field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateURLForwardingBody) SetMeta(meta *string) {
-	u.Meta = meta
-	u.require(updateURLForwardingBodyFieldMeta)
-}
-
-// SetTitle sets the Title field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateURLForwardingBody) SetTitle(title *string) {
-	u.Title = title
-	u.require(updateURLForwardingBodyFieldTitle)
-}
-
-// SetType sets the Type field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateURLForwardingBody) SetType(type_ URLForwardingType) {
-	u.Type = type_
-	u.require(updateURLForwardingBodyFieldType)
-}
-
-func (u *UpdateURLForwardingBody) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateURLForwardingBody
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*u = UpdateURLForwardingBody(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *u)
-	if err != nil {
-		return err
-	}
-	u.extraProperties = extraProperties
-	u.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (u *UpdateURLForwardingBody) MarshalJSON() ([]byte, error) {
-	type embed UpdateURLForwardingBody
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*u),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (u *UpdateURLForwardingBody) String() string {
-	if u == nil {
-		return "<nil>"
-	}
-	if len(u.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(u); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", u)
-}
-
-// URLForwarding represents a URL forwarding entry, allowing a domain to redirect to another URL using different forwarding methods.
-var (
-	uRLForwardingFieldDomainName = big.NewInt(1 << 0)
-	uRLForwardingFieldForwardsTo = big.NewInt(1 << 1)
-	uRLForwardingFieldHost       = big.NewInt(1 << 2)
-	uRLForwardingFieldMeta       = big.NewInt(1 << 3)
-	uRLForwardingFieldTitle      = big.NewInt(1 << 4)
-	uRLForwardingFieldType       = big.NewInt(1 << 5)
-)
-
-type URLForwarding struct {
-	// The domain name (without subdomains) that is being forwarded.
-	DomainName *string `json:"domainName,omitempty" url:"domainName,omitempty"`
+type URLForwardingInput struct {
 	// The destination URL to which this hostname will be forwarded.
 	ForwardsTo string `json:"forwardsTo" url:"forwardsTo"`
 	// The subdomain portion of the hostname that is being forwarded.
@@ -713,7 +530,7 @@ type URLForwarding struct {
 	//   - `masked`: Retains the original domain in the address bar, preventing the user from seeing the actual destination URL. Sometimes called iframe forwarding.
 	//   - `redirect`: Uses a standard HTTP redirect (301), which changes the address bar to the destination URL.
 	//   - `302`: Uses a temporary HTTP redirect (302), which changes the address bar to the destination URL but indicates the resource is temporarily located elsewhere.
-	Type URLForwardingType `json:"type" url:"type"`
+	Type URLForwardingInputType `json:"type" url:"type"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -722,111 +539,97 @@ type URLForwarding struct {
 	rawJSON         json.RawMessage
 }
 
-func (u *URLForwarding) GetDomainName() *string {
-	if u == nil {
-		return nil
-	}
-	return u.DomainName
-}
-
-func (u *URLForwarding) GetForwardsTo() string {
+func (u *URLForwardingInput) GetForwardsTo() string {
 	if u == nil {
 		return ""
 	}
 	return u.ForwardsTo
 }
 
-func (u *URLForwarding) GetHost() string {
+func (u *URLForwardingInput) GetHost() string {
 	if u == nil {
 		return ""
 	}
 	return u.Host
 }
 
-func (u *URLForwarding) GetMeta() *string {
+func (u *URLForwardingInput) GetMeta() *string {
 	if u == nil {
 		return nil
 	}
 	return u.Meta
 }
 
-func (u *URLForwarding) GetTitle() *string {
+func (u *URLForwardingInput) GetTitle() *string {
 	if u == nil {
 		return nil
 	}
 	return u.Title
 }
 
-func (u *URLForwarding) GetType() URLForwardingType {
+func (u *URLForwardingInput) GetType() URLForwardingInputType {
 	if u == nil {
 		return ""
 	}
 	return u.Type
 }
 
-func (u *URLForwarding) GetExtraProperties() map[string]interface{} {
+func (u *URLForwardingInput) GetExtraProperties() map[string]interface{} {
 	if u == nil {
 		return nil
 	}
 	return u.extraProperties
 }
 
-func (u *URLForwarding) require(field *big.Int) {
+func (u *URLForwardingInput) require(field *big.Int) {
 	if u.explicitFields == nil {
 		u.explicitFields = big.NewInt(0)
 	}
 	u.explicitFields.Or(u.explicitFields, field)
 }
 
-// SetDomainName sets the DomainName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *URLForwarding) SetDomainName(domainName *string) {
-	u.DomainName = domainName
-	u.require(uRLForwardingFieldDomainName)
-}
-
 // SetForwardsTo sets the ForwardsTo field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *URLForwarding) SetForwardsTo(forwardsTo string) {
+func (u *URLForwardingInput) SetForwardsTo(forwardsTo string) {
 	u.ForwardsTo = forwardsTo
-	u.require(uRLForwardingFieldForwardsTo)
+	u.require(uRLForwardingInputFieldForwardsTo)
 }
 
 // SetHost sets the Host field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *URLForwarding) SetHost(host string) {
+func (u *URLForwardingInput) SetHost(host string) {
 	u.Host = host
-	u.require(uRLForwardingFieldHost)
+	u.require(uRLForwardingInputFieldHost)
 }
 
 // SetMeta sets the Meta field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *URLForwarding) SetMeta(meta *string) {
+func (u *URLForwardingInput) SetMeta(meta *string) {
 	u.Meta = meta
-	u.require(uRLForwardingFieldMeta)
+	u.require(uRLForwardingInputFieldMeta)
 }
 
 // SetTitle sets the Title field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *URLForwarding) SetTitle(title *string) {
+func (u *URLForwardingInput) SetTitle(title *string) {
 	u.Title = title
-	u.require(uRLForwardingFieldTitle)
+	u.require(uRLForwardingInputFieldTitle)
 }
 
 // SetType sets the Type field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (u *URLForwarding) SetType(type_ URLForwardingType) {
+func (u *URLForwardingInput) SetType(type_ URLForwardingInputType) {
 	u.Type = type_
-	u.require(uRLForwardingFieldType)
+	u.require(uRLForwardingInputFieldType)
 }
 
-func (u *URLForwarding) UnmarshalJSON(data []byte) error {
-	type unmarshaler URLForwarding
+func (u *URLForwardingInput) UnmarshalJSON(data []byte) error {
+	type unmarshaler URLForwardingInput
 	var value unmarshaler
 	if err := json.Unmarshal(data, &value); err != nil {
 		return err
 	}
-	*u = URLForwarding(value)
+	*u = URLForwardingInput(value)
 	extraProperties, err := internal.ExtractExtraProperties(data, *u)
 	if err != nil {
 		return err
@@ -836,8 +639,8 @@ func (u *URLForwarding) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (u *URLForwarding) MarshalJSON() ([]byte, error) {
-	type embed URLForwarding
+func (u *URLForwardingInput) MarshalJSON() ([]byte, error) {
+	type embed URLForwardingInput
 	var marshaler = struct {
 		embed
 	}{
@@ -847,7 +650,7 @@ func (u *URLForwarding) MarshalJSON() ([]byte, error) {
 	return json.Marshal(explicitMarshaler)
 }
 
-func (u *URLForwarding) String() string {
+func (u *URLForwardingInput) String() string {
 	if u == nil {
 		return "<nil>"
 	}
@@ -860,6 +663,35 @@ func (u *URLForwarding) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", u)
+}
+
+// The type of URL forwarding. Valid values:
+//   - `masked`: Retains the original domain in the address bar, preventing the user from seeing the actual destination URL. Sometimes called iframe forwarding.
+//   - `redirect`: Uses a standard HTTP redirect (301), which changes the address bar to the destination URL.
+//   - `302`: Uses a temporary HTTP redirect (302), which changes the address bar to the destination URL but indicates the resource is temporarily located elsewhere.
+type URLForwardingInputType string
+
+const (
+	URLForwardingInputTypeMasked          URLForwardingInputType = "masked"
+	URLForwardingInputTypeRedirect        URLForwardingInputType = "redirect"
+	URLForwardingInputTypeThreeHundredTwo URLForwardingInputType = "302"
+)
+
+func NewURLForwardingInputTypeFromString(s string) (URLForwardingInputType, error) {
+	switch s {
+	case "masked":
+		return URLForwardingInputTypeMasked, nil
+	case "redirect":
+		return URLForwardingInputTypeRedirect, nil
+	case "302":
+		return URLForwardingInputTypeThreeHundredTwo, nil
+	}
+	var t URLForwardingInputType
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (u URLForwardingInputType) Ptr() *URLForwardingInputType {
+	return &u
 }
 
 // URLForwarding represents a URL forwarding entry response, allowing a domain to redirect to another URL using different forwarding methods.

@@ -1029,438 +1029,9 @@ func TestSettersMarkExplicitListURLForwardingsResponse(t *testing.T) {
 
 }
 
-func TestSettersUpdateURLForwardingBody(t *testing.T) {
-	t.Run("SetHost", func(t *testing.T) {
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueHost *string
-		obj.SetHost(fernTestValueHost)
-		assert.Equal(t, fernTestValueHost, obj.Host)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetDomainName", func(t *testing.T) {
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueDomainName *string
-		obj.SetDomainName(fernTestValueDomainName)
-		assert.Equal(t, fernTestValueDomainName, obj.DomainName)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
+func TestSettersURLForwardingInput(t *testing.T) {
 	t.Run("SetForwardsTo", func(t *testing.T) {
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueForwardsTo string
-		obj.SetForwardsTo(fernTestValueForwardsTo)
-		assert.Equal(t, fernTestValueForwardsTo, obj.ForwardsTo)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetMeta", func(t *testing.T) {
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueMeta *string
-		obj.SetMeta(fernTestValueMeta)
-		assert.Equal(t, fernTestValueMeta, obj.Meta)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetTitle", func(t *testing.T) {
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueTitle *string
-		obj.SetTitle(fernTestValueTitle)
-		assert.Equal(t, fernTestValueTitle, obj.Title)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetType", func(t *testing.T) {
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueType URLForwardingType
-		obj.SetType(fernTestValueType)
-		assert.Equal(t, fernTestValueType, obj.Type)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersUpdateURLForwardingBody(t *testing.T) {
-	t.Run("GetHost", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var expected *string
-		obj.Host = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetHost(), "getter should return the property value")
-	})
-
-	t.Run("GetHost_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		obj.Host = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetHost(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetHost_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetHost() // Should return zero value
-	})
-
-	t.Run("GetDomainName", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var expected *string
-		obj.DomainName = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetDomainName(), "getter should return the property value")
-	})
-
-	t.Run("GetDomainName_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		obj.DomainName = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetDomainName(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetDomainName_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetDomainName() // Should return zero value
-	})
-
-	t.Run("GetForwardsTo", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var expected string
-		obj.ForwardsTo = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetForwardsTo(), "getter should return the property value")
-	})
-
-	t.Run("GetForwardsTo_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetForwardsTo() // Should return zero value
-	})
-
-	t.Run("GetMeta", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var expected *string
-		obj.Meta = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetMeta(), "getter should return the property value")
-	})
-
-	t.Run("GetMeta_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		obj.Meta = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetMeta(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetMeta_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetMeta() // Should return zero value
-	})
-
-	t.Run("GetTitle", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var expected *string
-		obj.Title = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetTitle(), "getter should return the property value")
-	})
-
-	t.Run("GetTitle_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		obj.Title = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetTitle(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetTitle_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetTitle() // Should return zero value
-	})
-
-	t.Run("GetType", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var expected URLForwardingType
-		obj.Type = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetType(), "getter should return the property value")
-	})
-
-	t.Run("GetType_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetType() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitUpdateURLForwardingBody(t *testing.T) {
-	t.Run("SetHost_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueHost *string
-
-		// Act
-		obj.SetHost(fernTestValueHost)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetDomainName_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueDomainName *string
-
-		// Act
-		obj.SetDomainName(fernTestValueDomainName)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetForwardsTo_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueForwardsTo string
-
-		// Act
-		obj.SetForwardsTo(fernTestValueForwardsTo)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetMeta_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueMeta *string
-
-		// Act
-		obj.SetMeta(fernTestValueMeta)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetTitle_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueTitle *string
-
-		// Act
-		obj.SetTitle(fernTestValueTitle)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetType_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-		var fernTestValueType URLForwardingType
-
-		// Act
-		obj.SetType(fernTestValueType)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-}
-
-func TestSettersURLForwarding(t *testing.T) {
-	t.Run("SetDomainName", func(t *testing.T) {
-		obj := &URLForwarding{}
-		var fernTestValueDomainName *string
-		obj.SetDomainName(fernTestValueDomainName)
-		assert.Equal(t, fernTestValueDomainName, obj.DomainName)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-	t.Run("SetForwardsTo", func(t *testing.T) {
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueForwardsTo string
 		obj.SetForwardsTo(fernTestValueForwardsTo)
 		assert.Equal(t, fernTestValueForwardsTo, obj.ForwardsTo)
@@ -1468,7 +1039,7 @@ func TestSettersURLForwarding(t *testing.T) {
 	})
 
 	t.Run("SetHost", func(t *testing.T) {
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueHost string
 		obj.SetHost(fernTestValueHost)
 		assert.Equal(t, fernTestValueHost, obj.Host)
@@ -1476,7 +1047,7 @@ func TestSettersURLForwarding(t *testing.T) {
 	})
 
 	t.Run("SetMeta", func(t *testing.T) {
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueMeta *string
 		obj.SetMeta(fernTestValueMeta)
 		assert.Equal(t, fernTestValueMeta, obj.Meta)
@@ -1484,7 +1055,7 @@ func TestSettersURLForwarding(t *testing.T) {
 	})
 
 	t.Run("SetTitle", func(t *testing.T) {
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueTitle *string
 		obj.SetTitle(fernTestValueTitle)
 		assert.Equal(t, fernTestValueTitle, obj.Title)
@@ -1492,8 +1063,8 @@ func TestSettersURLForwarding(t *testing.T) {
 	})
 
 	t.Run("SetType", func(t *testing.T) {
-		obj := &URLForwarding{}
-		var fernTestValueType URLForwardingType
+		obj := &URLForwardingInput{}
+		var fernTestValueType URLForwardingInputType
 		obj.SetType(fernTestValueType)
 		assert.Equal(t, fernTestValueType, obj.Type)
 		assert.NotNil(t, obj.explicitFields)
@@ -1501,44 +1072,11 @@ func TestSettersURLForwarding(t *testing.T) {
 
 }
 
-func TestGettersURLForwarding(t *testing.T) {
-	t.Run("GetDomainName", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &URLForwarding{}
-		var expected *string
-		obj.DomainName = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetDomainName(), "getter should return the property value")
-	})
-
-	t.Run("GetDomainName_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &URLForwarding{}
-		obj.DomainName = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetDomainName(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetDomainName_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *URLForwarding
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetDomainName() // Should return zero value
-	})
-
+func TestGettersURLForwardingInput(t *testing.T) {
 	t.Run("GetForwardsTo", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var expected string
 		obj.ForwardsTo = expected
 
@@ -1548,7 +1086,7 @@ func TestGettersURLForwarding(t *testing.T) {
 
 	t.Run("GetForwardsTo_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		// Should not panic - getters should handle nil receiver gracefully
 		defer func() {
 			if r := recover(); r != nil {
@@ -1561,7 +1099,7 @@ func TestGettersURLForwarding(t *testing.T) {
 	t.Run("GetHost", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var expected string
 		obj.Host = expected
 
@@ -1571,7 +1109,7 @@ func TestGettersURLForwarding(t *testing.T) {
 
 	t.Run("GetHost_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		// Should not panic - getters should handle nil receiver gracefully
 		defer func() {
 			if r := recover(); r != nil {
@@ -1584,7 +1122,7 @@ func TestGettersURLForwarding(t *testing.T) {
 	t.Run("GetMeta", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var expected *string
 		obj.Meta = expected
 
@@ -1595,7 +1133,7 @@ func TestGettersURLForwarding(t *testing.T) {
 	t.Run("GetMeta_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		obj.Meta = nil
 
 		// Act & Assert
@@ -1604,7 +1142,7 @@ func TestGettersURLForwarding(t *testing.T) {
 
 	t.Run("GetMeta_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		// Should not panic - getters should handle nil receiver gracefully
 		defer func() {
 			if r := recover(); r != nil {
@@ -1617,7 +1155,7 @@ func TestGettersURLForwarding(t *testing.T) {
 	t.Run("GetTitle", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var expected *string
 		obj.Title = expected
 
@@ -1628,7 +1166,7 @@ func TestGettersURLForwarding(t *testing.T) {
 	t.Run("GetTitle_NilValue", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		obj.Title = nil
 
 		// Act & Assert
@@ -1637,7 +1175,7 @@ func TestGettersURLForwarding(t *testing.T) {
 
 	t.Run("GetTitle_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		// Should not panic - getters should handle nil receiver gracefully
 		defer func() {
 			if r := recover(); r != nil {
@@ -1650,8 +1188,8 @@ func TestGettersURLForwarding(t *testing.T) {
 	t.Run("GetType", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
-		var expected URLForwardingType
+		obj := &URLForwardingInput{}
+		var expected URLForwardingInputType
 		obj.Type = expected
 
 		// Act & Assert
@@ -1660,7 +1198,7 @@ func TestGettersURLForwarding(t *testing.T) {
 
 	t.Run("GetType_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		// Should not panic - getters should handle nil receiver gracefully
 		defer func() {
 			if r := recover(); r != nil {
@@ -1672,42 +1210,11 @@ func TestGettersURLForwarding(t *testing.T) {
 
 }
 
-func TestSettersMarkExplicitURLForwarding(t *testing.T) {
-	t.Run("SetDomainName_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &URLForwarding{}
-		var fernTestValueDomainName *string
-
-		// Act
-		obj.SetDomainName(fernTestValueDomainName)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
+func TestSettersMarkExplicitURLForwardingInput(t *testing.T) {
 	t.Run("SetForwardsTo_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueForwardsTo string
 
 		// Act
@@ -1738,7 +1245,7 @@ func TestSettersMarkExplicitURLForwarding(t *testing.T) {
 	t.Run("SetHost_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueHost string
 
 		// Act
@@ -1769,7 +1276,7 @@ func TestSettersMarkExplicitURLForwarding(t *testing.T) {
 	t.Run("SetMeta_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueMeta *string
 
 		// Act
@@ -1800,7 +1307,7 @@ func TestSettersMarkExplicitURLForwarding(t *testing.T) {
 	t.Run("SetTitle_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		var fernTestValueTitle *string
 
 		// Act
@@ -1831,8 +1338,8 @@ func TestSettersMarkExplicitURLForwarding(t *testing.T) {
 	t.Run("SetType_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
-		var fernTestValueType URLForwardingType
+		obj := &URLForwardingInput{}
+		var fernTestValueType URLForwardingInputType
 
 		// Act
 		obj.SetType(fernTestValueType)
@@ -2387,11 +1894,11 @@ func TestJSONMarshalingListURLForwardingsResponse(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingURLForwarding(t *testing.T) {
+func TestJSONMarshalingURLForwardingInput(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 
 		// Act - Marshal to JSON
 		data, err := json.Marshal(obj)
@@ -2400,21 +1907,21 @@ func TestJSONMarshalingURLForwarding(t *testing.T) {
 		assert.NotEmpty(t, data, "marshaled data should not be empty")
 
 		// Unmarshal back and verify round-trip
-		var unmarshaled URLForwarding
+		var unmarshaled URLForwardingInput
 		err = json.Unmarshal(data, &unmarshaled)
 		assert.NoError(t, err, "round-trip unmarshal should succeed")
 	})
 
 	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
 		t.Parallel()
-		var obj URLForwarding
+		var obj URLForwardingInput
 		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
 		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
 	})
 
 	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
 		t.Parallel()
-		var obj URLForwarding
+		var obj URLForwardingInput
 		err := json.Unmarshal([]byte(`{}`), &obj)
 		assert.NoError(t, err, "unmarshaling empty object should succeed")
 	})
@@ -2453,39 +1960,6 @@ func TestJSONMarshalingURLForwardingResponse(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingUpdateURLForwardingBody(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateURLForwardingBody{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled UpdateURLForwardingBody
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateURLForwardingBody
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateURLForwardingBody
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
 func TestStringListURLForwardingsResponse(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -2502,17 +1976,17 @@ func TestStringListURLForwardingsResponse(t *testing.T) {
 	})
 }
 
-func TestStringURLForwarding(t *testing.T) {
+func TestStringURLForwardingInput(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		result := obj.String()
 		assert.NotEmpty(t, result, "String() should return a non-empty representation")
 	})
 
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -2534,19 +2008,39 @@ func TestStringURLForwardingResponse(t *testing.T) {
 	})
 }
 
-func TestStringUpdateURLForwardingBody(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
+func TestEnumURLForwardingInputType(t *testing.T) {
+	t.Run("NewFromString_masked", func(t *testing.T) {
 		t.Parallel()
-		obj := &UpdateURLForwardingBody{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
+		val, err := NewURLForwardingInputTypeFromString("masked")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, URLForwardingInputType("masked"), val, "enum value should match expected wire value")
 	})
 
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
+	t.Run("NewFromString_redirect", func(t *testing.T) {
 		t.Parallel()
-		var obj *UpdateURLForwardingBody
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
+		val, err := NewURLForwardingInputTypeFromString("redirect")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, URLForwardingInputType("redirect"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_302", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewURLForwardingInputTypeFromString("302")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, URLForwardingInputType("302"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewURLForwardingInputTypeFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewURLForwardingInputTypeFromString("masked")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
 	})
 }
 
@@ -2609,10 +2103,10 @@ func TestExtraPropertiesListURLForwardingsResponse(t *testing.T) {
 	})
 }
 
-func TestExtraPropertiesURLForwarding(t *testing.T) {
+func TestExtraPropertiesURLForwardingInput(t *testing.T) {
 	t.Run("GetExtraProperties", func(t *testing.T) {
 		t.Parallel()
-		obj := &URLForwarding{}
+		obj := &URLForwardingInput{}
 		// Should not panic when calling GetExtraProperties()
 		defer func() {
 			if r := recover(); r != nil {
@@ -2626,7 +2120,7 @@ func TestExtraPropertiesURLForwarding(t *testing.T) {
 
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
-		var obj *URLForwarding
+		var obj *URLForwardingInput
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})
@@ -2650,29 +2144,6 @@ func TestExtraPropertiesURLForwardingResponse(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *URLForwardingResponse
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesUpdateURLForwardingBody(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateURLForwardingBody{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateURLForwardingBody
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

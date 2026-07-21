@@ -1873,6 +1873,10 @@ Adds (registers) a new DNSSEC DS record for a domain.
 ```go
 request := &coreapigo.CreateDnssecBody{
         DomainName: "domainName",
+        Algorithm: 1,
+        Digest: "digest",
+        DigestType: 1,
+        KeyTag: 1,
     }
 client.DnsseCs.CreateDnssec(
         context.TODO(),
@@ -1901,7 +1905,7 @@ client.DnsseCs.CreateDnssec(
 <dl>
 <dd>
 
-**algorithm:** `*int` 
+**algorithm:** `int` 
     
 </dd>
 </dl>
@@ -1909,7 +1913,7 @@ client.DnsseCs.CreateDnssec(
 <dl>
 <dd>
 
-**digest:** `*string` — Digest is a digest of the DNSKEY RR that is registered with the registry.
+**digest:** `string` — Digest is a digest of the DNSKEY RR that is registered with the registry.
     
 </dd>
 </dl>
@@ -1917,7 +1921,7 @@ client.DnsseCs.CreateDnssec(
 <dl>
 <dd>
 
-**createDnssecBodyDomainName:** `*string` — The name of the domain.
+**digestType:** `int` 
     
 </dd>
 </dl>
@@ -1925,15 +1929,7 @@ client.DnsseCs.CreateDnssec(
 <dl>
 <dd>
 
-**digestType:** `*int` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**keyTag:** `*int` 
+**keyTag:** `int` 
     
 </dd>
 </dl>
@@ -3051,10 +3047,10 @@ Sets up a new URL forwarding (redirect) for a domain or subdomain. If this is th
 ```go
 request := &coreapigo.CreateURLForwardingRequest{
         DomainName: "example.com",
-        Body: &coreapigo.URLForwarding{
+        Body: &coreapigo.URLForwardingInput{
             ForwardsTo: "https://destination-site.com",
             Host: "www",
-            Type: coreapigo.URLForwardingTypeMasked,
+            Type: coreapigo.URLForwardingInputTypeMasked,
         },
     }
 client.URLForwardings.CreateURLForwarding(
@@ -3084,7 +3080,7 @@ client.URLForwardings.CreateURLForwarding(
 <dl>
 <dd>
 
-**request:** `coreapigo.CreateURLForwardingBody` 
+**request:** `*coreapigo.URLForwardingInput` 
     
 </dd>
 </dl>
@@ -3196,9 +3192,10 @@ Modifies an existing URL forwarding rule. Changes may take up to 24 hours to ful
 request := &coreapigo.UpdateURLForwardingRequest{
         DomainName: "example.com",
         Host: "www.example.org",
-        Body: &coreapigo.UpdateURLForwardingBody{
+        Body: &coreapigo.URLForwardingInput{
             ForwardsTo: "https://destination-site.com",
-            Type: coreapigo.URLForwardingTypeMasked,
+            Host: "www",
+            Type: coreapigo.URLForwardingInputTypeMasked,
         },
     }
 client.URLForwardings.UpdateURLForwarding(
@@ -3236,7 +3233,7 @@ client.URLForwardings.UpdateURLForwarding(
 <dl>
 <dd>
 
-**request:** `*coreapigo.UpdateURLForwardingBody` 
+**request:** `*coreapigo.URLForwardingInput` 
     
 </dd>
 </dl>
@@ -3571,9 +3568,10 @@ Modifies an existing URL forwarding rule by ID.  The domain must be owned by the
 request := &coreapigo.UpdateURLForwardingByIDRequest{
         DomainName: "example.com",
         ID: 12345,
-        Body: &coreapigo.UpdateURLForwardingBody{
+        Body: &coreapigo.URLForwardingInput{
             ForwardsTo: "https://destination-site.com",
-            Type: coreapigo.URLForwardingTypeMasked,
+            Host: "www",
+            Type: coreapigo.URLForwardingInputTypeMasked,
         },
     }
 client.URLForwardings.UpdateURLForwardingByID(
@@ -3611,7 +3609,7 @@ client.URLForwardings.UpdateURLForwardingByID(
 <dl>
 <dd>
 
-**request:** `*coreapigo.UpdateURLForwardingBody` 
+**request:** `*coreapigo.URLForwardingInput` 
     
 </dd>
 </dl>
@@ -4068,9 +4066,11 @@ Supported webhook event names:
 - `domain.lock.status_change` – domain lock added or removed.
 - `domain.transfer.status_change` – domain transfer IN to name.com; status updates while name.com is the gaining registrar.
 - `domain.transfer_out.status_change` – domain transfer OUT from name.com to another registrar; fires when the domain is removed from the account.
-- `domain.transfer.internal_in` - name.com domain transfers in to the subscribing account.
+- `domain.transfer.internal_in` - name.com domain transfers in to the subscribing account via internal transfer.
+- `domain.transfer.internal_out` - name.com domain transfers out of the subscribing account via internal transfer.
 - `contact.verification.status_change` - contact verification status changes (verified or unverified).
 - `domain.registry.rejection` – domain **create** failed after asynchronous registry processing (uncommon; most creates succeed at request time).
+- `domain.expiration` – domain has expired and entered the post-expiry grace period. This is informational only.
 </dd>
 </dl>
 </dd>

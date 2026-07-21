@@ -2006,6 +2006,154 @@ func (c *ContactsRequest) String() string {
 // The date and time when the domain was created at the registry.
 type CreateDate = time.Time
 
+// Payload sent when a domain in the subscribing account expires and the grace period starts. This event is informational; it is separate from lock, removal, and transfer-out events.
+var (
+	domainExpirationFieldEventName      = big.NewInt(1 << 0)
+	domainExpirationFieldDomainName     = big.NewInt(1 << 1)
+	domainExpirationFieldExpirationDate = big.NewInt(1 << 2)
+)
+
+type DomainExpiration struct {
+	// The name of the subscription event.
+	EventName DomainExpirationEventName `json:"eventName" url:"eventName"`
+	// The name of the expired domain.
+	DomainName string `json:"domainName" url:"domainName"`
+	// The date and time when the domain expired.
+	ExpirationDate time.Time `json:"expirationDate" url:"expirationDate"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DomainExpiration) GetEventName() DomainExpirationEventName {
+	if d == nil {
+		return ""
+	}
+	return d.EventName
+}
+
+func (d *DomainExpiration) GetDomainName() string {
+	if d == nil {
+		return ""
+	}
+	return d.DomainName
+}
+
+func (d *DomainExpiration) GetExpirationDate() time.Time {
+	if d == nil {
+		return time.Time{}
+	}
+	return d.ExpirationDate
+}
+
+func (d *DomainExpiration) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
+	return d.extraProperties
+}
+
+func (d *DomainExpiration) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetEventName sets the EventName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainExpiration) SetEventName(eventName DomainExpirationEventName) {
+	d.EventName = eventName
+	d.require(domainExpirationFieldEventName)
+}
+
+// SetDomainName sets the DomainName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainExpiration) SetDomainName(domainName string) {
+	d.DomainName = domainName
+	d.require(domainExpirationFieldDomainName)
+}
+
+// SetExpirationDate sets the ExpirationDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainExpiration) SetExpirationDate(expirationDate time.Time) {
+	d.ExpirationDate = expirationDate
+	d.require(domainExpirationFieldExpirationDate)
+}
+
+func (d *DomainExpiration) UnmarshalJSON(data []byte) error {
+	type embed DomainExpiration
+	var unmarshaler = struct {
+		embed
+		ExpirationDate *internal.DateTime `json:"expirationDate"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DomainExpiration(unmarshaler.embed)
+	d.ExpirationDate = unmarshaler.ExpirationDate.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DomainExpiration) MarshalJSON() ([]byte, error) {
+	type embed DomainExpiration
+	var marshaler = struct {
+		embed
+		ExpirationDate *internal.DateTime `json:"expirationDate"`
+	}{
+		embed:          embed(*d),
+		ExpirationDate: internal.NewDateTime(d.ExpirationDate),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (d *DomainExpiration) String() string {
+	if d == nil {
+		return "<nil>"
+	}
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// The name of the subscription event.
+type DomainExpirationEventName string
+
+const (
+	DomainExpirationEventNameDomainExpiration DomainExpirationEventName = "domain.expiration"
+)
+
+func NewDomainExpirationEventNameFromString(s string) (DomainExpirationEventName, error) {
+	switch s {
+	case "domain.expiration":
+		return DomainExpirationEventNameDomainExpiration, nil
+	}
+	var t DomainExpirationEventName
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DomainExpirationEventName) Ptr() *DomainExpirationEventName {
+	return &d
+}
+
 var (
 	domainLockStatusChangeFieldEventName        = big.NewInt(1 << 0)
 	domainLockStatusChangeFieldDomainName       = big.NewInt(1 << 1)
@@ -2916,6 +3064,239 @@ func NewDomainTransferInternalInStatusChangeStatusFromString(s string) (DomainTr
 }
 
 func (d DomainTransferInternalInStatusChangeStatus) Ptr() *DomainTransferInternalInStatusChangeStatus {
+	return &d
+}
+
+// Payload sent when a domain transfers OUT from the webhook subscriber's account to another name.com account.
+var (
+	domainTransferInternalOutStatusChangeFieldEventName            = big.NewInt(1 << 0)
+	domainTransferInternalOutStatusChangeFieldTransferID           = big.NewInt(1 << 1)
+	domainTransferInternalOutStatusChangeFieldSourceAccountID      = big.NewInt(1 << 2)
+	domainTransferInternalOutStatusChangeFieldDestinationAccountID = big.NewInt(1 << 3)
+	domainTransferInternalOutStatusChangeFieldStatus               = big.NewInt(1 << 4)
+	domainTransferInternalOutStatusChangeFieldOccurredAt           = big.NewInt(1 << 5)
+	domainTransferInternalOutStatusChangeFieldDomain               = big.NewInt(1 << 6)
+)
+
+type DomainTransferInternalOutStatusChange struct {
+	// The name of the subscription event.
+	EventName DomainTransferInternalOutStatusChangeEventName `json:"eventName" url:"eventName"`
+	// The internal transfer ID for this move, when available. Omitted when no transfer ID has been assigned for the event.
+	TransferID *int `json:"transferId,omitempty" url:"transferId,omitempty"`
+	// The account id that previously owned the domain (the losing account).
+	SourceAccountID int `json:"sourceAccountId" url:"sourceAccountId"`
+	// The account id that now owns the domain (the gaining account).
+	DestinationAccountID int                                         `json:"destinationAccountId" url:"destinationAccountId"`
+	Status               DomainTransferInternalOutStatusChangeStatus `json:"status" url:"status"`
+	// When the domain transfer out occurred.
+	OccurredAt time.Time              `json:"occurredAt" url:"occurredAt"`
+	Domain     *DomainResponsePayload `json:"domain" url:"domain"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetEventName() DomainTransferInternalOutStatusChangeEventName {
+	if d == nil {
+		return ""
+	}
+	return d.EventName
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetTransferID() *int {
+	if d == nil {
+		return nil
+	}
+	return d.TransferID
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetSourceAccountID() int {
+	if d == nil {
+		return 0
+	}
+	return d.SourceAccountID
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetDestinationAccountID() int {
+	if d == nil {
+		return 0
+	}
+	return d.DestinationAccountID
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetStatus() DomainTransferInternalOutStatusChangeStatus {
+	if d == nil {
+		return ""
+	}
+	return d.Status
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetOccurredAt() time.Time {
+	if d == nil {
+		return time.Time{}
+	}
+	return d.OccurredAt
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetDomain() *DomainResponsePayload {
+	if d == nil {
+		return nil
+	}
+	return d.Domain
+}
+
+func (d *DomainTransferInternalOutStatusChange) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
+	return d.extraProperties
+}
+
+func (d *DomainTransferInternalOutStatusChange) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetEventName sets the EventName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetEventName(eventName DomainTransferInternalOutStatusChangeEventName) {
+	d.EventName = eventName
+	d.require(domainTransferInternalOutStatusChangeFieldEventName)
+}
+
+// SetTransferID sets the TransferID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetTransferID(transferID *int) {
+	d.TransferID = transferID
+	d.require(domainTransferInternalOutStatusChangeFieldTransferID)
+}
+
+// SetSourceAccountID sets the SourceAccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetSourceAccountID(sourceAccountID int) {
+	d.SourceAccountID = sourceAccountID
+	d.require(domainTransferInternalOutStatusChangeFieldSourceAccountID)
+}
+
+// SetDestinationAccountID sets the DestinationAccountID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetDestinationAccountID(destinationAccountID int) {
+	d.DestinationAccountID = destinationAccountID
+	d.require(domainTransferInternalOutStatusChangeFieldDestinationAccountID)
+}
+
+// SetStatus sets the Status field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetStatus(status DomainTransferInternalOutStatusChangeStatus) {
+	d.Status = status
+	d.require(domainTransferInternalOutStatusChangeFieldStatus)
+}
+
+// SetOccurredAt sets the OccurredAt field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetOccurredAt(occurredAt time.Time) {
+	d.OccurredAt = occurredAt
+	d.require(domainTransferInternalOutStatusChangeFieldOccurredAt)
+}
+
+// SetDomain sets the Domain field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferInternalOutStatusChange) SetDomain(domain *DomainResponsePayload) {
+	d.Domain = domain
+	d.require(domainTransferInternalOutStatusChangeFieldDomain)
+}
+
+func (d *DomainTransferInternalOutStatusChange) UnmarshalJSON(data []byte) error {
+	type embed DomainTransferInternalOutStatusChange
+	var unmarshaler = struct {
+		embed
+		OccurredAt *internal.DateTime `json:"occurredAt"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DomainTransferInternalOutStatusChange(unmarshaler.embed)
+	d.OccurredAt = unmarshaler.OccurredAt.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DomainTransferInternalOutStatusChange) MarshalJSON() ([]byte, error) {
+	type embed DomainTransferInternalOutStatusChange
+	var marshaler = struct {
+		embed
+		OccurredAt *internal.DateTime `json:"occurredAt"`
+	}{
+		embed:      embed(*d),
+		OccurredAt: internal.NewDateTime(d.OccurredAt),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (d *DomainTransferInternalOutStatusChange) String() string {
+	if d == nil {
+		return "<nil>"
+	}
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// The name of the subscription event.
+type DomainTransferInternalOutStatusChangeEventName string
+
+const (
+	DomainTransferInternalOutStatusChangeEventNameDomainTransferInternalOut DomainTransferInternalOutStatusChangeEventName = "domain.transfer.internal_out"
+)
+
+func NewDomainTransferInternalOutStatusChangeEventNameFromString(s string) (DomainTransferInternalOutStatusChangeEventName, error) {
+	switch s {
+	case "domain.transfer.internal_out":
+		return DomainTransferInternalOutStatusChangeEventNameDomainTransferInternalOut, nil
+	}
+	var t DomainTransferInternalOutStatusChangeEventName
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DomainTransferInternalOutStatusChangeEventName) Ptr() *DomainTransferInternalOutStatusChangeEventName {
+	return &d
+}
+
+type DomainTransferInternalOutStatusChangeStatus string
+
+const (
+	DomainTransferInternalOutStatusChangeStatusCompleted DomainTransferInternalOutStatusChangeStatus = "completed"
+)
+
+func NewDomainTransferInternalOutStatusChangeStatusFromString(s string) (DomainTransferInternalOutStatusChangeStatus, error) {
+	switch s {
+	case "completed":
+		return DomainTransferInternalOutStatusChangeStatusCompleted, nil
+	}
+	var t DomainTransferInternalOutStatusChangeStatus
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DomainTransferInternalOutStatusChangeStatus) Ptr() *DomainTransferInternalOutStatusChangeStatus {
 	return &d
 }
 
@@ -5636,6 +6017,183 @@ func (u *UnsupportedMedia415) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UnsupportedMedia415) String() string {
+	if u == nil {
+		return "<nil>"
+	}
+	if len(u.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(u); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", u)
+}
+
+// URLForwarding represents a URL forwarding entry, allowing a domain to redirect to another URL using different forwarding methods.
+var (
+	uRLForwardingFieldDomainName = big.NewInt(1 << 0)
+	uRLForwardingFieldForwardsTo = big.NewInt(1 << 1)
+	uRLForwardingFieldHost       = big.NewInt(1 << 2)
+	uRLForwardingFieldMeta       = big.NewInt(1 << 3)
+	uRLForwardingFieldTitle      = big.NewInt(1 << 4)
+	uRLForwardingFieldType       = big.NewInt(1 << 5)
+)
+
+type URLForwarding struct {
+	// The domain name (without subdomains) that is being forwarded.
+	DomainName *string `json:"domainName,omitempty" url:"domainName,omitempty"`
+	// The destination URL to which this hostname will be forwarded.
+	ForwardsTo string `json:"forwardsTo" url:"forwardsTo"`
+	// The subdomain portion of the hostname that is being forwarded.
+	Host string `json:"host" url:"host"`
+	// Meta tags to include in the HTML page when using "masked" forwarding.
+	// Ignored for other forwarding types.
+	// Example: `<meta name='keywords' content='fish, denver, platte'>`
+	Meta *string `json:"meta,omitempty" url:"meta,omitempty"`
+	// The title to be used for the HTML page when using "masked" forwarding.
+	// Ignored for other forwarding types.
+	Title *string `json:"title,omitempty" url:"title,omitempty"`
+	// The type of URL forwarding. Valid values:
+	//   - `masked`: Retains the original domain in the address bar, preventing the user from seeing the actual destination URL. Sometimes called iframe forwarding.
+	//   - `redirect`: Uses a standard HTTP redirect (301), which changes the address bar to the destination URL.
+	//   - `302`: Uses a temporary HTTP redirect (302), which changes the address bar to the destination URL but indicates the resource is temporarily located elsewhere.
+	Type URLForwardingType `json:"type" url:"type"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (u *URLForwarding) GetDomainName() *string {
+	if u == nil {
+		return nil
+	}
+	return u.DomainName
+}
+
+func (u *URLForwarding) GetForwardsTo() string {
+	if u == nil {
+		return ""
+	}
+	return u.ForwardsTo
+}
+
+func (u *URLForwarding) GetHost() string {
+	if u == nil {
+		return ""
+	}
+	return u.Host
+}
+
+func (u *URLForwarding) GetMeta() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Meta
+}
+
+func (u *URLForwarding) GetTitle() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Title
+}
+
+func (u *URLForwarding) GetType() URLForwardingType {
+	if u == nil {
+		return ""
+	}
+	return u.Type
+}
+
+func (u *URLForwarding) GetExtraProperties() map[string]interface{} {
+	if u == nil {
+		return nil
+	}
+	return u.extraProperties
+}
+
+func (u *URLForwarding) require(field *big.Int) {
+	if u.explicitFields == nil {
+		u.explicitFields = big.NewInt(0)
+	}
+	u.explicitFields.Or(u.explicitFields, field)
+}
+
+// SetDomainName sets the DomainName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *URLForwarding) SetDomainName(domainName *string) {
+	u.DomainName = domainName
+	u.require(uRLForwardingFieldDomainName)
+}
+
+// SetForwardsTo sets the ForwardsTo field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *URLForwarding) SetForwardsTo(forwardsTo string) {
+	u.ForwardsTo = forwardsTo
+	u.require(uRLForwardingFieldForwardsTo)
+}
+
+// SetHost sets the Host field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *URLForwarding) SetHost(host string) {
+	u.Host = host
+	u.require(uRLForwardingFieldHost)
+}
+
+// SetMeta sets the Meta field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *URLForwarding) SetMeta(meta *string) {
+	u.Meta = meta
+	u.require(uRLForwardingFieldMeta)
+}
+
+// SetTitle sets the Title field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *URLForwarding) SetTitle(title *string) {
+	u.Title = title
+	u.require(uRLForwardingFieldTitle)
+}
+
+// SetType sets the Type field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *URLForwarding) SetType(type_ URLForwardingType) {
+	u.Type = type_
+	u.require(uRLForwardingFieldType)
+}
+
+func (u *URLForwarding) UnmarshalJSON(data []byte) error {
+	type unmarshaler URLForwarding
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*u = URLForwarding(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *u)
+	if err != nil {
+		return err
+	}
+	u.extraProperties = extraProperties
+	u.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (u *URLForwarding) MarshalJSON() ([]byte, error) {
+	type embed URLForwarding
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (u *URLForwarding) String() string {
 	if u == nil {
 		return "<nil>"
 	}
