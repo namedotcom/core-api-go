@@ -10,24 +10,21 @@ import (
 )
 
 var (
-	createDnssecBodyFieldDomainName                 = big.NewInt(1 << 0)
-	createDnssecBodyFieldAlgorithm                  = big.NewInt(1 << 1)
-	createDnssecBodyFieldDigest                     = big.NewInt(1 << 2)
-	createDnssecBodyFieldCreateDnssecBodyDomainName = big.NewInt(1 << 3)
-	createDnssecBodyFieldDigestType                 = big.NewInt(1 << 4)
-	createDnssecBodyFieldKeyTag                     = big.NewInt(1 << 5)
+	createDnssecBodyFieldDomainName = big.NewInt(1 << 0)
+	createDnssecBodyFieldAlgorithm  = big.NewInt(1 << 1)
+	createDnssecBodyFieldDigest     = big.NewInt(1 << 2)
+	createDnssecBodyFieldDigestType = big.NewInt(1 << 3)
+	createDnssecBodyFieldKeyTag     = big.NewInt(1 << 4)
 )
 
 type CreateDnssecBody struct {
 	// DomainName is the domain name to create keys for.
 	DomainName string `json:"-" url:"-"`
-	Algorithm  *int   `json:"algorithm,omitempty" url:"-"`
+	Algorithm  int    `json:"algorithm" url:"-"`
 	// Digest is a digest of the DNSKEY RR that is registered with the registry.
-	Digest *string `json:"digest,omitempty" url:"-"`
-	// The name of the domain.
-	CreateDnssecBodyDomainName *string `json:"domainName,omitempty" url:"-"`
-	DigestType                 *int    `json:"digestType,omitempty" url:"-"`
-	KeyTag                     *int    `json:"keyTag,omitempty" url:"-"`
+	Digest     string `json:"digest" url:"-"`
+	DigestType int    `json:"digestType" url:"-"`
+	KeyTag     int    `json:"keyTag" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -49,35 +46,28 @@ func (c *CreateDnssecBody) SetDomainName(domainName string) {
 
 // SetAlgorithm sets the Algorithm field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDnssecBody) SetAlgorithm(algorithm *int) {
+func (c *CreateDnssecBody) SetAlgorithm(algorithm int) {
 	c.Algorithm = algorithm
 	c.require(createDnssecBodyFieldAlgorithm)
 }
 
 // SetDigest sets the Digest field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDnssecBody) SetDigest(digest *string) {
+func (c *CreateDnssecBody) SetDigest(digest string) {
 	c.Digest = digest
 	c.require(createDnssecBodyFieldDigest)
 }
 
-// SetCreateDnssecBodyDomainName sets the CreateDnssecBodyDomainName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDnssecBody) SetCreateDnssecBodyDomainName(createDnssecBodyDomainName *string) {
-	c.CreateDnssecBodyDomainName = createDnssecBodyDomainName
-	c.require(createDnssecBodyFieldCreateDnssecBodyDomainName)
-}
-
 // SetDigestType sets the DigestType field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDnssecBody) SetDigestType(digestType *int) {
+func (c *CreateDnssecBody) SetDigestType(digestType int) {
 	c.DigestType = digestType
 	c.require(createDnssecBodyFieldDigestType)
 }
 
 // SetKeyTag sets the KeyTag field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDnssecBody) SetKeyTag(keyTag *int) {
+func (c *CreateDnssecBody) SetKeyTag(keyTag int) {
 	c.KeyTag = keyTag
 	c.require(createDnssecBodyFieldKeyTag)
 }

@@ -116,6 +116,10 @@ func TestDnsseCsCreateDnssecWithWireMock(
 	)
 	request := &coreapigo.CreateDnssecBody{
 		DomainName: "domainName",
+		Algorithm:  1,
+		Digest:     "digest",
+		DigestType: 1,
+		KeyTag:     1,
 	}
 	_, invocationErr := client.DnsseCs.CreateDnssec(
 		context.TODO(),

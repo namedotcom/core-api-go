@@ -1,11 +1,12 @@
-# Namecom Go Library
+# name.com Core API Go Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fnamedotcom%2Fcore-api-go)
 
-The Namecom Go library provides convenient access to the Namecom APIs from Go.
+The name.com Core API Go library provides convenient access to the name.com Core API APIs from Go.
 
 ## Table of Contents
 
+- [Documentation](#documentation)
 - [Reference](#reference)
 - [Usage](#usage)
 - [Environments](#environments)
@@ -17,6 +18,10 @@ The Namecom Go library provides convenient access to the Namecom APIs from Go.
   - [Timeouts](#timeouts)
   - [Explicit Null](#explicit-null)
 - [Contributing](#contributing)
+
+## Documentation
+
+API reference documentation is available [here](https://docs.name.com).
 
 ## Reference
 
@@ -32,7 +37,6 @@ package example
 import (
     context "context"
 
-    coreapigo "github.com/namedotcom/core-api-go"
     client "github.com/namedotcom/core-api-go/client"
     option "github.com/namedotcom/core-api-go/option"
 )
@@ -44,52 +48,8 @@ func do() {
             "<password>",
         ),
     )
-    request := &coreapigo.CreateAccountRequest{
-        Account: &coreapigo.AccountRequest{
-            Contacts: &coreapigo.ContactsRequest{
-                Registrant: &coreapigo.RegistrantContactRequest{
-                    FirstName: coreapigo.String(
-                        "Jane",
-                    ),
-                    LastName: coreapigo.String(
-                        "Doe",
-                    ),
-                    Address1: coreapigo.String(
-                        "123 Main St.",
-                    ),
-                    City: coreapigo.String(
-                        "Denver",
-                    ),
-                    State: coreapigo.String(
-                        "CO",
-                    ),
-                    Zip: coreapigo.String(
-                        "12345",
-                    ),
-                    Country: coreapigo.String(
-                        "US",
-                    ),
-                    Email: coreapigo.String(
-                        "admin@example.net",
-                    ),
-                    Phone: coreapigo.String(
-                        "+13035551212",
-                    ),
-                },
-            },
-            AccountName: coreapigo.String(
-                "reseller_subaccount",
-            ),
-            Password: coreapigo.String(
-                "SecureP4ss!",
-            ),
-        },
-        APITos: true,
-        Tos: true,
-    }
-    client.Accounts.CreateAccount(
+    client.Hello(
         context.TODO(),
-        request,
     )
 }
 ```
@@ -101,7 +61,7 @@ URL, which is particularly useful in test environments.
 
 ```go
 client := client.NewClient(
-    option.WithBaseURL(api.Environments.Default),
+    option.WithBaseURL(api.Environments.Sandbox),
 )
 ```
 
@@ -111,7 +71,7 @@ Structured error types are returned from API calls that return non-success statu
 with the `errors.Is` and `errors.As` APIs, so you can access the error like so:
 
 ```go
-response, err := client.Accounts.CreateAccount(...)
+response, err := client.Hello(...)
 if err != nil {
     var apiError *core.APIError
     if errors.As(err, apiError) {
@@ -145,7 +105,7 @@ client := client.NewClient(
 )
 
 // Specify options for an individual request.
-response, err := client.Accounts.CreateAccount(
+response, err := client.Hello(
     ...,
     option.WithToken("<YOUR_API_KEY>"),
 )
@@ -160,7 +120,7 @@ when you need to examine the response headers received from the API call. (When 
 the raw HTTP response data will be included automatically in the Page response object.)
 
 ```go
-response, err := client.Accounts.WithRawResponse.CreateAccount(...)
+response, err := client.WithRawResponse.Hello(...)
 if err != nil {
     return err
 }
@@ -198,7 +158,7 @@ client := client.NewClient(
     option.WithMaxAttempts(1),
 )
 
-response, err := client.Accounts.CreateAccount(
+response, err := client.Hello(
     ...,
     option.WithMaxAttempts(1),
 )
@@ -212,7 +172,7 @@ Setting a timeout for each individual request is as simple as using the standard
 ctx, cancel := context.WithTimeout(ctx, time.Second)
 defer cancel()
 
-response, err := client.Accounts.CreateAccount(ctx, ...)
+response, err := client.Hello(ctx, ...)
 ```
 
 ### Explicit Null
@@ -234,7 +194,7 @@ type ExampleRequest struct {
 request := &ExampleRequest{}
 request.SetName(nil)
 
-response, err := client.Accounts.CreateAccount(ctx, request, ...)
+response, err := client.Hello(ctx, request, ...)
 ```
 
 ## Contributing
