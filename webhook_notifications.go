@@ -146,6 +146,7 @@ type AvailableWebhooks string
 
 const (
 	AvailableWebhooksAccountCreditBalanceChange      AvailableWebhooks = "account.credit.balance_change"
+	AvailableWebhooksAccountDomainRemoval            AvailableWebhooks = "account.domain.removal"
 	AvailableWebhooksDomainLockStatusChange          AvailableWebhooks = "domain.lock.status_change"
 	AvailableWebhooksDomainTransferStatusChange      AvailableWebhooks = "domain.transfer.status_change"
 	AvailableWebhooksDomainTransferOutStatusChange   AvailableWebhooks = "domain.transfer_out.status_change"
@@ -160,6 +161,8 @@ func NewAvailableWebhooksFromString(s string) (AvailableWebhooks, error) {
 	switch s {
 	case "account.credit.balance_change":
 		return AvailableWebhooksAccountCreditBalanceChange, nil
+	case "account.domain.removal":
+		return AvailableWebhooksAccountDomainRemoval, nil
 	case "domain.lock.status_change":
 		return AvailableWebhooksDomainLockStatusChange, nil
 	case "domain.transfer.status_change":

@@ -1369,6 +1369,13 @@ func TestEnumAvailableWebhooks(t *testing.T) {
 		assert.Equal(t, AvailableWebhooks("account.credit.balance_change"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_account_domain_removal", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAvailableWebhooksFromString("account.domain.removal")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AvailableWebhooks("account.domain.removal"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_domain_lock_status_change", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewAvailableWebhooksFromString("domain.lock.status_change")

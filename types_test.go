@@ -676,6 +676,263 @@ func TestSettersMarkExplicitAccountCreditBalanceChange(t *testing.T) {
 
 }
 
+func TestSettersAccountDomainRemoval(t *testing.T) {
+	t.Run("SetEventName", func(t *testing.T) {
+		obj := &AccountDomainRemoval{}
+		var fernTestValueEventName AccountDomainRemovalEventName
+		obj.SetEventName(fernTestValueEventName)
+		assert.Equal(t, fernTestValueEventName, obj.EventName)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetDomainName", func(t *testing.T) {
+		obj := &AccountDomainRemoval{}
+		var fernTestValueDomainName string
+		obj.SetDomainName(fernTestValueDomainName)
+		assert.Equal(t, fernTestValueDomainName, obj.DomainName)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetReason", func(t *testing.T) {
+		obj := &AccountDomainRemoval{}
+		var fernTestValueReason AccountDomainRemovalReason
+		obj.SetReason(fernTestValueReason)
+		assert.Equal(t, fernTestValueReason, obj.Reason)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetExpireDate", func(t *testing.T) {
+		obj := &AccountDomainRemoval{}
+		var fernTestValueExpireDate time.Time
+		obj.SetExpireDate(fernTestValueExpireDate)
+		assert.Equal(t, fernTestValueExpireDate, obj.ExpireDate)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+}
+
+func TestGettersAccountDomainRemoval(t *testing.T) {
+	t.Run("GetEventName", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var expected AccountDomainRemovalEventName
+		obj.EventName = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetEventName(), "getter should return the property value")
+	})
+
+	t.Run("GetEventName_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *AccountDomainRemoval
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetEventName() // Should return zero value
+	})
+
+	t.Run("GetDomainName", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var expected string
+		obj.DomainName = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetDomainName(), "getter should return the property value")
+	})
+
+	t.Run("GetDomainName_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *AccountDomainRemoval
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetDomainName() // Should return zero value
+	})
+
+	t.Run("GetReason", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var expected AccountDomainRemovalReason
+		obj.Reason = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetReason(), "getter should return the property value")
+	})
+
+	t.Run("GetReason_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *AccountDomainRemoval
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetReason() // Should return zero value
+	})
+
+	t.Run("GetExpireDate", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var expected time.Time
+		obj.ExpireDate = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetExpireDate(), "getter should return the property value")
+	})
+
+	t.Run("GetExpireDate_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *AccountDomainRemoval
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetExpireDate() // Should return zero value
+	})
+
+}
+
+func TestSettersMarkExplicitAccountDomainRemoval(t *testing.T) {
+	t.Run("SetEventName_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var fernTestValueEventName AccountDomainRemovalEventName
+
+		// Act
+		obj.SetEventName(fernTestValueEventName)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetDomainName_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var fernTestValueDomainName string
+
+		// Act
+		obj.SetDomainName(fernTestValueDomainName)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetReason_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var fernTestValueReason AccountDomainRemovalReason
+
+		// Act
+		obj.SetReason(fernTestValueReason)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetExpireDate_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+		var fernTestValueExpireDate time.Time
+
+		// Act
+		obj.SetExpireDate(fernTestValueExpireDate)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+}
+
 func TestSettersBadGateway502(t *testing.T) {
 	t.Run("SetMessage", func(t *testing.T) {
 		obj := &BadGateway502{}
@@ -12074,6 +12331,39 @@ func TestJSONMarshalingAccountCreditBalanceChange(t *testing.T) {
 	})
 }
 
+func TestJSONMarshalingAccountDomainRemoval(t *testing.T) {
+	t.Run("MarshalUnmarshal", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &AccountDomainRemoval{}
+
+		// Act - Marshal to JSON
+		data, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed")
+		assert.NotNil(t, data, "marshaled data should not be nil")
+		assert.NotEmpty(t, data, "marshaled data should not be empty")
+
+		// Unmarshal back and verify round-trip
+		var unmarshaled AccountDomainRemoval
+		err = json.Unmarshal(data, &unmarshaled)
+		assert.NoError(t, err, "round-trip unmarshal should succeed")
+	})
+
+	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
+		t.Parallel()
+		var obj AccountDomainRemoval
+		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
+		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
+	})
+
+	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
+		t.Parallel()
+		var obj AccountDomainRemoval
+		err := json.Unmarshal([]byte(`{}`), &obj)
+		assert.NoError(t, err, "unmarshaling empty object should succeed")
+	})
+}
+
 func TestJSONMarshalingBadGateway502(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -13459,6 +13749,22 @@ func TestStringAccountCreditBalanceChange(t *testing.T) {
 	})
 }
 
+func TestStringAccountDomainRemoval(t *testing.T) {
+	t.Run("StringMethod", func(t *testing.T) {
+		t.Parallel()
+		obj := &AccountDomainRemoval{}
+		result := obj.String()
+		assert.NotEmpty(t, result, "String() should return a non-empty representation")
+	})
+
+	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *AccountDomainRemoval
+		result := obj.String()
+		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
+	})
+}
+
 func TestStringBadGateway502(t *testing.T) {
 	t.Run("StringMethod", func(t *testing.T) {
 		t.Parallel()
@@ -14137,6 +14443,64 @@ func TestEnumAccountCreditBalanceChangeEventName(t *testing.T) {
 	})
 }
 
+func TestEnumAccountDomainRemovalEventName(t *testing.T) {
+	t.Run("NewFromString_account_domain_removal", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAccountDomainRemovalEventNameFromString("account.domain.removal")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AccountDomainRemovalEventName("account.domain.removal"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewAccountDomainRemovalEventNameFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewAccountDomainRemovalEventNameFromString("account.domain.removal")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
+func TestEnumAccountDomainRemovalReason(t *testing.T) {
+	t.Run("NewFromString_expiration", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAccountDomainRemovalReasonFromString("expiration")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AccountDomainRemovalReason("expiration"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_agp_refund", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAccountDomainRemovalReasonFromString("agp_refund")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AccountDomainRemovalReason("agp_refund"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_administrative", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewAccountDomainRemovalReasonFromString("administrative")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, AccountDomainRemovalReason("administrative"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_Invalid", func(t *testing.T) {
+		_, err := NewAccountDomainRemovalReasonFromString("invalid_value_that_does_not_exist")
+		assert.Error(t, err)
+	})
+
+	t.Run("Ptr", func(t *testing.T) {
+		val, err := NewAccountDomainRemovalReasonFromString("expiration")
+		assert.NoError(t, err)
+		ptr := val.Ptr()
+		assert.NotNil(t, ptr)
+		assert.Equal(t, val, *ptr)
+	})
+}
+
 func TestEnumContactVerificationStatusChangeEventName(t *testing.T) {
 	t.Run("NewFromString_contact_verification_status_change", func(t *testing.T) {
 		t.Parallel()
@@ -14534,6 +14898,29 @@ func TestExtraPropertiesAccountCreditBalanceChange(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *AccountCreditBalanceChange
+		extraProps := obj.GetExtraProperties()
+		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
+	})
+}
+
+func TestExtraPropertiesAccountDomainRemoval(t *testing.T) {
+	t.Run("GetExtraProperties", func(t *testing.T) {
+		t.Parallel()
+		obj := &AccountDomainRemoval{}
+		// Should not panic when calling GetExtraProperties()
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("GetExtraProperties() panicked: %v", r)
+			}
+		}()
+		extraProps := obj.GetExtraProperties()
+		// Result can be nil or an empty/non-empty map
+		_ = extraProps
+	})
+
+	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *AccountDomainRemoval
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})
