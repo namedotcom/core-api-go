@@ -295,6 +295,30 @@ func (p *PaymentRequiredError) Unwrap() error {
 	return p.APIError
 }
 
+// Service Unavailable — returned during scheduled maintenance when the API is offline. See https://status.name.com for updates.
+type ServiceUnavailableError struct {
+	*core.APIError
+	Body any
+}
+
+func (s *ServiceUnavailableError) UnmarshalJSON(data []byte) error {
+	var body any
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	s.StatusCode = 503
+	s.Body = body
+	return nil
+}
+
+func (s *ServiceUnavailableError) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.Body)
+}
+
+func (s *ServiceUnavailableError) Unwrap() error {
+	return s.APIError
+}
+
 // Rate limit has been exceeded.
 type TooManyRequestsError struct {
 	*core.APIError

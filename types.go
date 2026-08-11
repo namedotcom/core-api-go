@@ -328,6 +328,197 @@ func (a AccountCreditBalanceChangeEventName) Ptr() *AccountCreditBalanceChangeEv
 	return &a
 }
 
+// Payload sent when a domain is removed from the subscribing account.
+var (
+	accountDomainRemovalFieldEventName  = big.NewInt(1 << 0)
+	accountDomainRemovalFieldDomainName = big.NewInt(1 << 1)
+	accountDomainRemovalFieldReason     = big.NewInt(1 << 2)
+	accountDomainRemovalFieldExpireDate = big.NewInt(1 << 3)
+)
+
+type AccountDomainRemoval struct {
+	// The name of the subscription event
+	EventName AccountDomainRemovalEventName `json:"eventName" url:"eventName"`
+	// The name of the domain that was removed
+	DomainName string `json:"domainName" url:"domainName"`
+	// Why the domain left inventory: `expiration` (registry delete / post-expiry inventory loss), `agp_refund` (AGP refund delete), or `administrative` (ops/support removal).
+	Reason AccountDomainRemovalReason `json:"reason" url:"reason"`
+	// The date and time when the domain expired
+	ExpireDate time.Time `json:"expireDate" url:"expireDate"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (a *AccountDomainRemoval) GetEventName() AccountDomainRemovalEventName {
+	if a == nil {
+		return ""
+	}
+	return a.EventName
+}
+
+func (a *AccountDomainRemoval) GetDomainName() string {
+	if a == nil {
+		return ""
+	}
+	return a.DomainName
+}
+
+func (a *AccountDomainRemoval) GetReason() AccountDomainRemovalReason {
+	if a == nil {
+		return ""
+	}
+	return a.Reason
+}
+
+func (a *AccountDomainRemoval) GetExpireDate() time.Time {
+	if a == nil {
+		return time.Time{}
+	}
+	return a.ExpireDate
+}
+
+func (a *AccountDomainRemoval) GetExtraProperties() map[string]interface{} {
+	if a == nil {
+		return nil
+	}
+	return a.extraProperties
+}
+
+func (a *AccountDomainRemoval) require(field *big.Int) {
+	if a.explicitFields == nil {
+		a.explicitFields = big.NewInt(0)
+	}
+	a.explicitFields.Or(a.explicitFields, field)
+}
+
+// SetEventName sets the EventName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccountDomainRemoval) SetEventName(eventName AccountDomainRemovalEventName) {
+	a.EventName = eventName
+	a.require(accountDomainRemovalFieldEventName)
+}
+
+// SetDomainName sets the DomainName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccountDomainRemoval) SetDomainName(domainName string) {
+	a.DomainName = domainName
+	a.require(accountDomainRemovalFieldDomainName)
+}
+
+// SetReason sets the Reason field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccountDomainRemoval) SetReason(reason AccountDomainRemovalReason) {
+	a.Reason = reason
+	a.require(accountDomainRemovalFieldReason)
+}
+
+// SetExpireDate sets the ExpireDate field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (a *AccountDomainRemoval) SetExpireDate(expireDate time.Time) {
+	a.ExpireDate = expireDate
+	a.require(accountDomainRemovalFieldExpireDate)
+}
+
+func (a *AccountDomainRemoval) UnmarshalJSON(data []byte) error {
+	type embed AccountDomainRemoval
+	var unmarshaler = struct {
+		embed
+		ExpireDate *internal.DateTime `json:"expireDate"`
+	}{
+		embed: embed(*a),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*a = AccountDomainRemoval(unmarshaler.embed)
+	a.ExpireDate = unmarshaler.ExpireDate.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *a)
+	if err != nil {
+		return err
+	}
+	a.extraProperties = extraProperties
+	a.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (a *AccountDomainRemoval) MarshalJSON() ([]byte, error) {
+	type embed AccountDomainRemoval
+	var marshaler = struct {
+		embed
+		ExpireDate *internal.DateTime `json:"expireDate"`
+	}{
+		embed:      embed(*a),
+		ExpireDate: internal.NewDateTime(a.ExpireDate),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, a.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (a *AccountDomainRemoval) String() string {
+	if a == nil {
+		return "<nil>"
+	}
+	if len(a.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(a.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(a); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", a)
+}
+
+// The name of the subscription event
+type AccountDomainRemovalEventName string
+
+const (
+	AccountDomainRemovalEventNameAccountDomainRemoval AccountDomainRemovalEventName = "account.domain.removal"
+)
+
+func NewAccountDomainRemovalEventNameFromString(s string) (AccountDomainRemovalEventName, error) {
+	switch s {
+	case "account.domain.removal":
+		return AccountDomainRemovalEventNameAccountDomainRemoval, nil
+	}
+	var t AccountDomainRemovalEventName
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a AccountDomainRemovalEventName) Ptr() *AccountDomainRemovalEventName {
+	return &a
+}
+
+// Why the domain left inventory: `expiration` (registry delete / post-expiry inventory loss), `agp_refund` (AGP refund delete), or `administrative` (ops/support removal).
+type AccountDomainRemovalReason string
+
+const (
+	AccountDomainRemovalReasonExpiration     AccountDomainRemovalReason = "expiration"
+	AccountDomainRemovalReasonAgpRefund      AccountDomainRemovalReason = "agp_refund"
+	AccountDomainRemovalReasonAdministrative AccountDomainRemovalReason = "administrative"
+)
+
+func NewAccountDomainRemovalReasonFromString(s string) (AccountDomainRemovalReason, error) {
+	switch s {
+	case "expiration":
+		return AccountDomainRemovalReasonExpiration, nil
+	case "agp_refund":
+		return AccountDomainRemovalReasonAgpRefund, nil
+	case "administrative":
+		return AccountDomainRemovalReasonAdministrative, nil
+	}
+	var t AccountDomainRemovalReason
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (a AccountDomainRemovalReason) Ptr() *AccountDomainRemovalReason {
+	return &a
+}
+
 // Indicates whether the domain is set to renew automatically before expiration.
 type AutorenewEnabled = bool
 
@@ -3300,7 +3491,7 @@ func (d DomainTransferInternalOutStatusChangeStatus) Ptr() *DomainTransferIntern
 	return &d
 }
 
-// Payload sent when a domain transfer OUT from name.com to another registrar has a status change (initiated, completed, or canceled). When status is "completed", the domain has been removed from name.com. In some edge cases (including near-expiration scenarios) the data may not be fully accurate.
+// Payload for `domain.transfer_out.status_change`. `completed` means the domain left name.com. `canceled` means the outbound transfer is no longer pending at the registry.
 var (
 	domainTransferOutStatusChangeFieldEventName        = big.NewInt(1 << 0)
 	domainTransferOutStatusChangeFieldDomainName       = big.NewInt(1 << 1)
@@ -3311,9 +3502,9 @@ var (
 type DomainTransferOutStatusChange struct {
 	// The name of the subscription event.
 	EventName DomainTransferOutStatusChangeEventName `json:"eventName" url:"eventName"`
-	// The domain that has transferred out of name.com.
+	// The domain whose outbound transfer status changed. For `completed`, the domain has left name.com; for `initiated` and `canceled`, it remains on the losing account.
 	DomainName string `json:"domainName" url:"domainName"`
-	// The status of the transfer out event. May be "initiated" (transfer out was started), "completed" (domain has been removed from the account), or "canceled" (transfer out was canceled before completion).
+	// `initiated` (pending out started), `completed` (domain removed), or `canceled` (no longer pending at the registry).
 	Status DomainTransferOutStatusChangeStatus `json:"status" url:"status"`
 	// The registry client ID associated with the domain at the time of transfer out, when available. This can help identify the gaining registrar at the registry.
 	RegistryClientID *string `json:"registryClientId,omitempty" url:"registryClientId,omitempty"`
@@ -3457,7 +3648,7 @@ func (d DomainTransferOutStatusChangeEventName) Ptr() *DomainTransferOutStatusCh
 	return &d
 }
 
-// The status of the transfer out event. May be "initiated" (transfer out was started), "completed" (domain has been removed from the account), or "canceled" (transfer out was canceled before completion).
+// `initiated` (pending out started), `completed` (domain removed), or `canceled` (no longer pending at the registry).
 type DomainTransferOutStatusChangeStatus string
 
 const (
@@ -5564,6 +5755,108 @@ func (r *RegistrantContactRequest) String() string {
 
 // The cost to renew the domain. This may be required for the RenewDomain operation.
 type RenewalPrice = float64
+
+var (
+	serviceUnavailableErrorBodyFieldMessage = big.NewInt(1 << 0)
+	serviceUnavailableErrorBodyFieldDetails = big.NewInt(1 << 1)
+)
+
+type ServiceUnavailableErrorBody struct {
+	// A human-readable message providing more details about the error.
+	Message string `json:"message" url:"message"`
+	// Additional context or information about the error.
+	Details *string `json:"details,omitempty" url:"details,omitempty"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (s *ServiceUnavailableErrorBody) GetMessage() string {
+	if s == nil {
+		return ""
+	}
+	return s.Message
+}
+
+func (s *ServiceUnavailableErrorBody) GetDetails() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Details
+}
+
+func (s *ServiceUnavailableErrorBody) GetExtraProperties() map[string]interface{} {
+	if s == nil {
+		return nil
+	}
+	return s.extraProperties
+}
+
+func (s *ServiceUnavailableErrorBody) require(field *big.Int) {
+	if s.explicitFields == nil {
+		s.explicitFields = big.NewInt(0)
+	}
+	s.explicitFields.Or(s.explicitFields, field)
+}
+
+// SetMessage sets the Message field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ServiceUnavailableErrorBody) SetMessage(message string) {
+	s.Message = message
+	s.require(serviceUnavailableErrorBodyFieldMessage)
+}
+
+// SetDetails sets the Details field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (s *ServiceUnavailableErrorBody) SetDetails(details *string) {
+	s.Details = details
+	s.require(serviceUnavailableErrorBodyFieldDetails)
+}
+
+func (s *ServiceUnavailableErrorBody) UnmarshalJSON(data []byte) error {
+	type unmarshaler ServiceUnavailableErrorBody
+	var value unmarshaler
+	if err := json.Unmarshal(data, &value); err != nil {
+		return err
+	}
+	*s = ServiceUnavailableErrorBody(value)
+	extraProperties, err := internal.ExtractExtraProperties(data, *s)
+	if err != nil {
+		return err
+	}
+	s.extraProperties = extraProperties
+	s.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (s *ServiceUnavailableErrorBody) MarshalJSON() ([]byte, error) {
+	type embed ServiceUnavailableErrorBody
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*s),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, s.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (s *ServiceUnavailableErrorBody) String() string {
+	if s == nil {
+		return "<nil>"
+	}
+	if len(s.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(s.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(s); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", s)
+}
 
 var (
 	tooManyRequestsErrorBodyFieldMessage = big.NewInt(1 << 0)

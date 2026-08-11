@@ -121,6 +121,7 @@ func (c *Client) CancelTransfer(
 }
 
 // Cancels an outbound transfer for the given domain. Use this when the domain is being transferred out of name.com (losing registrar) to another (gaining) registrar and the registrant or reseller wants to cancel that transfer.
+// On success, subscribers receive `domain.transfer_out.status_change` with status `canceled`.
 // The endpoint validates that the domain exists and belongs to the authenticated account. Only domains in a pending transfer (out) state can be canceled.
 func (c *Client) CancelOutboundTransfer(
 	ctx context.Context,
