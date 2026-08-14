@@ -35,6 +35,14 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Returns all domain transfer requests for the account, including in-progress and recent transfers.
+//
+// Example:
+//
+//	request := &coreapigo.ListTransfersRequest{}
+//	client.Transfers.ListTransfers(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListTransfers(
 	ctx context.Context,
 	request *coreapigo.ListTransfersRequest,
@@ -53,6 +61,17 @@ func (c *Client) ListTransfers(
 
 // Initiates a domain transfer into your name.com account from another registrar. You must provide the domain name and its valid transfer authorization code (EPP code). The domain must not be locked or under any transfer restrictions (e.g. clientTransferProhibited). If successful, the transfer is submitted and tracked through the ICANN transfer process. Once a transfer has been created, you can track its progress via the [GetTransfer](/api/v1/reference/transfers/get-transfer) endpoint.
 // **Transfer pricing:** Omit `purchasePrice` for standard (non-premium) transfers. For premium transfers, pass `transferPrice` from [Get Pricing For Domain](/api/v1/reference/domains/get-pricing-for-domain) as `purchasePrice`. If sent, it must match Get Pricing `transferPrice` exactly or the request will fail. Premium transfers without `purchasePrice` will fail. See the [Domain pricing guide](/guides/domain-pricing) for how [Get Pricing](/api/v1/reference/domains/get-pricing-for-domain) `transferPrice` relates to the `years` query parameter.
+//
+// Example:
+//
+//	request := &coreapigo.CreateTransferRequest{
+//	    AuthCode: "ABC123",
+//	    DomainName: "example.com",
+//	}
+//	client.Transfers.CreateTransfer(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateTransfer(
 	ctx context.Context,
 	request *coreapigo.CreateTransferRequest,
@@ -70,6 +89,16 @@ func (c *Client) CreateTransfer(
 }
 
 // Retrieves details of a specific domain transfer request.
+//
+// Example:
+//
+//	request := &coreapigo.GetTransferRequest{
+//	    DomainName: "domainName",
+//	}
+//	client.Transfers.GetTransfer(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetTransfer(
 	ctx context.Context,
 	request *coreapigo.GetTransferRequest,
@@ -104,6 +133,17 @@ func (c *Client) GetTransfer(
 // - failed
 // - canceled
 // - canceled_pending_refund
+//
+// Example:
+//
+//	request := &coreapigo.CancelTransferRequest{
+//	    DomainName: "domainName",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Transfers.CancelTransfer(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CancelTransfer(
 	ctx context.Context,
 	request *coreapigo.CancelTransferRequest,
@@ -123,6 +163,17 @@ func (c *Client) CancelTransfer(
 // Cancels an outbound transfer for the given domain. Use this when the domain is being transferred out of name.com (losing registrar) to another (gaining) registrar and the registrant or reseller wants to cancel that transfer.
 // On success, subscribers receive `domain.transfer_out.status_change` with status `canceled`.
 // The endpoint validates that the domain exists and belongs to the authenticated account. Only domains in a pending transfer (out) state can be canceled.
+//
+// Example:
+//
+//	request := &coreapigo.CancelOutboundTransferRequest{
+//	    DomainName: "example.com",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Transfers.CancelOutboundTransfer(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CancelOutboundTransfer(
 	ctx context.Context,
 	request *coreapigo.CancelOutboundTransferRequest,
@@ -150,6 +201,17 @@ func (c *Client) CancelOutboundTransfer(
 // If `contacts` is omitted, the gaining account's default contacts are applied. If `contacts` is provided, any roles included in the request are applied and omitted roles use the gaining account's default contacts (same pattern as [Create Domain](/api/v1/reference/domains/create-domain) and [Set Contacts](/api/v1/reference/domains/set-contacts)). The 60-day contact-change transfer lock is enforced based on the **gaining** account's settings, consistent with Set Contacts.
 // #### Access
 // Restricted to approved enterprise resellers; other callers receive `403 Forbidden`.
+//
+// Example:
+//
+//	request := &coreapigo.CreateInternalTransferInRequest{
+//	    DomainName: "example.com",
+//	    AuthCode: "ABC123",
+//	}
+//	client.Transfers.CreateInternalTransferIn(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateInternalTransferIn(
 	ctx context.Context,
 	request *coreapigo.CreateInternalTransferInRequest,
@@ -177,6 +239,16 @@ func (c *Client) CreateInternalTransferIn(
 // #### Privacy
 //
 // This endpoint never reveals which account a domain is in. To check whether a domain is in your own account, use [Get Domain](/api/v1/reference/domains/get-domain) instead.
+//
+// Example:
+//
+//	request := &coreapigo.GetTransferEligibilityRequest{
+//	    DomainName: "domainName",
+//	}
+//	client.Transfers.GetTransferEligibility(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetTransferEligibility(
 	ctx context.Context,
 	request *coreapigo.GetTransferEligibilityRequest,

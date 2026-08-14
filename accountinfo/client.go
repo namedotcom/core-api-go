@@ -35,6 +35,12 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Returns the current account credit balance for the authenticated user.
+//
+// Example:
+//
+//	client.AccountInfo.CheckAccountBalance(
+//	    context.TODO(),
+//	)
 func (c *Client) CheckAccountBalance(
 	ctx context.Context,
 	opts ...option.RequestOption,

@@ -167,6 +167,7 @@ func TestTransfersCancelTransferWithWireMock(
 	)
 	request := &coreapigo.CancelTransferRequest{
 		DomainName: "domainName",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Transfers.CancelTransfer(
 		context.TODO(),
@@ -193,6 +194,7 @@ func TestTransfersCancelOutboundTransferWithWireMock(
 	)
 	request := &coreapigo.CancelOutboundTransferRequest{
 		DomainName: "example.com",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Transfers.CancelOutboundTransfer(
 		context.TODO(),

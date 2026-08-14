@@ -204,6 +204,7 @@ func TestDomainsDisableAutorenewWithWireMock(
 	)
 	request := &coreapigo.DisableAutorenewRequest{
 		DomainName: "example.com",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Domains.DisableAutorenew(
 		context.TODO(),
@@ -230,6 +231,7 @@ func TestDomainsDisableWhoisPrivacyWithWireMock(
 	)
 	request := &coreapigo.DisableWhoisPrivacyRequest{
 		DomainName: "example.com",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Domains.DisableWhoisPrivacy(
 		context.TODO(),
@@ -256,6 +258,7 @@ func TestDomainsEnableAutorenewWithWireMock(
 	)
 	request := &coreapigo.EnableAutorenewRequest{
 		DomainName: "example.com",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Domains.EnableAutorenew(
 		context.TODO(),
@@ -282,6 +285,7 @@ func TestDomainsEnableWhoisPrivacyWithWireMock(
 	)
 	request := &coreapigo.EnableWhoisPrivacyRequest{
 		DomainName: "domainName",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Domains.EnableWhoisPrivacy(
 		context.TODO(),
@@ -363,6 +367,7 @@ func TestDomainsLockDomainWithWireMock(
 	)
 	request := &coreapigo.LockDomainRequest{
 		DomainName: "example.com",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Domains.LockDomain(
 		context.TODO(),
@@ -500,6 +505,7 @@ func TestDomainsUnlockDomainWithWireMock(
 	)
 	request := &coreapigo.UnlockDomainRequest{
 		DomainName: "domainName",
+		Body:       &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.Domains.UnlockDomain(
 		context.TODO(),

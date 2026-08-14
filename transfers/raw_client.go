@@ -189,6 +189,7 @@ func (r *RawClient) CancelTransfer(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Transfer
 	raw, err := r.caller.Call(
 		ctx,
@@ -201,6 +202,7 @@ func (r *RawClient) CancelTransfer(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
@@ -234,6 +236,7 @@ func (r *RawClient) CancelOutboundTransfer(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.CancelTransferOutResponse
 	raw, err := r.caller.Call(
 		ctx,
@@ -246,6 +249,7 @@ func (r *RawClient) CancelOutboundTransfer(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},

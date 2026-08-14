@@ -36,6 +36,21 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Returns a list of contacts, related to domains within your account, that require verification as per ICANN procedures.
 // When a new domain is created, unverified contacts are not immediately available in API responses.  Records are added by a scheduled process that runs approximately every 10 minutes.  As a result, there may be up to a 10-minute delay before unverified contacts appear in the API. This delay also applies to related events such as webhooks or other downstream systems that depend on contact verification data.
+//
+// Example:
+//
+//	request := &coreapigo.UnverifiedContactsListRequest{
+//	    PerPage: coreapigo.Int(
+//	        100,
+//	    ),
+//	    Page: coreapigo.Int(
+//	        2,
+//	    ),
+//	}
+//	client.ContactVerification.UnverifiedContactsList(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UnverifiedContactsList(
 	ctx context.Context,
 	request *coreapigo.UnverifiedContactsListRequest,
@@ -54,6 +69,20 @@ func (c *Client) UnverifiedContactsList(
 
 // Use this API to verify a contact.
 // This API is only available to approved reseller accounts. Contact name.com support to request access.
+//
+// Example:
+//
+//	request := &coreapigo.VerifyContactRequest{
+//	    VerificationID: 1,
+//	    IdempotencyKey: coreapigo.String(
+//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+//	    ),
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.ContactVerification.VerifyContact(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) VerifyContact(
 	ctx context.Context,
 	request *coreapigo.VerifyContactRequest,
@@ -80,6 +109,20 @@ func (c *Client) VerifyContact(
 // `nextEligibleAt` is always returned so the client knows when it can try again.
 //
 // On `429`, the response uses the standard error envelope, and `details` contains the earliest retry time (RFC3339 UTC).
+//
+// Example:
+//
+//	request := &coreapigo.ResendContactVerificationEmailRequest{
+//	    VerificationID: 1,
+//	    IdempotencyKey: coreapigo.String(
+//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+//	    ),
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.ContactVerification.ResendContactVerificationEmail(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ResendContactVerificationEmail(
 	ctx context.Context,
 	request *coreapigo.ResendContactVerificationEmailRequest,

@@ -35,6 +35,22 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Returns a paginated list of all email forwarding rules for a domain.
+//
+// Example:
+//
+//	request := &coreapigo.ListEmailForwardingsRequest{
+//	    DomainName: "domainName",
+//	    PerPage: coreapigo.Int(
+//	        100,
+//	    ),
+//	    Page: coreapigo.Int(
+//	        1,
+//	    ),
+//	}
+//	client.EmailForwardings.ListEmailForwardings(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListEmailForwardings(
 	ctx context.Context,
 	request *coreapigo.ListEmailForwardingsRequest,
@@ -52,6 +68,18 @@ func (c *Client) ListEmailForwardings(
 }
 
 // Creates a new email forwarding rule for a domain, such as redirecting info@example.com to an external inbox.  If this is the first email forwarding rule created for the domain, the API may also update your MX records automatically to enable mail routing.  The alias must not conflict with existing email services or MX records.  To modify a forwarding rule later, use [UpdateEmailForwarding](/api/v1/reference/email-forwardings/update-email-forwarding).
+//
+// Example:
+//
+//	request := &coreapigo.CreateEmailForwardingRequest{
+//	    DomainName: "example.com",
+//	    EmailBox: "admin",
+//	    EmailTo: "webmaster@example.com",
+//	}
+//	client.EmailForwardings.CreateEmailForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateEmailForwarding(
 	ctx context.Context,
 	request *coreapigo.CreateEmailForwardingRequest,
@@ -69,6 +97,17 @@ func (c *Client) CreateEmailForwarding(
 }
 
 // Retrieves the details of a specific email forwarding entry.
+//
+// Example:
+//
+//	request := &coreapigo.GetEmailForwardingRequest{
+//	    DomainName: "domainName",
+//	    EmailBox: "emailBox",
+//	}
+//	client.EmailForwardings.GetEmailForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetEmailForwarding(
 	ctx context.Context,
 	request *coreapigo.GetEmailForwardingRequest,
@@ -86,6 +125,17 @@ func (c *Client) GetEmailForwarding(
 }
 
 // Updates the destination email address for an existing forwarding rule.
+//
+// Example:
+//
+//	request := &coreapigo.EmailForwardingsUpdateEmailForwardingBody{
+//	    DomainName: "domainName",
+//	    EmailBox: "emailBox",
+//	}
+//	client.EmailForwardings.UpdateEmailForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateEmailForwarding(
 	ctx context.Context,
 	request *coreapigo.EmailForwardingsUpdateEmailForwardingBody,
@@ -103,6 +153,17 @@ func (c *Client) UpdateEmailForwarding(
 }
 
 // Deletes an email forwarding rule from a domain.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteEmailForwardingRequest{
+//	    DomainName: "domainName",
+//	    EmailBox: "emailBox",
+//	}
+//	client.EmailForwardings.DeleteEmailForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteEmailForwarding(
 	ctx context.Context,
 	request *coreapigo.DeleteEmailForwardingRequest,

@@ -1,7 +1,7 @@
 {
-  "cliVersion": "5.64.0",
+  "cliVersion": "5.95.0",
   "generatorName": "fernapi/fern-go-sdk",
-  "generatorVersion": "1.46.2",
+  "generatorVersion": "1.55.1",
   "generatorConfig": {
     "module": {
       "path": "github.com/namedotcom/core-api-go",
@@ -11,7 +11,7 @@
     "enableWireTests": true
   },
   "invokedBy": "ci",
-  "requestedVersion": "1.33.0",
+  "requestedVersion": "1.33.1",
   "ciProvider": "gitlab",
-  "sdkVersion": "v1.33.0"
+  "sdkVersion": "v1.33.1"
 }

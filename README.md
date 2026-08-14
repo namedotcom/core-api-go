@@ -2,7 +2,17 @@
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fnamedotcom%2Fcore-api-go)
 
-The name.com Core API Go library provides convenient access to the name.com Core API APIs from Go.
+Official SDK for the name.com Core API.
+
+List endpoints are paginated: pass the `page` query parameter to page through
+results, and read the response `links` header for next/previous page links.
+
+Write endpoints that accept an `X-Idempotency-Key` header are safe to retry —
+reusing the same key returns the original result instead of repeating the
+operation. Keys are valid for 12 hours.
+
+See https://docs.name.com for full guides and the API reference.
+
 
 ## Table of Contents
 
@@ -50,6 +60,170 @@ func do() {
     )
     client.Hello(
         context.TODO(),
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
+    client.AccountInfo.CheckAccountBalance(
+        context.TODO(),
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    coreapigo "github.com/namedotcom/core-api-go"
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
+    request := &coreapigo.SearchRequest{
+        Keyword: "mydomain",
+    }
+    client.Domains.Search(
+        context.TODO(),
+        request,
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    coreapigo "github.com/namedotcom/core-api-go"
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
+    request := &coreapigo.ListDomainsRequest{}
+    client.Domains.ListDomains(
+        context.TODO(),
+        request,
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    coreapigo "github.com/namedotcom/core-api-go"
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
+    request := &coreapigo.GetDomainRequest{
+        DomainName: "example.com",
+    }
+    client.Domains.GetDomain(
+        context.TODO(),
+        request,
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    coreapigo "github.com/namedotcom/core-api-go"
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
+    request := &coreapigo.ListRecordsRequest{
+        DomainName: "domainName",
+    }
+    client.DNS.ListRecords(
+        context.TODO(),
+        request,
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    coreapigo "github.com/namedotcom/core-api-go"
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
+    request := &coreapigo.DNSCreateRecordBody{
+        DomainName: "domainName",
+        Answer: "answer",
+        Host: "host",
+        Type: coreapigo.DNSCreateRecordBodyTypeA,
+    }
+    client.DNS.CreateRecord(
+        context.TODO(),
+        request,
     )
 }
 ```

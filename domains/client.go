@@ -35,6 +35,14 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Lists all domains in your account (basic details for each domain).
+//
+// Example:
+//
+//	request := &coreapigo.ListDomainsRequest{}
+//	client.Domains.ListDomains(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListDomains(
 	ctx context.Context,
 	request *coreapigo.ListDomainsRequest,
@@ -88,6 +96,23 @@ func (c *Client) ListDomains(
 //
 // #### Contact Verification
 // When a new domain registration is created and a contact is submitted, name.com may need to validate the contact's email address in accordance with ICANN policy. This validation involves sending an email to the provided address, prompting the recipient to click a link to verify their email address.
+//
+// Example:
+//
+//	request := &coreapigo.CreateDomainRequest{
+//	    IdempotencyKey: coreapigo.String(
+//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+//	    ),
+//	    Domain: &coreapigo.DomainCreatePayload{
+//	        DomainName: coreapigo.String(
+//	            "example.com",
+//	        ),
+//	    },
+//	}
+//	client.Domains.CreateDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateDomain(
 	ctx context.Context,
 	request *coreapigo.CreateDomainRequest,
@@ -105,6 +130,16 @@ func (c *Client) CreateDomain(
 }
 
 // Retrieves detailed information for a specific domain in your account.
+//
+// Example:
+//
+//	request := &coreapigo.GetDomainRequest{
+//	    DomainName: "example.com",
+//	}
+//	client.Domains.GetDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetDomain(
 	ctx context.Context,
 	request *coreapigo.GetDomainRequest,
@@ -122,6 +157,21 @@ func (c *Client) GetDomain(
 }
 
 // Allows updating of the autorenew, WhoIs Privacy and lock status of the specified domain. The request requires one, or any combination of the parameters in order to pass validation. If any of the requested updates failed, the domain will be returned to it's original state.
+//
+// Example:
+//
+//	request := &coreapigo.UpdateDomainRequest{
+//	    DomainName: "domainName",
+//	    Body: &coreapigo.UpdateDomainRequestBody{
+//	        UpdateDomainRequestBodyAutorenewEnabled: &coreapigo.UpdateDomainRequestBodyAutorenewEnabled{
+//	            AutorenewEnabled: true,
+//	        },
+//	    },
+//	}
+//	client.Domains.UpdateDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateDomain(
 	ctx context.Context,
 	request *coreapigo.UpdateDomainRequest,
@@ -138,7 +188,18 @@ func (c *Client) UpdateDomain(
 	return response.Body, nil
 }
 
-// Turns off automatic renewal for a domain.  **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+// Turns off automatic renewal for a domain. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+//
+// Example:
+//
+//	request := &coreapigo.DisableAutorenewRequest{
+//	    DomainName: "example.com",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Domains.DisableAutorenew(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DisableAutorenew(
 	ctx context.Context,
 	request *coreapigo.DisableAutorenewRequest,
@@ -156,6 +217,17 @@ func (c *Client) DisableAutorenew(
 }
 
 // Disables WHOIS privacy protection on a domain. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+//
+// Example:
+//
+//	request := &coreapigo.DisableWhoisPrivacyRequest{
+//	    DomainName: "example.com",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Domains.DisableWhoisPrivacy(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DisableWhoisPrivacy(
 	ctx context.Context,
 	request *coreapigo.DisableWhoisPrivacyRequest,
@@ -173,6 +245,17 @@ func (c *Client) DisableWhoisPrivacy(
 }
 
 // Turns on automatic renewal for a domain. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+//
+// Example:
+//
+//	request := &coreapigo.EnableAutorenewRequest{
+//	    DomainName: "example.com",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Domains.EnableAutorenew(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) EnableAutorenew(
 	ctx context.Context,
 	request *coreapigo.EnableAutorenewRequest,
@@ -190,6 +273,17 @@ func (c *Client) EnableAutorenew(
 }
 
 // Enables WHOIS privacy protection on a domain. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+//
+// Example:
+//
+//	request := &coreapigo.EnableWhoisPrivacyRequest{
+//	    DomainName: "domainName",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Domains.EnableWhoisPrivacy(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) EnableWhoisPrivacy(
 	ctx context.Context,
 	request *coreapigo.EnableWhoisPrivacyRequest,
@@ -207,6 +301,16 @@ func (c *Client) EnableWhoisPrivacy(
 }
 
 // Retrieves the transfer authorization code (EPP code) for a domain.
+//
+// Example:
+//
+//	request := &coreapigo.GetAuthCodeForDomainRequest{
+//	    DomainName: "domainName",
+//	}
+//	client.Domains.GetAuthCodeForDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetAuthCodeForDomain(
 	ctx context.Context,
 	request *coreapigo.GetAuthCodeForDomainRequest,
@@ -236,6 +340,19 @@ func (c *Client) GetAuthCodeForDomain(
 // **Transfer:** Pass `transferPrice` as `purchasePrice` on [Create Transfer](/api/v1/reference/transfers/create-transfer) for premium transfers. The `years` query parameter does not affect `transferPrice`.
 //
 // See the [Domain pricing guide](/guides/domain-pricing) for the full workflow.
+//
+// Example:
+//
+//	request := &coreapigo.GetPricingForDomainRequest{
+//	    DomainName: "domainName",
+//	    Years: coreapigo.Int(
+//	        2,
+//	    ),
+//	}
+//	client.Domains.GetPricingForDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetPricingForDomain(
 	ctx context.Context,
 	request *coreapigo.GetPricingForDomainRequest,
@@ -253,6 +370,17 @@ func (c *Client) GetPricingForDomain(
 }
 
 // Locks a domain to prevent it from being transferred. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+//
+// Example:
+//
+//	request := &coreapigo.LockDomainRequest{
+//	    DomainName: "example.com",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Domains.LockDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) LockDomain(
 	ctx context.Context,
 	request *coreapigo.LockDomainRequest,
@@ -270,6 +398,19 @@ func (c *Client) LockDomain(
 }
 
 // Adds or renews WHOIS privacy protection for a domain. This is used to ensure personal contact details remain hidden from public WHOIS lookups.  If WHOIS privacy is already enabled, this will extend the protection. If it’s not yet active, this will both purchase and enable the service.  This is a billable action unless covered by a bundled privacy plan.
+//
+// Example:
+//
+//	request := &coreapigo.DomainsPurchasePrivacyBody{
+//	    DomainName: "domainName",
+//	    IdempotencyKey: coreapigo.String(
+//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+//	    ),
+//	}
+//	client.Domains.PurchasePrivacy(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) PurchasePrivacy(
 	ctx context.Context,
 	request *coreapigo.DomainsPurchasePrivacyBody,
@@ -287,6 +428,16 @@ func (c *Client) PurchasePrivacy(
 }
 
 // Renews an existing domain for an additional registration period. Include the domain name and renewal term. Omit `purchasePrice` for standard (non-premium) renewals. For premium renewals, pass `renewalPrice` from [Get Pricing](/api/v1/reference/domains/get-pricing-for-domain) with matching `years` as `purchasePrice`. Renewal pricing is separate from Create Domain registration/acquisition pricing. This is typically used to extend ownership before a domain’s expiration.
+//
+// Example:
+//
+//	request := &coreapigo.DomainsRenewDomainBody{
+//	    DomainName: "domainName",
+//	}
+//	client.Domains.RenewDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) RenewDomain(
 	ctx context.Context,
 	request *coreapigo.DomainsRenewDomainBody,
@@ -306,6 +457,16 @@ func (c *Client) RenewDomain(
 // Updates WHOIS contact information for a domain. This includes the registrant, administrative, technical, and billing contacts.  All contact objects must be complete — partial updates are not supported.  You should fetch the existing contact data first (e.g., via [GetDomain](/api/v1/reference/domains/get-domain) and modify only the values you wish to change.  This call replaces all four contact sets at once.
 // #### Contact Verification
 // When registrant contact information is updated, validation may be triggered if the new contact information has not been previously validated. This validation is required by ICANN for all TLDs except country-code TLDs (ccTLDs). This validation involves sending an email to the provided address, prompting the recipient to click a link to verify their email address.
+//
+// Example:
+//
+//	request := &coreapigo.DomainsSetContactsBody{
+//	    DomainName: "example.com",
+//	}
+//	client.Domains.SetContacts(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SetContacts(
 	ctx context.Context,
 	request *coreapigo.DomainsSetContactsBody,
@@ -323,6 +484,20 @@ func (c *Client) SetContacts(
 }
 
 // SetNameservers will set the nameservers for the Domain. This operation updates the DNS configuration by changing which nameservers are responsible for the domain's zone.
+//
+// Example:
+//
+//	request := &coreapigo.DomainsSetNameserversBody{
+//	    DomainName: "example.com",
+//	    Nameservers: []string{
+//	        "ns1.name.com",
+//	        "ns2.name.com",
+//	    },
+//	}
+//	client.Domains.SetNameservers(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SetNameservers(
 	ctx context.Context,
 	request *coreapigo.DomainsSetNameserversBody,
@@ -340,6 +515,17 @@ func (c *Client) SetNameservers(
 }
 
 // Unlocks a domain to allow it to be transferred. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+//
+// Example:
+//
+//	request := &coreapigo.UnlockDomainRequest{
+//	    DomainName: "domainName",
+//	    Body: &coreapigo.EmptyObject{},
+//	}
+//	client.Domains.UnlockDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UnlockDomain(
 	ctx context.Context,
 	request *coreapigo.UnlockDomainRequest,
@@ -367,6 +553,18 @@ func (c *Client) UnlockDomain(
 // to ensure predictable pricing and immediate fulfillment. Other purchase types
 // (such as aftermarket variants) can introduce higher costs and non-instant
 // transactions that may be delayed or declined by third parties.
+//
+// Example:
+//
+//	request := &coreapigo.AvailabilityRequest{
+//	    DomainNames: []string{
+//	        "domainNames",
+//	    },
+//	}
+//	client.Domains.CheckAvailability(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CheckAvailability(
 	ctx context.Context,
 	request *coreapigo.AvailabilityRequest,
@@ -396,6 +594,16 @@ func (c *Client) CheckAvailability(
 // With `purchaseType: registration`, domains that do not match the filter are **omitted** from results (unlike Check Availability, which returns them with `purchasable: false`).
 //
 // When results show `premium: true` or a non-`registration` `purchaseType`, follow the [Domain pricing guide](/guides/domain-pricing) before calling Create Domain. For all types, re-check with Check Availability immediately before create — prices and availability can change.
+//
+// Example:
+//
+//	request := &coreapigo.SearchRequest{
+//	    Keyword: "mydomain",
+//	}
+//	client.Domains.Search(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) Search(
 	ctx context.Context,
 	request *coreapigo.SearchRequest,
@@ -419,6 +627,20 @@ func (c *Client) Search(
 //
 // If no valid domains remain after this process, the API returns a `400 Bad Request` response.
 // **Note:** The cached zone files used for this check are refreshed twice daily based on the latest available data from the registries.
+//
+// Example:
+//
+//	request := &coreapigo.ZoneCheckRequest{
+//	    DomainNames: []string{
+//	        "example.com",
+//	        "example.net",
+//	        "example.org",
+//	    },
+//	}
+//	client.Domains.ZoneCheck(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ZoneCheck(
 	ctx context.Context,
 	request *coreapigo.ZoneCheckRequest,

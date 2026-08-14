@@ -35,6 +35,12 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Retrieves all active webhook subscriptions on the account.
+//
+// Example:
+//
+//	client.WebhookNotifications.GetSubscribedNotifications(
+//	    context.TODO(),
+//	)
 func (c *Client) GetSubscribedNotifications(
 	ctx context.Context,
 	opts ...option.RequestOption,
@@ -61,6 +67,18 @@ func (c *Client) GetSubscribedNotifications(
 // - `contact.verification.status_change` - contact verification status changes (verified or unverified).
 // - `domain.registry.rejection` – domain **create** failed after asynchronous registry processing (uncommon; most creates succeed at request time).
 // - `domain.expiration` – domain has expired and entered the post-expiry grace period. This is informational only.
+//
+// Example:
+//
+//	request := &coreapigo.SubscribeToNotification{
+//	    EventName: coreapigo.AvailableWebhooksAccountCreditBalanceChange,
+//	    URL: "https://example.com",
+//	    Active: true,
+//	}
+//	client.WebhookNotifications.SubscribeToNotification(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) SubscribeToNotification(
 	ctx context.Context,
 	request *coreapigo.SubscribeToNotification,
@@ -78,6 +96,21 @@ func (c *Client) SubscribeToNotification(
 }
 
 // Updates an existing webhook’s configuration.  This may include changing the callback URL or updating whether the webhook is currently active.
+//
+// Example:
+//
+//	request := &coreapigo.ModifySubscriptionRequest{
+//	    ID: 1,
+//	    Body: &coreapigo.ModifySubscriptionRequestBody{
+//	        ModifySubscriptionRequestBodyURL: &coreapigo.ModifySubscriptionRequestBodyURL{
+//	            URL: "url",
+//	        },
+//	    },
+//	}
+//	client.WebhookNotifications.ModifySubscription(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ModifySubscription(
 	ctx context.Context,
 	request *coreapigo.ModifySubscriptionRequest,
@@ -95,6 +128,16 @@ func (c *Client) ModifySubscription(
 }
 
 // Removes a webhook subscription from the account.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteSubscriptionRequest{
+//	    ID: 1,
+//	}
+//	client.WebhookNotifications.DeleteSubscription(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteSubscription(
 	ctx context.Context,
 	request *coreapigo.DeleteSubscriptionRequest,

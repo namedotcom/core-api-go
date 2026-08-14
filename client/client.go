@@ -84,6 +84,12 @@ func NewNamecom(opts ...option.RequestOption) *Namecom {
 }
 
 // Returns basic information about the API server (useful for testing connectivity and version checks).
+//
+// Example:
+//
+//	client.Hello(
+//	    context.TODO(),
+//	)
 func (n *Namecom) Hello(
 	ctx context.Context,
 	opts ...option.RequestOption,

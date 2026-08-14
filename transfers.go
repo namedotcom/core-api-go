@@ -15,7 +15,8 @@ var (
 
 type CancelOutboundTransferRequest struct {
 	// DomainName is the domain whose transfer out should be canceled.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -35,13 +36,27 @@ func (c *CancelOutboundTransferRequest) SetDomainName(domainName string) {
 	c.require(cancelOutboundTransferRequestFieldDomainName)
 }
 
+func (c *CancelOutboundTransferRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	c.Body = body
+	return nil
+}
+
+func (c *CancelOutboundTransferRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c.Body)
+}
+
 var (
 	cancelTransferRequestFieldDomainName = big.NewInt(1 << 0)
 )
 
 type CancelTransferRequest struct {
 	// DomainName is the domain to cancel the transfer for.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -59,6 +74,19 @@ func (c *CancelTransferRequest) require(field *big.Int) {
 func (c *CancelTransferRequest) SetDomainName(domainName string) {
 	c.DomainName = domainName
 	c.require(cancelTransferRequestFieldDomainName)
+}
+
+func (c *CancelTransferRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	c.Body = body
+	return nil
+}
+
+func (c *CancelTransferRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c.Body)
 }
 
 var (

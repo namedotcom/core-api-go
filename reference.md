@@ -27,9 +27,8 @@ Returns basic information about the API server (useful for testing connectivity 
 
 ```go
 client.Hello(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -70,9 +69,8 @@ Returns the current account credit balance for the authenticated user.
 
 ```go
 client.AccountInfo.CheckAccountBalance(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -113,53 +111,52 @@ Creates a new sub-account under your authenticated reseller account and returns 
 
 ```go
 request := &coreapigo.CreateAccountRequest{
-        Account: &coreapigo.AccountRequest{
-            Contacts: &coreapigo.ContactsRequest{
-                Registrant: &coreapigo.RegistrantContactRequest{
-                    FirstName: coreapigo.String(
-                        "Jane",
-                    ),
-                    LastName: coreapigo.String(
-                        "Doe",
-                    ),
-                    Address1: coreapigo.String(
-                        "123 Main St.",
-                    ),
-                    City: coreapigo.String(
-                        "Denver",
-                    ),
-                    State: coreapigo.String(
-                        "CO",
-                    ),
-                    Zip: coreapigo.String(
-                        "12345",
-                    ),
-                    Country: coreapigo.String(
-                        "US",
-                    ),
-                    Email: coreapigo.String(
-                        "admin@example.net",
-                    ),
-                    Phone: coreapigo.String(
-                        "+13035551212",
-                    ),
-                },
+    Account: &coreapigo.AccountRequest{
+        Contacts: &coreapigo.ContactsRequest{
+            Registrant: &coreapigo.RegistrantContactRequest{
+                FirstName: coreapigo.String(
+                    "Jane",
+                ),
+                LastName: coreapigo.String(
+                    "Doe",
+                ),
+                Address1: coreapigo.String(
+                    "123 Main St.",
+                ),
+                City: coreapigo.String(
+                    "Denver",
+                ),
+                State: coreapigo.String(
+                    "CO",
+                ),
+                Zip: coreapigo.String(
+                    "12345",
+                ),
+                Country: coreapigo.String(
+                    "US",
+                ),
+                Email: coreapigo.String(
+                    "admin@example.net",
+                ),
+                Phone: coreapigo.String(
+                    "+13035551212",
+                ),
             },
-            AccountName: coreapigo.String(
-                "reseller_subaccount",
-            ),
-            Password: coreapigo.String(
-                "SecureP4ss!",
-            ),
         },
-        APITos: true,
-        Tos: true,
-    }
-client.Accounts.CreateAccount(
-        context.TODO(),
-        request,
-    )
+        AccountName: coreapigo.String(
+            "reseller_subaccount",
+        ),
+        Password: coreapigo.String(
+            "SecureP4ss!",
+        ),
+    },
+    APITos: true,
+    Tos: true,
 }
+client.Accounts.CreateAccount(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -232,10 +229,9 @@ Lists all domains in your account (basic details for each domain).
 ```go
 request := &coreapigo.ListDomainsRequest{}
 client.Domains.ListDomains(
-        context.TODO(),
-        request,
-    )
-}
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -462,20 +458,19 @@ When a new domain registration is created and a contact is submitted, name.com m
 
 ```go
 request := &coreapigo.CreateDomainRequest{
-        IdempotencyKey: coreapigo.String(
-            "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+    IdempotencyKey: coreapigo.String(
+        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+    ),
+    Domain: &coreapigo.DomainCreatePayload{
+        DomainName: coreapigo.String(
+            "example.com",
         ),
-        Domain: &coreapigo.DomainCreatePayload{
-            DomainName: coreapigo.String(
-                "example.com",
-            ),
-        },
-    }
-client.Domains.CreateDomain(
-        context.TODO(),
-        request,
-    )
+    },
 }
+client.Domains.CreateDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -591,13 +586,12 @@ Retrieves detailed information for a specific domain in your account.
 
 ```go
 request := &coreapigo.GetDomainRequest{
-        DomainName: "example.com",
-    }
-client.Domains.GetDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
 }
+client.Domains.GetDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -652,18 +646,17 @@ Allows updating of the autorenew, WhoIs Privacy and lock status of the specified
 
 ```go
 request := &coreapigo.UpdateDomainRequest{
-        DomainName: "domainName",
-        Body: &coreapigo.UpdateDomainRequestBody{
-            UpdateDomainRequestBodyAutorenewEnabled: &coreapigo.UpdateDomainRequestBodyAutorenewEnabled{
-                AutorenewEnabled: true,
-            },
+    DomainName: "domainName",
+    Body: &coreapigo.UpdateDomainRequestBody{
+        UpdateDomainRequestBodyAutorenewEnabled: &coreapigo.UpdateDomainRequestBodyAutorenewEnabled{
+            AutorenewEnabled: true,
         },
-    }
-client.Domains.UpdateDomain(
-        context.TODO(),
-        request,
-    )
+    },
 }
+client.Domains.UpdateDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -698,7 +691,7 @@ client.Domains.UpdateDomain(
 </dl>
 </details>
 
-<details><summary><code>client.Domains.DisableAutorenew(DomainName) -> *coreapigo.Domain</code></summary>
+<details><summary><code>client.Domains.DisableAutorenew(DomainName, request) -> *coreapigo.Domain</code></summary>
 <dl>
 <dd>
 
@@ -710,7 +703,7 @@ client.Domains.UpdateDomain(
 <dl>
 <dd>
 
-Turns off automatic renewal for a domain.  **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
+Turns off automatic renewal for a domain. **DEPRECATED** This endpoint is deprecated in favor of the new UpdateDomain API. This will be removed in a future release.
 </dd>
 </dl>
 </dd>
@@ -726,13 +719,13 @@ Turns off automatic renewal for a domain.  **DEPRECATED** This endpoint is depre
 
 ```go
 request := &coreapigo.DisableAutorenewRequest{
-        DomainName: "example.com",
-    }
-client.Domains.DisableAutorenew(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Domains.DisableAutorenew(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -751,6 +744,14 @@ client.Domains.DisableAutorenew(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -759,7 +760,7 @@ client.Domains.DisableAutorenew(
 </dl>
 </details>
 
-<details><summary><code>client.Domains.DisableWhoisPrivacy(DomainName) -> *coreapigo.Domain</code></summary>
+<details><summary><code>client.Domains.DisableWhoisPrivacy(DomainName, request) -> *coreapigo.Domain</code></summary>
 <dl>
 <dd>
 
@@ -787,13 +788,13 @@ Disables WHOIS privacy protection on a domain. **DEPRECATED** This endpoint is d
 
 ```go
 request := &coreapigo.DisableWhoisPrivacyRequest{
-        DomainName: "example.com",
-    }
-client.Domains.DisableWhoisPrivacy(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Domains.DisableWhoisPrivacy(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -812,6 +813,14 @@ client.Domains.DisableWhoisPrivacy(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -820,7 +829,7 @@ client.Domains.DisableWhoisPrivacy(
 </dl>
 </details>
 
-<details><summary><code>client.Domains.EnableAutorenew(DomainName) -> *coreapigo.Domain</code></summary>
+<details><summary><code>client.Domains.EnableAutorenew(DomainName, request) -> *coreapigo.Domain</code></summary>
 <dl>
 <dd>
 
@@ -848,13 +857,13 @@ Turns on automatic renewal for a domain. **DEPRECATED** This endpoint is depreca
 
 ```go
 request := &coreapigo.EnableAutorenewRequest{
-        DomainName: "example.com",
-    }
-client.Domains.EnableAutorenew(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Domains.EnableAutorenew(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -873,6 +882,14 @@ client.Domains.EnableAutorenew(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -881,7 +898,7 @@ client.Domains.EnableAutorenew(
 </dl>
 </details>
 
-<details><summary><code>client.Domains.EnableWhoisPrivacy(DomainName) -> *coreapigo.Domain</code></summary>
+<details><summary><code>client.Domains.EnableWhoisPrivacy(DomainName, request) -> *coreapigo.Domain</code></summary>
 <dl>
 <dd>
 
@@ -909,13 +926,13 @@ Enables WHOIS privacy protection on a domain. **DEPRECATED** This endpoint is de
 
 ```go
 request := &coreapigo.EnableWhoisPrivacyRequest{
-        DomainName: "domainName",
-    }
-client.Domains.EnableWhoisPrivacy(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Domains.EnableWhoisPrivacy(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -931,6 +948,14 @@ client.Domains.EnableWhoisPrivacy(
 <dd>
 
 **domainName:** `string` — DomainName is the domain name to enable whoisprivacy for.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
     
 </dd>
 </dl>
@@ -970,13 +995,12 @@ Retrieves the transfer authorization code (EPP code) for a domain.
 
 ```go
 request := &coreapigo.GetAuthCodeForDomainRequest{
-        DomainName: "domainName",
-    }
-client.Domains.GetAuthCodeForDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
 }
+client.Domains.GetAuthCodeForDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1043,16 +1067,15 @@ See the [Domain pricing guide](/guides/domain-pricing) for the full workflow.
 
 ```go
 request := &coreapigo.GetPricingForDomainRequest{
-        DomainName: "domainName",
-        Years: coreapigo.Int(
-            2,
-        ),
-    }
-client.Domains.GetPricingForDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Years: coreapigo.Int(
+        2,
+    ),
 }
+client.Domains.GetPricingForDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1087,7 +1110,7 @@ client.Domains.GetPricingForDomain(
 </dl>
 </details>
 
-<details><summary><code>client.Domains.LockDomain(DomainName) -> *coreapigo.Domain</code></summary>
+<details><summary><code>client.Domains.LockDomain(DomainName, request) -> *coreapigo.Domain</code></summary>
 <dl>
 <dd>
 
@@ -1115,13 +1138,13 @@ Locks a domain to prevent it from being transferred. **DEPRECATED** This endpoin
 
 ```go
 request := &coreapigo.LockDomainRequest{
-        DomainName: "example.com",
-    }
-client.Domains.LockDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Domains.LockDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1137,6 +1160,14 @@ client.Domains.LockDomain(
 <dd>
 
 **domainName:** `string` — DomainName is the domain name to lock.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
     
 </dd>
 </dl>
@@ -1176,16 +1207,15 @@ Adds or renews WHOIS privacy protection for a domain. This is used to ensure per
 
 ```go
 request := &coreapigo.DomainsPurchasePrivacyBody{
-        DomainName: "domainName",
-        IdempotencyKey: coreapigo.String(
-            "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-        ),
-    }
-client.Domains.PurchasePrivacy(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    IdempotencyKey: coreapigo.String(
+        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+    ),
 }
+client.Domains.PurchasePrivacy(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1264,13 +1294,12 @@ Renews an existing domain for an additional registration period. Include the dom
 
 ```go
 request := &coreapigo.DomainsRenewDomainBody{
-        DomainName: "domainName",
-    }
-client.Domains.RenewDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
 }
+client.Domains.RenewDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1343,13 +1372,12 @@ When registrant contact information is updated, validation may be triggered if t
 
 ```go
 request := &coreapigo.DomainsSetContactsBody{
-        DomainName: "example.com",
-    }
-client.Domains.SetContacts(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
 }
+client.Domains.SetContacts(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1412,17 +1440,16 @@ SetNameservers will set the nameservers for the Domain. This operation updates t
 
 ```go
 request := &coreapigo.DomainsSetNameserversBody{
-        DomainName: "example.com",
-        Nameservers: []string{
-            "ns1.name.com",
-            "ns2.name.com",
-        },
-    }
-client.Domains.SetNameservers(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Nameservers: []string{
+        "ns1.name.com",
+        "ns2.name.com",
+    },
 }
+client.Domains.SetNameservers(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1457,7 +1484,7 @@ client.Domains.SetNameservers(
 </dl>
 </details>
 
-<details><summary><code>client.Domains.UnlockDomain(DomainName) -> *coreapigo.Domain</code></summary>
+<details><summary><code>client.Domains.UnlockDomain(DomainName, request) -> *coreapigo.Domain</code></summary>
 <dl>
 <dd>
 
@@ -1485,13 +1512,13 @@ Unlocks a domain to allow it to be transferred. **DEPRECATED** This endpoint is 
 
 ```go
 request := &coreapigo.UnlockDomainRequest{
-        DomainName: "domainName",
-    }
-client.Domains.UnlockDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Domains.UnlockDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1507,6 +1534,14 @@ client.Domains.UnlockDomain(
 <dd>
 
 **domainName:** `string` — DomainName is the domain name to unlock.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
     
 </dd>
 </dl>
@@ -1556,15 +1591,14 @@ transactions that may be delayed or declined by third parties.
 
 ```go
 request := &coreapigo.AvailabilityRequest{
-        DomainNames: []string{
-            "domainNames",
-        },
-    }
-client.Domains.CheckAvailability(
-        context.TODO(),
-        request,
-    )
+    DomainNames: []string{
+        "domainNames",
+    },
 }
+client.Domains.CheckAvailability(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1639,13 +1673,12 @@ When results show `premium: true` or a non-`registration` `purchaseType`, follow
 
 ```go
 request := &coreapigo.SearchRequest{
-        Keyword: "mydomain",
-    }
-client.Domains.Search(
-        context.TODO(),
-        request,
-    )
+    Keyword: "mydomain",
 }
+client.Domains.Search(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1733,17 +1766,16 @@ If no valid domains remain after this process, the API returns a `400 Bad Reques
 
 ```go
 request := &coreapigo.ZoneCheckRequest{
-        DomainNames: []string{
-            "example.com",
-            "example.net",
-            "example.org",
-        },
-    }
-client.Domains.ZoneCheck(
-        context.TODO(),
-        request,
-    )
+    DomainNames: []string{
+        "example.com",
+        "example.net",
+        "example.org",
+    },
 }
+client.Domains.ZoneCheck(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1811,13 +1843,12 @@ Lists all DNSSEC (DS) records configured for a domain.
 
 ```go
 request := &coreapigo.ListDnsseCsRequest{
-        DomainName: "domainName",
-    }
-client.DnsseCs.ListDnsseCs(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
 }
+client.DnsseCs.ListDnsseCs(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1872,17 +1903,16 @@ Adds (registers) a new DNSSEC DS record for a domain.
 
 ```go
 request := &coreapigo.CreateDnssecBody{
-        DomainName: "domainName",
-        Algorithm: 1,
-        Digest: "digest",
-        DigestType: 1,
-        KeyTag: 1,
-    }
-client.DnsseCs.CreateDnssec(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Algorithm: 1,
+    Digest: "digest",
+    DigestType: 1,
+    KeyTag: 1,
 }
+client.DnsseCs.CreateDnssec(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -1969,14 +1999,13 @@ Retrieves details of a specific DNSSEC record for a domain.
 
 ```go
 request := &coreapigo.GetDnssecRequest{
-        DomainName: "domainName",
-        Digest: "digest",
-    }
-client.DnsseCs.GetDnssec(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Digest: "digest",
 }
+client.DnsseCs.GetDnssec(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2039,14 +2068,13 @@ Deletes a DNSSEC record from a domain.
 
 ```go
 request := &coreapigo.DeleteDnssecRequest{
-        DomainName: "domainName",
-        Digest: "digest",
-    }
-client.DnsseCs.DeleteDnssec(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Digest: "digest",
 }
+client.DnsseCs.DeleteDnssec(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2110,19 +2138,18 @@ Returns a paginated list of all email forwarding rules for a domain.
 
 ```go
 request := &coreapigo.ListEmailForwardingsRequest{
-        DomainName: "domainName",
-        PerPage: coreapigo.Int(
-            100,
-        ),
-        Page: coreapigo.Int(
-            1,
-        ),
-    }
-client.EmailForwardings.ListEmailForwardings(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    PerPage: coreapigo.Int(
+        100,
+    ),
+    Page: coreapigo.Int(
+        1,
+    ),
 }
+client.EmailForwardings.ListEmailForwardings(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2193,15 +2220,14 @@ Creates a new email forwarding rule for a domain, such as redirecting info@examp
 
 ```go
 request := &coreapigo.CreateEmailForwardingRequest{
-        DomainName: "example.com",
-        EmailBox: "admin",
-        EmailTo: "webmaster@example.com",
-    }
-client.EmailForwardings.CreateEmailForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    EmailBox: "admin",
+    EmailTo: "webmaster@example.com",
 }
+client.EmailForwardings.CreateEmailForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2272,14 +2298,13 @@ Retrieves the details of a specific email forwarding entry.
 
 ```go
 request := &coreapigo.GetEmailForwardingRequest{
-        DomainName: "domainName",
-        EmailBox: "emailBox",
-    }
-client.EmailForwardings.GetEmailForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    EmailBox: "emailBox",
 }
+client.EmailForwardings.GetEmailForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2342,14 +2367,13 @@ Updates the destination email address for an existing forwarding rule.
 
 ```go
 request := &coreapigo.EmailForwardingsUpdateEmailForwardingBody{
-        DomainName: "domainName",
-        EmailBox: "emailBox",
-    }
-client.EmailForwardings.UpdateEmailForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    EmailBox: "emailBox",
 }
+client.EmailForwardings.UpdateEmailForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2420,14 +2444,13 @@ Deletes an email forwarding rule from a domain.
 
 ```go
 request := &coreapigo.DeleteEmailForwardingRequest{
-        DomainName: "domainName",
-        EmailBox: "emailBox",
-    }
-client.EmailForwardings.DeleteEmailForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    EmailBox: "emailBox",
 }
+client.EmailForwardings.DeleteEmailForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2491,13 +2514,12 @@ Lists all DNS records for a specified domain.
 
 ```go
 request := &coreapigo.ListRecordsRequest{
-        DomainName: "domainName",
-    }
-client.DNS.ListRecords(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
 }
+client.DNS.ListRecords(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2568,16 +2590,15 @@ Adds a new DNS record to the specified domain zone. Provide the record type (e.g
 
 ```go
 request := &coreapigo.DNSCreateRecordBody{
-        DomainName: "domainName",
-        Answer: "answer",
-        Host: "host",
-        Type: coreapigo.DNSCreateRecordBodyTypeA,
-    }
-client.DNS.CreateRecord(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Answer: "answer",
+    Host: "host",
+    Type: coreapigo.DNSCreateRecordBodyTypeA,
 }
+client.DNS.CreateRecord(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2695,14 +2716,13 @@ Retrieves details of a specific DNS record.
 
 ```go
 request := &coreapigo.GetRecordRequest{
-        DomainName: "domainName",
-        ID: 1,
-    }
-client.DNS.GetRecord(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    ID: 1,
 }
+client.DNS.GetRecord(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2765,16 +2785,15 @@ Replaces an existing DNS record with new data. This is a full overwrite — all 
 
 ```go
 request := &coreapigo.DNSUpdateRecordBody{
-        DomainName: "domainName",
-        ID: 1,
-        Answer: "answer",
-        Type: coreapigo.DNSUpdateRecordBodyTypeA,
-    }
-client.DNS.UpdateRecord(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    ID: 1,
+    Answer: "answer",
+    Type: coreapigo.DNSUpdateRecordBodyTypeA,
 }
+client.DNS.UpdateRecord(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2892,14 +2911,13 @@ Removes a DNS record by ID. Often used during cleanup operations or when replaci
 
 ```go
 request := &coreapigo.DeleteRecordRequest{
-        DomainName: "domainName",
-        ID: 1,
-    }
-client.DNS.DeleteRecord(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    ID: 1,
 }
+client.DNS.DeleteRecord(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -2963,19 +2981,18 @@ Returns all URL forwarding settings configured for a domain. **Deprecated.** Use
 
 ```go
 request := &coreapigo.ListURLForwardingsRequest{
-        DomainName: "example.com",
-        PerPage: coreapigo.Int(
-            100,
-        ),
-        Page: coreapigo.Int(
-            1,
-        ),
-    }
-client.URLForwardings.ListURLForwardings(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    PerPage: coreapigo.Int(
+        100,
+    ),
+    Page: coreapigo.Int(
+        1,
+    ),
 }
+client.URLForwardings.ListURLForwardings(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3046,18 +3063,17 @@ Sets up a new URL forwarding (redirect) for a domain or subdomain. If this is th
 
 ```go
 request := &coreapigo.CreateURLForwardingRequest{
-        DomainName: "example.com",
-        Body: &coreapigo.URLForwardingInput{
-            ForwardsTo: "https://destination-site.com",
-            Host: "www",
-            Type: coreapigo.URLForwardingInputTypeMasked,
-        },
-    }
-client.URLForwardings.CreateURLForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Body: &coreapigo.URLForwardingInput{
+        ForwardsTo: "https://destination-site.com",
+        Host: "www",
+        Type: coreapigo.URLForwardingInputTypeMasked,
+    },
 }
+client.URLForwardings.CreateURLForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3120,14 +3136,13 @@ Retrieves the details of a specific URL forwarding configuration. **Deprecated.*
 
 ```go
 request := &coreapigo.GetURLForwardingRequest{
-        DomainName: "example.com",
-        Host: "www.example.org",
-    }
-client.URLForwardings.GetURLForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Host: "www.example.org",
 }
+client.URLForwardings.GetURLForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3190,19 +3205,18 @@ Modifies an existing URL forwarding rule. Changes may take up to 24 hours to ful
 
 ```go
 request := &coreapigo.UpdateURLForwardingRequest{
-        DomainName: "example.com",
-        Host: "www.example.org",
-        Body: &coreapigo.URLForwardingInput{
-            ForwardsTo: "https://destination-site.com",
-            Host: "www",
-            Type: coreapigo.URLForwardingInputTypeMasked,
-        },
-    }
-client.URLForwardings.UpdateURLForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Host: "www.example.org",
+    Body: &coreapigo.URLForwardingInput{
+        ForwardsTo: "https://destination-site.com",
+        Host: "www",
+        Type: coreapigo.URLForwardingInputTypeMasked,
+    },
 }
+client.URLForwardings.UpdateURLForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3273,14 +3287,13 @@ Removes a URL forwarding configuration from the domain. This operation cannot be
 
 ```go
 request := &coreapigo.DeleteURLForwardingRequest{
-        DomainName: "example.com",
-        Host: "www.example.org",
-    }
-client.URLForwardings.DeleteURLForwarding(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Host: "www.example.org",
 }
+client.URLForwardings.DeleteURLForwarding(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3343,19 +3356,18 @@ Returns all URL forwarding settings configured for a domain. Each entry includes
 
 ```go
 request := &coreapigo.ListURLForwardingsByDomainRequest{
-        DomainName: "example.com",
-        PerPage: coreapigo.Int(
-            100,
-        ),
-        Page: coreapigo.Int(
-            1,
-        ),
-    }
-client.URLForwardings.ListURLForwardingsByDomain(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    PerPage: coreapigo.Int(
+        100,
+    ),
+    Page: coreapigo.Int(
+        1,
+    ),
 }
+client.URLForwardings.ListURLForwardingsByDomain(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3426,14 +3438,13 @@ Retrieves the details of a specific URL forwarding configuration by ID.  The dom
 
 ```go
 request := &coreapigo.GetURLForwardingByIDRequest{
-        DomainName: "example.com",
-        ID: 12345,
-    }
-client.URLForwardings.GetURLForwardingByID(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    ID: 12345,
 }
+client.URLForwardings.GetURLForwardingByID(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3496,14 +3507,13 @@ Removes a URL forwarding configuration by ID. The domain must be owned by the au
 
 ```go
 request := &coreapigo.DeleteURLForwardingByIDRequest{
-        DomainName: "example.com",
-        ID: 12345,
-    }
-client.URLForwardings.DeleteURLForwardingByID(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    ID: 12345,
 }
+client.URLForwardings.DeleteURLForwardingByID(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3566,19 +3576,18 @@ Modifies an existing URL forwarding rule by ID.  The domain must be owned by the
 
 ```go
 request := &coreapigo.UpdateURLForwardingByIDRequest{
-        DomainName: "example.com",
-        ID: 12345,
-        Body: &coreapigo.URLForwardingInput{
-            ForwardsTo: "https://destination-site.com",
-            Host: "www",
-            Type: coreapigo.URLForwardingInputTypeMasked,
-        },
-    }
-client.URLForwardings.UpdateURLForwardingByID(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    ID: 12345,
+    Body: &coreapigo.URLForwardingInput{
+        ForwardsTo: "https://destination-site.com",
+        Host: "www",
+        Type: coreapigo.URLForwardingInputTypeMasked,
+    },
 }
+client.URLForwardings.UpdateURLForwardingByID(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3650,19 +3659,18 @@ Lists all vanity nameserver hostnames configured for a domain.
 
 ```go
 request := &coreapigo.ListVanityNameserversRequest{
-        DomainName: "example.com",
-        PerPage: coreapigo.Int(
-            50,
-        ),
-        Page: coreapigo.Int(
-            2,
-        ),
-    }
-client.VanityNameservers.ListVanityNameservers(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    PerPage: coreapigo.Int(
+        50,
+    ),
+    Page: coreapigo.Int(
+        2,
+    ),
 }
+client.VanityNameservers.ListVanityNameservers(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3733,18 +3741,17 @@ Register a new vanity nameserver for the specified domain.
 
 ```go
 request := &coreapigo.CreateVanityNameserverBody{
-        DomainName: "example.com",
-        Hostname: "ns1",
-        Ips: []string{
-            "192.168.1.10",
-            "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-        },
-    }
-client.VanityNameservers.CreateVanityNameserver(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Hostname: "ns1",
+    Ips: []string{
+        "192.168.1.10",
+        "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+    },
 }
+client.VanityNameservers.CreateVanityNameserver(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3815,14 +3822,13 @@ Retrieves details for a of a specific vanity nameserver (including its IP addres
 
 ```go
 request := &coreapigo.GetVanityNameserverRequest{
-        DomainName: "example.com",
-        Hostname: "ns1.example.com",
-    }
-client.VanityNameservers.GetVanityNameserver(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Hostname: "ns1.example.com",
 }
+client.VanityNameservers.GetVanityNameserver(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3885,14 +3891,13 @@ Updates the glue record IP addresses for a vanity nameserver.
 
 ```go
 request := &coreapigo.UpdateVanityNameserverBody{
-        DomainName: "example.com",
-        Hostname: "ns1.example.com",
-    }
-client.VanityNameservers.UpdateVanityNameserver(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Hostname: "ns1.example.com",
 }
+client.VanityNameservers.UpdateVanityNameserver(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -3963,14 +3968,13 @@ Deletes a vanity nameserver from the domain’s registry settings. This operatio
 
 ```go
 request := &coreapigo.DeleteVanityNameserverRequest{
-        DomainName: "example.com",
-        Hostname: "ns1.example.com",
-    }
-client.VanityNameservers.DeleteVanityNameserver(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Hostname: "ns1.example.com",
 }
+client.VanityNameservers.DeleteVanityNameserver(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4034,9 +4038,8 @@ Retrieves all active webhook subscriptions on the account.
 
 ```go
 client.WebhookNotifications.GetSubscribedNotifications(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -4087,15 +4090,14 @@ Supported webhook event names:
 
 ```go
 request := &coreapigo.SubscribeToNotification{
-        EventName: coreapigo.AvailableWebhooksAccountCreditBalanceChange,
-        URL: "https://example.com",
-        Active: true,
-    }
-client.WebhookNotifications.SubscribeToNotification(
-        context.TODO(),
-        request,
-    )
+    EventName: coreapigo.AvailableWebhooksAccountCreditBalanceChange,
+    URL: "https://example.com",
+    Active: true,
 }
+client.WebhookNotifications.SubscribeToNotification(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4166,18 +4168,17 @@ Updates an existing webhook’s configuration.  This may include changing the ca
 
 ```go
 request := &coreapigo.ModifySubscriptionRequest{
-        ID: 1,
-        Body: &coreapigo.ModifySubscriptionRequestBody{
-            ModifySubscriptionRequestBodyURL: &coreapigo.ModifySubscriptionRequestBodyURL{
-                URL: "url",
-            },
+    ID: 1,
+    Body: &coreapigo.ModifySubscriptionRequestBody{
+        ModifySubscriptionRequestBodyURL: &coreapigo.ModifySubscriptionRequestBodyURL{
+            URL: "url",
         },
-    }
-client.WebhookNotifications.ModifySubscription(
-        context.TODO(),
-        request,
-    )
+    },
 }
+client.WebhookNotifications.ModifySubscription(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4240,13 +4241,12 @@ Removes a webhook subscription from the account.
 
 ```go
 request := &coreapigo.DeleteSubscriptionRequest{
-        ID: 1,
-    }
-client.WebhookNotifications.DeleteSubscription(
-        context.TODO(),
-        request,
-    )
+    ID: 1,
 }
+client.WebhookNotifications.DeleteSubscription(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4303,10 +4303,9 @@ Retrieves a list of all orders placed in the account.
 ```go
 request := &coreapigo.ListOrdersRequest{}
 client.Orders.ListOrders(
-        context.TODO(),
-        request,
-    )
-}
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4425,13 +4424,12 @@ Fetches full details about a specific order using its ID. This includes domains,
 
 ```go
 request := &coreapigo.GetOrderRequest{
-        OrderID: 1,
-    }
-client.Orders.GetOrder(
-        context.TODO(),
-        request,
-    )
+    OrderID: 1,
 }
+client.Orders.GetOrder(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4505,19 +4503,18 @@ This endpoint supports idempotent requests via the `X-Idempotency-Key` header. I
 
 ```go
 request := &coreapigo.RefundRequest{
-        IdempotencyKey: coreapigo.String(
-            "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-        ),
-        OrderID: 123456,
-        OrderItemIDs: []int{
-            987654,
-        },
-    }
-client.Refunds.ProcessRefund(
-        context.TODO(),
-        request,
-    )
+    IdempotencyKey: coreapigo.String(
+        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+    ),
+    OrderID: 123456,
+    OrderItemIDs: []int{
+        987654,
+    },
 }
+client.Refunds.ProcessRefund(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4590,10 +4587,9 @@ Returns all domain transfer requests for the account, including in-progress and 
 ```go
 request := &coreapigo.ListTransfersRequest{}
 client.Transfers.ListTransfers(
-        context.TODO(),
-        request,
-    )
-}
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4657,14 +4653,13 @@ Initiates a domain transfer into your name.com account from another registrar. Y
 
 ```go
 request := &coreapigo.CreateTransferRequest{
-        AuthCode: "ABC123",
-        DomainName: "example.com",
-    }
-client.Transfers.CreateTransfer(
-        context.TODO(),
-        request,
-    )
+    AuthCode: "ABC123",
+    DomainName: "example.com",
 }
+client.Transfers.CreateTransfer(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4743,13 +4738,12 @@ Retrieves details of a specific domain transfer request.
 
 ```go
 request := &coreapigo.GetTransferRequest{
-        DomainName: "domainName",
-    }
-client.Transfers.GetTransfer(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
 }
+client.Transfers.GetTransfer(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4776,7 +4770,7 @@ client.Transfers.GetTransfer(
 </dl>
 </details>
 
-<details><summary><code>client.Transfers.CancelTransfer(DomainName) -> *coreapigo.Transfer</code></summary>
+<details><summary><code>client.Transfers.CancelTransfer(DomainName, request) -> *coreapigo.Transfer</code></summary>
 <dl>
 <dd>
 
@@ -4821,13 +4815,13 @@ Non-cancelable statuses:
 
 ```go
 request := &coreapigo.CancelTransferRequest{
-        DomainName: "domainName",
-    }
-client.Transfers.CancelTransfer(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Transfers.CancelTransfer(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4846,6 +4840,14 @@ client.Transfers.CancelTransfer(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -4854,7 +4856,7 @@ client.Transfers.CancelTransfer(
 </dl>
 </details>
 
-<details><summary><code>client.Transfers.CancelOutboundTransfer(DomainName) -> *coreapigo.CancelTransferOutResponse</code></summary>
+<details><summary><code>client.Transfers.CancelOutboundTransfer(DomainName, request) -> *coreapigo.CancelTransferOutResponse</code></summary>
 <dl>
 <dd>
 
@@ -4884,13 +4886,13 @@ The endpoint validates that the domain exists and belongs to the authenticated a
 
 ```go
 request := &coreapigo.CancelOutboundTransferRequest{
-        DomainName: "example.com",
-    }
-client.Transfers.CancelOutboundTransfer(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    Body: &coreapigo.EmptyObject{},
 }
+client.Transfers.CancelOutboundTransfer(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -4906,6 +4908,14 @@ client.Transfers.CancelOutboundTransfer(
 <dd>
 
 **domainName:** `string` — DomainName is the domain whose transfer out should be canceled.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
     
 </dd>
 </dl>
@@ -4955,14 +4965,13 @@ Restricted to approved enterprise resellers; other callers receive `403 Forbidde
 
 ```go
 request := &coreapigo.CreateInternalTransferInRequest{
-        DomainName: "example.com",
-        AuthCode: "ABC123",
-    }
-client.Transfers.CreateInternalTransferIn(
-        context.TODO(),
-        request,
-    )
+    DomainName: "example.com",
+    AuthCode: "ABC123",
 }
+client.Transfers.CreateInternalTransferIn(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5043,13 +5052,12 @@ This endpoint never reveals which account a domain is in. To check whether a dom
 
 ```go
 request := &coreapigo.GetTransferEligibilityRequest{
-        DomainName: "domainName",
-    }
-client.Transfers.GetTransferEligibility(
-        context.TODO(),
-        request,
-    )
+    DomainName: "domainName",
 }
+client.Transfers.GetTransferEligibility(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5105,13 +5113,12 @@ Returns the registration requirements some general information for a specific TL
 
 ```go
 request := &coreapigo.GetRequirementRequest{
-        Tld: "fr",
-    }
-client.DomainInfo.GetRequirement(
-        context.TODO(),
-        request,
-    )
+    Tld: "fr",
 }
+client.DomainInfo.GetRequirement(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5166,13 +5173,12 @@ Performs the actual claims check for a specific domain. This endpoint checks if 
 
 ```go
 request := &coreapigo.DomainClaimsCheckRequest{
-        Domain: "tiktok.page",
-    }
-client.DomainInfo.CheckDomainClaims(
-        context.TODO(),
-        request,
-    )
+    Domain: "tiktok.page",
 }
+client.DomainInfo.CheckDomainClaims(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5235,13 +5241,12 @@ Returns the registration requirements as a JSON Schema (Draft 7) document. This 
 
 ```go
 request := &coreapigo.GetTldRequirementsV2Request{
-        Tld: "fr",
-    }
-client.DomainInfo.GetTldRequirementsV2(
-        context.TODO(),
-        request,
-    )
+    Tld: "fr",
 }
+client.DomainInfo.GetTldRequirementsV2(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5306,15 +5311,14 @@ This endpoint returns an alphabetical list of all TLDs supported by name.com, in
 
 ```go
 request := &coreapigo.TldPriceListRequest{
-        Duration: coreapigo.Int(
-            1,
-        ),
-    }
-client.TldPricing.TldPriceList(
-        context.TODO(),
-        request,
-    )
+    Duration: coreapigo.Int(
+        1,
+    ),
 }
+client.TldPricing.TldPriceList(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5395,9 +5399,8 @@ Gets a pre-signed URL that will allow a user to download a list of premium domai
 
 ```go
 client.PremiumDomains.PremiumDomainLists(
-        context.TODO(),
-    )
-}
+    context.TODO(),
+)
 ```
 </dd>
 </dl>
@@ -5439,18 +5442,17 @@ When a new domain is created, unverified contacts are not immediately available 
 
 ```go
 request := &coreapigo.UnverifiedContactsListRequest{
-        PerPage: coreapigo.Int(
-            100,
-        ),
-        Page: coreapigo.Int(
-            2,
-        ),
-    }
-client.ContactVerification.UnverifiedContactsList(
-        context.TODO(),
-        request,
-    )
+    PerPage: coreapigo.Int(
+        100,
+    ),
+    Page: coreapigo.Int(
+        2,
+    ),
 }
+client.ContactVerification.UnverifiedContactsList(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5485,7 +5487,7 @@ client.ContactVerification.UnverifiedContactsList(
 </dl>
 </details>
 
-<details><summary><code>client.ContactVerification.VerifyContact(VerificationID) -> error</code></summary>
+<details><summary><code>client.ContactVerification.VerifyContact(VerificationID, request) -> error</code></summary>
 <dl>
 <dd>
 
@@ -5514,16 +5516,16 @@ This API is only available to approved reseller accounts. Contact name.com suppo
 
 ```go
 request := &coreapigo.VerifyContactRequest{
-        VerificationID: 1,
-        IdempotencyKey: coreapigo.String(
-            "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-        ),
-    }
-client.ContactVerification.VerifyContact(
-        context.TODO(),
-        request,
-    )
+    VerificationID: 1,
+    IdempotencyKey: coreapigo.String(
+        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+    ),
+    Body: &coreapigo.EmptyObject{},
 }
+client.ContactVerification.VerifyContact(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5550,6 +5552,14 @@ client.ContactVerification.VerifyContact(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -5558,7 +5568,7 @@ client.ContactVerification.VerifyContact(
 </dl>
 </details>
 
-<details><summary><code>client.ContactVerification.ResendContactVerificationEmail(VerificationID) -> *coreapigo.ContactVerificationResendResponse</code></summary>
+<details><summary><code>client.ContactVerification.ResendContactVerificationEmail(VerificationID, request) -> *coreapigo.ContactVerificationResendResponse</code></summary>
 <dl>
 <dd>
 
@@ -5595,16 +5605,16 @@ On `429`, the response uses the standard error envelope, and `details` contains 
 
 ```go
 request := &coreapigo.ResendContactVerificationEmailRequest{
-        VerificationID: 1,
-        IdempotencyKey: coreapigo.String(
-            "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-        ),
-    }
-client.ContactVerification.ResendContactVerificationEmail(
-        context.TODO(),
-        request,
-    )
+    VerificationID: 1,
+    IdempotencyKey: coreapigo.String(
+        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+    ),
+    Body: &coreapigo.EmptyObject{},
 }
+client.ContactVerification.ResendContactVerificationEmail(
+    context.TODO(),
+    request,
+)
 ```
 </dd>
 </dl>
@@ -5628,6 +5638,14 @@ client.ContactVerification.ResendContactVerificationEmail(
 <dd>
 
 **idempotencyKey:** `*string` — A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `*coreapigo.EmptyObject` 
     
 </dd>
 </dl>

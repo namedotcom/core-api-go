@@ -35,6 +35,22 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Lists all vanity nameserver hostnames configured for a domain.
+//
+// Example:
+//
+//	request := &coreapigo.ListVanityNameserversRequest{
+//	    DomainName: "example.com",
+//	    PerPage: coreapigo.Int(
+//	        50,
+//	    ),
+//	    Page: coreapigo.Int(
+//	        2,
+//	    ),
+//	}
+//	client.VanityNameservers.ListVanityNameservers(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListVanityNameservers(
 	ctx context.Context,
 	request *coreapigo.ListVanityNameserversRequest,
@@ -52,6 +68,21 @@ func (c *Client) ListVanityNameservers(
 }
 
 // Register a new vanity nameserver for the specified domain.
+//
+// Example:
+//
+//	request := &coreapigo.CreateVanityNameserverBody{
+//	    DomainName: "example.com",
+//	    Hostname: "ns1",
+//	    Ips: []string{
+//	        "192.168.1.10",
+//	        "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+//	    },
+//	}
+//	client.VanityNameservers.CreateVanityNameserver(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateVanityNameserver(
 	ctx context.Context,
 	request *coreapigo.CreateVanityNameserverBody,
@@ -69,6 +100,17 @@ func (c *Client) CreateVanityNameserver(
 }
 
 // Retrieves details for a of a specific vanity nameserver (including its IP addresses).
+//
+// Example:
+//
+//	request := &coreapigo.GetVanityNameserverRequest{
+//	    DomainName: "example.com",
+//	    Hostname: "ns1.example.com",
+//	}
+//	client.VanityNameservers.GetVanityNameserver(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetVanityNameserver(
 	ctx context.Context,
 	request *coreapigo.GetVanityNameserverRequest,
@@ -86,6 +128,17 @@ func (c *Client) GetVanityNameserver(
 }
 
 // Updates the glue record IP addresses for a vanity nameserver.
+//
+// Example:
+//
+//	request := &coreapigo.UpdateVanityNameserverBody{
+//	    DomainName: "example.com",
+//	    Hostname: "ns1.example.com",
+//	}
+//	client.VanityNameservers.UpdateVanityNameserver(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateVanityNameserver(
 	ctx context.Context,
 	request *coreapigo.UpdateVanityNameserverBody,
@@ -103,6 +156,17 @@ func (c *Client) UpdateVanityNameserver(
 }
 
 // Deletes a vanity nameserver from the domain’s registry settings. This operation might fail if the registry detects the nameserver is still in use.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteVanityNameserverRequest{
+//	    DomainName: "example.com",
+//	    Hostname: "ns1.example.com",
+//	}
+//	client.VanityNameservers.DeleteVanityNameserver(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteVanityNameserver(
 	ctx context.Context,
 	request *coreapigo.DeleteVanityNameserverRequest,

@@ -53,6 +53,22 @@ func NewClient(options *core.RequestOptions) *Client {
 // ### Idempotency
 //
 // This endpoint supports idempotent requests via the `X-Idempotency-Key` header. If you retry a request with the same idempotency key, you will receive the same response as the original request. This is useful for safely retrying requests without risk of processing duplicate refunds.
+//
+// Example:
+//
+//	request := &coreapigo.RefundRequest{
+//	    IdempotencyKey: coreapigo.String(
+//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
+//	    ),
+//	    OrderID: 123456,
+//	    OrderItemIDs: []int{
+//	        987654,
+//	    },
+//	}
+//	client.Refunds.ProcessRefund(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ProcessRefund(
 	ctx context.Context,
 	request *coreapigo.RefundRequest,

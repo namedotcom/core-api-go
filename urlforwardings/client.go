@@ -35,6 +35,22 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Returns all URL forwarding settings configured for a domain. **Deprecated.** Use [List URL Forwardings by domain](/api/v1/reference/url-forwardings/list-urlforwardings-by-domain) instead, which returns entries with an `id` for use with by-ID endpoints.
+//
+// Example:
+//
+//	request := &coreapigo.ListURLForwardingsRequest{
+//	    DomainName: "example.com",
+//	    PerPage: coreapigo.Int(
+//	        100,
+//	    ),
+//	    Page: coreapigo.Int(
+//	        1,
+//	    ),
+//	}
+//	client.URLForwardings.ListURLForwardings(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListURLForwardings(
 	ctx context.Context,
 	request *coreapigo.ListURLForwardingsRequest,
@@ -52,6 +68,21 @@ func (c *Client) ListURLForwardings(
 }
 
 // Sets up a new URL forwarding (redirect) for a domain or subdomain. If this is the first URL forwarding entry, it may modify the A records for the domain accordingly. Note that changes may take up to 24 hours to fully propagate.
+//
+// Example:
+//
+//	request := &coreapigo.CreateURLForwardingRequest{
+//	    DomainName: "example.com",
+//	    Body: &coreapigo.URLForwardingInput{
+//	        ForwardsTo: "https://destination-site.com",
+//	        Host: "www",
+//	        Type: coreapigo.URLForwardingInputTypeMasked,
+//	    },
+//	}
+//	client.URLForwardings.CreateURLForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateURLForwarding(
 	ctx context.Context,
 	request *coreapigo.CreateURLForwardingRequest,
@@ -69,6 +100,17 @@ func (c *Client) CreateURLForwarding(
 }
 
 // Retrieves the details of a specific URL forwarding configuration. **Deprecated.** Use [Get URL Forwarding by ID](/api/v1/reference/url-forwardings/get-urlforwarding-by-id) instead.
+//
+// Example:
+//
+//	request := &coreapigo.GetURLForwardingRequest{
+//	    DomainName: "example.com",
+//	    Host: "www.example.org",
+//	}
+//	client.URLForwardings.GetURLForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetURLForwarding(
 	ctx context.Context,
 	request *coreapigo.GetURLForwardingRequest,
@@ -86,6 +128,22 @@ func (c *Client) GetURLForwarding(
 }
 
 // Modifies an existing URL forwarding rule. Changes may take up to 24 hours to fully propagate. **Deprecated.** Use [Update URL Forwarding by ID](/api/v1/reference/url-forwardings/update-urlforwarding-by-id) instead.
+//
+// Example:
+//
+//	request := &coreapigo.UpdateURLForwardingRequest{
+//	    DomainName: "example.com",
+//	    Host: "www.example.org",
+//	    Body: &coreapigo.URLForwardingInput{
+//	        ForwardsTo: "https://destination-site.com",
+//	        Host: "www",
+//	        Type: coreapigo.URLForwardingInputTypeMasked,
+//	    },
+//	}
+//	client.URLForwardings.UpdateURLForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateURLForwarding(
 	ctx context.Context,
 	request *coreapigo.UpdateURLForwardingRequest,
@@ -103,6 +161,17 @@ func (c *Client) UpdateURLForwarding(
 }
 
 // Removes a URL forwarding configuration from the domain. This operation cannot be undone. **Deprecated.** Use [Delete URL Forwarding by ID](/api/v1/reference/url-forwardings/delete-urlforwarding-by-id) instead.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteURLForwardingRequest{
+//	    DomainName: "example.com",
+//	    Host: "www.example.org",
+//	}
+//	client.URLForwardings.DeleteURLForwarding(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteURLForwarding(
 	ctx context.Context,
 	request *coreapigo.DeleteURLForwardingRequest,
@@ -120,6 +189,22 @@ func (c *Client) DeleteURLForwarding(
 }
 
 // Returns all URL forwarding settings configured for a domain. Each entry includes an `id` that can be used with the URL Forwarding by-ID endpoints to get, update, or delete records.
+//
+// Example:
+//
+//	request := &coreapigo.ListURLForwardingsByDomainRequest{
+//	    DomainName: "example.com",
+//	    PerPage: coreapigo.Int(
+//	        100,
+//	    ),
+//	    Page: coreapigo.Int(
+//	        1,
+//	    ),
+//	}
+//	client.URLForwardings.ListURLForwardingsByDomain(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListURLForwardingsByDomain(
 	ctx context.Context,
 	request *coreapigo.ListURLForwardingsByDomainRequest,
@@ -137,6 +222,17 @@ func (c *Client) ListURLForwardingsByDomain(
 }
 
 // Retrieves the details of a specific URL forwarding configuration by ID.  The domain must be owned by the authenticated account.
+//
+// Example:
+//
+//	request := &coreapigo.GetURLForwardingByIDRequest{
+//	    DomainName: "example.com",
+//	    ID: 12345,
+//	}
+//	client.URLForwardings.GetURLForwardingByID(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetURLForwardingByID(
 	ctx context.Context,
 	request *coreapigo.GetURLForwardingByIDRequest,
@@ -154,6 +250,17 @@ func (c *Client) GetURLForwardingByID(
 }
 
 // Removes a URL forwarding configuration by ID. The domain must be owned by the authenticated account. This operation cannot be undone.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteURLForwardingByIDRequest{
+//	    DomainName: "example.com",
+//	    ID: 12345,
+//	}
+//	client.URLForwardings.DeleteURLForwardingByID(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteURLForwardingByID(
 	ctx context.Context,
 	request *coreapigo.DeleteURLForwardingByIDRequest,
@@ -171,6 +278,22 @@ func (c *Client) DeleteURLForwardingByID(
 }
 
 // Modifies an existing URL forwarding rule by ID.  The domain must be owned by the authenticated account. Changes may take up to 24 hours to fully propagate.
+//
+// Example:
+//
+//	request := &coreapigo.UpdateURLForwardingByIDRequest{
+//	    DomainName: "example.com",
+//	    ID: 12345,
+//	    Body: &coreapigo.URLForwardingInput{
+//	        ForwardsTo: "https://destination-site.com",
+//	        Host: "www",
+//	        Type: coreapigo.URLForwardingInputTypeMasked,
+//	    },
+//	}
+//	client.URLForwardings.UpdateURLForwardingByID(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateURLForwardingByID(
 	ctx context.Context,
 	request *coreapigo.UpdateURLForwardingByIDRequest,

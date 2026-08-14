@@ -103,7 +103,7 @@ func (r *RawClient) VerifyContact(
 	if request.IdempotencyKey != nil {
 		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
 	}
-
+	headers.Add("Content-Type", "application/json")
 	raw, err := r.caller.Call(
 		ctx,
 		&internal.CallParams{
@@ -115,6 +115,7 @@ func (r *RawClient) VerifyContact(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
 	)
@@ -150,7 +151,7 @@ func (r *RawClient) ResendContactVerificationEmail(
 	if request.IdempotencyKey != nil {
 		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
 	}
-
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.ContactVerificationResendResponse
 	raw, err := r.caller.Call(
 		ctx,
@@ -163,6 +164,7 @@ func (r *RawClient) ResendContactVerificationEmail(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},

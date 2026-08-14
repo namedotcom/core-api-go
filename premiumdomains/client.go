@@ -36,6 +36,12 @@ func NewClient(options *core.RequestOptions) *Client {
 
 // Gets a pre-signed URL that will allow a user to download a list of premium domains, with their registration and renewal pricing.
 // **Please Note:** The pre-signed URL will only be valid for 10 minutes. This endpoint is only available to approved reseller accounts. Contact name.com support to request access.
+//
+// Example:
+//
+//	client.PremiumDomains.PremiumDomainLists(
+//	    context.TODO(),
+//	)
 func (c *Client) PremiumDomainLists(
 	ctx context.Context,
 	opts ...option.RequestOption,

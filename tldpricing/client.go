@@ -44,6 +44,18 @@ func NewClient(options *core.RequestOptions) *Client {
 // - General TLD pricing only: This represents standard pricing for domains registered under the specified TLD. Pricing for specific domains may differ based on multiple factors (e.g., premium classifications, registry pricing rules). To retrieve pricing for an individual domain, use the GetPricingForDomain endpoint.
 // - Availability: If a pricing value is returned as null, that product type is not currently supported for the TLD. (Example: registrationPrice = null means registrations are not currently available.)
 // - If you do not have account level pricing, the retail price will always match your account level price. (e.g., registration price = registration retail price)
+//
+// Example:
+//
+//	request := &coreapigo.TldPriceListRequest{
+//	    Duration: coreapigo.Int(
+//	        1,
+//	    ),
+//	}
+//	client.TldPricing.TldPriceList(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) TldPriceList(
 	ctx context.Context,
 	request *coreapigo.TldPriceListRequest,

@@ -35,6 +35,16 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Lists all DNSSEC (DS) records configured for a domain.
+//
+// Example:
+//
+//	request := &coreapigo.ListDnsseCsRequest{
+//	    DomainName: "domainName",
+//	}
+//	client.DnsseCs.ListDnsseCs(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListDnsseCs(
 	ctx context.Context,
 	request *coreapigo.ListDnsseCsRequest,
@@ -52,6 +62,20 @@ func (c *Client) ListDnsseCs(
 }
 
 // Adds (registers) a new DNSSEC DS record for a domain.
+//
+// Example:
+//
+//	request := &coreapigo.CreateDnssecBody{
+//	    DomainName: "domainName",
+//	    Algorithm: 1,
+//	    Digest: "digest",
+//	    DigestType: 1,
+//	    KeyTag: 1,
+//	}
+//	client.DnsseCs.CreateDnssec(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateDnssec(
 	ctx context.Context,
 	request *coreapigo.CreateDnssecBody,
@@ -69,6 +93,17 @@ func (c *Client) CreateDnssec(
 }
 
 // Retrieves details of a specific DNSSEC record for a domain.
+//
+// Example:
+//
+//	request := &coreapigo.GetDnssecRequest{
+//	    DomainName: "domainName",
+//	    Digest: "digest",
+//	}
+//	client.DnsseCs.GetDnssec(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetDnssec(
 	ctx context.Context,
 	request *coreapigo.GetDnssecRequest,
@@ -86,6 +121,17 @@ func (c *Client) GetDnssec(
 }
 
 // Deletes a DNSSEC record from a domain.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteDnssecRequest{
+//	    DomainName: "domainName",
+//	    Digest: "digest",
+//	}
+//	client.DnsseCs.DeleteDnssec(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteDnssec(
 	ctx context.Context,
 	request *coreapigo.DeleteDnssecRequest,

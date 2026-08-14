@@ -35,6 +35,14 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Retrieves a list of all orders placed in the account.
+//
+// Example:
+//
+//	request := &coreapigo.ListOrdersRequest{}
+//	client.Orders.ListOrders(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListOrders(
 	ctx context.Context,
 	request *coreapigo.ListOrdersRequest,
@@ -52,6 +60,16 @@ func (c *Client) ListOrders(
 }
 
 // Fetches full details about a specific order using its ID. This includes domains, prices, and timestamps.  Useful for confirming transactions, receipts, or generating invoices.
+//
+// Example:
+//
+//	request := &coreapigo.GetOrderRequest{
+//	    OrderID: 1,
+//	}
+//	client.Orders.GetOrder(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetOrder(
 	ctx context.Context,
 	request *coreapigo.GetOrderRequest,

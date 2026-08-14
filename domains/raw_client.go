@@ -239,6 +239,7 @@ func (r *RawClient) DisableAutorenew(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Domain
 	raw, err := r.caller.Call(
 		ctx,
@@ -251,6 +252,7 @@ func (r *RawClient) DisableAutorenew(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
@@ -284,6 +286,7 @@ func (r *RawClient) DisableWhoisPrivacy(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Domain
 	raw, err := r.caller.Call(
 		ctx,
@@ -296,6 +299,7 @@ func (r *RawClient) DisableWhoisPrivacy(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
@@ -329,6 +333,7 @@ func (r *RawClient) EnableAutorenew(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Domain
 	raw, err := r.caller.Call(
 		ctx,
@@ -341,6 +346,7 @@ func (r *RawClient) EnableAutorenew(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
@@ -374,6 +380,7 @@ func (r *RawClient) EnableWhoisPrivacy(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Domain
 	raw, err := r.caller.Call(
 		ctx,
@@ -386,6 +393,7 @@ func (r *RawClient) EnableWhoisPrivacy(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
@@ -516,6 +524,7 @@ func (r *RawClient) LockDomain(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Domain
 	raw, err := r.caller.Call(
 		ctx,
@@ -528,6 +537,7 @@ func (r *RawClient) LockDomain(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},
@@ -752,6 +762,7 @@ func (r *RawClient) UnlockDomain(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
+	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.Domain
 	raw, err := r.caller.Call(
 		ctx,
@@ -764,6 +775,7 @@ func (r *RawClient) UnlockDomain(
 			BodyProperties:  options.BodyProperties,
 			QueryParameters: options.QueryParameters,
 			Client:          options.HTTPClient,
+			Request:         request,
 			Response:        &response,
 			ErrorDecoder:    internal.NewErrorDecoder(coreapigo.ErrorCodes),
 		},

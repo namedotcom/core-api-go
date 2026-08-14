@@ -35,6 +35,56 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Creates a new sub-account under your authenticated reseller account and returns API credentials for the new account.  This endpoint is only available to approved reseller accounts. Contact name.com support to request access.
+//
+// Example:
+//
+//	request := &coreapigo.CreateAccountRequest{
+//	    Account: &coreapigo.AccountRequest{
+//	        Contacts: &coreapigo.ContactsRequest{
+//	            Registrant: &coreapigo.RegistrantContactRequest{
+//	                FirstName: coreapigo.String(
+//	                    "Jane",
+//	                ),
+//	                LastName: coreapigo.String(
+//	                    "Doe",
+//	                ),
+//	                Address1: coreapigo.String(
+//	                    "123 Main St.",
+//	                ),
+//	                City: coreapigo.String(
+//	                    "Denver",
+//	                ),
+//	                State: coreapigo.String(
+//	                    "CO",
+//	                ),
+//	                Zip: coreapigo.String(
+//	                    "12345",
+//	                ),
+//	                Country: coreapigo.String(
+//	                    "US",
+//	                ),
+//	                Email: coreapigo.String(
+//	                    "admin@example.net",
+//	                ),
+//	                Phone: coreapigo.String(
+//	                    "+13035551212",
+//	                ),
+//	            },
+//	        },
+//	        AccountName: coreapigo.String(
+//	            "reseller_subaccount",
+//	        ),
+//	        Password: coreapigo.String(
+//	            "SecureP4ss!",
+//	        ),
+//	    },
+//	    APITos: true,
+//	    Tos: true,
+//	}
+//	client.Accounts.CreateAccount(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateAccount(
 	ctx context.Context,
 	request *coreapigo.CreateAccountRequest,

@@ -19,7 +19,8 @@ type ResendContactVerificationEmailRequest struct {
 	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
 	IdempotencyKey *string `json:"-" url:"-"`
 	// The verificationId for the pending contact verification record.
-	VerificationID int `json:"-" url:"-"`
+	VerificationID int          `json:"-" url:"-"`
+	Body           *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -44,6 +45,19 @@ func (r *ResendContactVerificationEmailRequest) SetIdempotencyKey(idempotencyKey
 func (r *ResendContactVerificationEmailRequest) SetVerificationID(verificationID int) {
 	r.VerificationID = verificationID
 	r.require(resendContactVerificationEmailRequestFieldVerificationID)
+}
+
+func (r *ResendContactVerificationEmailRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	r.Body = body
+	return nil
+}
+
+func (r *ResendContactVerificationEmailRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(r.Body)
 }
 
 var (
@@ -91,7 +105,8 @@ type VerifyContactRequest struct {
 	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
 	IdempotencyKey *string `json:"-" url:"-"`
 	// The VerificationId required to verify a specific contact.
-	VerificationID int `json:"-" url:"-"`
+	VerificationID int          `json:"-" url:"-"`
+	Body           *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -116,6 +131,19 @@ func (v *VerifyContactRequest) SetIdempotencyKey(idempotencyKey *string) {
 func (v *VerifyContactRequest) SetVerificationID(verificationID int) {
 	v.VerificationID = verificationID
 	v.require(verifyContactRequestFieldVerificationID)
+}
+
+func (v *VerifyContactRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	v.Body = body
+	return nil
+}
+
+func (v *VerifyContactRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.Body)
 }
 
 // Response for resending a contact verification email.

@@ -191,7 +191,8 @@ var (
 
 type DisableAutorenewRequest struct {
 	// DomainName is the domain name to disable autorenew for.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -211,13 +212,27 @@ func (d *DisableAutorenewRequest) SetDomainName(domainName string) {
 	d.require(disableAutorenewRequestFieldDomainName)
 }
 
+func (d *DisableAutorenewRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	d.Body = body
+	return nil
+}
+
+func (d *DisableAutorenewRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(d.Body)
+}
+
 var (
 	disableWhoisPrivacyRequestFieldDomainName = big.NewInt(1 << 0)
 )
 
 type DisableWhoisPrivacyRequest struct {
 	// DomainName is the domain name to disable whoisprivacy for.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -237,13 +252,27 @@ func (d *DisableWhoisPrivacyRequest) SetDomainName(domainName string) {
 	d.require(disableWhoisPrivacyRequestFieldDomainName)
 }
 
+func (d *DisableWhoisPrivacyRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	d.Body = body
+	return nil
+}
+
+func (d *DisableWhoisPrivacyRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(d.Body)
+}
+
 var (
 	enableAutorenewRequestFieldDomainName = big.NewInt(1 << 0)
 )
 
 type EnableAutorenewRequest struct {
 	// DomainName is the domain name to enable autorenew for.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -263,13 +292,27 @@ func (e *EnableAutorenewRequest) SetDomainName(domainName string) {
 	e.require(enableAutorenewRequestFieldDomainName)
 }
 
+func (e *EnableAutorenewRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	e.Body = body
+	return nil
+}
+
+func (e *EnableAutorenewRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Body)
+}
+
 var (
 	enableWhoisPrivacyRequestFieldDomainName = big.NewInt(1 << 0)
 )
 
 type EnableWhoisPrivacyRequest struct {
 	// DomainName is the domain name to enable whoisprivacy for.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -287,6 +330,19 @@ func (e *EnableWhoisPrivacyRequest) require(field *big.Int) {
 func (e *EnableWhoisPrivacyRequest) SetDomainName(domainName string) {
 	e.DomainName = domainName
 	e.require(enableWhoisPrivacyRequestFieldDomainName)
+}
+
+func (e *EnableWhoisPrivacyRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	e.Body = body
+	return nil
+}
+
+func (e *EnableWhoisPrivacyRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Body)
 }
 
 var (
@@ -579,7 +635,8 @@ var (
 
 type LockDomainRequest struct {
 	// DomainName is the domain name to lock.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -597,6 +654,19 @@ func (l *LockDomainRequest) require(field *big.Int) {
 func (l *LockDomainRequest) SetDomainName(domainName string) {
 	l.DomainName = domainName
 	l.require(lockDomainRequestFieldDomainName)
+}
+
+func (l *LockDomainRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	l.Body = body
+	return nil
+}
+
+func (l *LockDomainRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(l.Body)
 }
 
 var (
@@ -940,7 +1010,8 @@ var (
 
 type UnlockDomainRequest struct {
 	// DomainName is the domain name to unlock.
-	DomainName string `json:"-" url:"-"`
+	DomainName string       `json:"-" url:"-"`
+	Body       *EmptyObject `json:"-" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -958,6 +1029,19 @@ func (u *UnlockDomainRequest) require(field *big.Int) {
 func (u *UnlockDomainRequest) SetDomainName(domainName string) {
 	u.DomainName = domainName
 	u.require(unlockDomainRequestFieldDomainName)
+}
+
+func (u *UnlockDomainRequest) UnmarshalJSON(data []byte) error {
+	body := new(EmptyObject)
+	if err := json.Unmarshal(data, &body); err != nil {
+		return err
+	}
+	u.Body = body
+	return nil
+}
+
+func (u *UnlockDomainRequest) MarshalJSON() ([]byte, error) {
+	return json.Marshal(u.Body)
 }
 
 var (

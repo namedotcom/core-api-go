@@ -35,6 +35,16 @@ func NewClient(options *core.RequestOptions) *Client {
 }
 
 // Lists all DNS records for a specified domain.
+//
+// Example:
+//
+//	request := &coreapigo.ListRecordsRequest{
+//	    DomainName: "domainName",
+//	}
+//	client.DNS.ListRecords(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) ListRecords(
 	ctx context.Context,
 	request *coreapigo.ListRecordsRequest,
@@ -52,6 +62,19 @@ func (c *Client) ListRecords(
 }
 
 // Adds a new DNS record to the specified domain zone. Provide the record type (e.g. A, MX, CNAME), host, value, and TTL.  This is used for configuring domain-based services such as email, website hosting, or third-party verifications.
+//
+// Example:
+//
+//	request := &coreapigo.DNSCreateRecordBody{
+//	    DomainName: "domainName",
+//	    Answer: "answer",
+//	    Host: "host",
+//	    Type: coreapigo.DNSCreateRecordBodyTypeA,
+//	}
+//	client.DNS.CreateRecord(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) CreateRecord(
 	ctx context.Context,
 	request *coreapigo.DNSCreateRecordBody,
@@ -69,6 +92,17 @@ func (c *Client) CreateRecord(
 }
 
 // Retrieves details of a specific DNS record.
+//
+// Example:
+//
+//	request := &coreapigo.GetRecordRequest{
+//	    DomainName: "domainName",
+//	    ID: 1,
+//	}
+//	client.DNS.GetRecord(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) GetRecord(
 	ctx context.Context,
 	request *coreapigo.GetRecordRequest,
@@ -86,6 +120,19 @@ func (c *Client) GetRecord(
 }
 
 // Replaces an existing DNS record with new data. This is a full overwrite — all required fields (host, type, answer, ttl) must be included in the request body. If you omit a field, the existing value will not be preserved and the request may fail. Use [GetRecord](/api/v1/reference/dns/get-record) beforehand to retrieve the current values if you intend to modify just one field. The record ID must belong to a domain you manage.
+//
+// Example:
+//
+//	request := &coreapigo.DNSUpdateRecordBody{
+//	    DomainName: "domainName",
+//	    ID: 1,
+//	    Answer: "answer",
+//	    Type: coreapigo.DNSUpdateRecordBodyTypeA,
+//	}
+//	client.DNS.UpdateRecord(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) UpdateRecord(
 	ctx context.Context,
 	request *coreapigo.DNSUpdateRecordBody,
@@ -103,6 +150,17 @@ func (c *Client) UpdateRecord(
 }
 
 // Removes a DNS record by ID. Often used during cleanup operations or when replacing outdated DNS settings with updated records.
+//
+// Example:
+//
+//	request := &coreapigo.DeleteRecordRequest{
+//	    DomainName: "domainName",
+//	    ID: 1,
+//	}
+//	client.DNS.DeleteRecord(
+//	    context.TODO(),
+//	    request,
+//	)
 func (c *Client) DeleteRecord(
 	ctx context.Context,
 	request *coreapigo.DeleteRecordRequest,
