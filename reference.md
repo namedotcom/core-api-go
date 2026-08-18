@@ -458,9 +458,6 @@ When a new domain registration is created and a contact is submitted, name.com m
 
 ```go
 request := &coreapigo.CreateDomainRequest{
-    IdempotencyKey: coreapigo.String(
-        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-    ),
     Domain: &coreapigo.DomainCreatePayload{
         DomainName: coreapigo.String(
             "example.com",
@@ -481,14 +478,6 @@ client.Domains.CreateDomain(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**idempotencyKey:** `*string` — A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -1208,9 +1197,6 @@ Adds or renews WHOIS privacy protection for a domain. This is used to ensure per
 ```go
 request := &coreapigo.DomainsPurchasePrivacyBody{
     DomainName: "domainName",
-    IdempotencyKey: coreapigo.String(
-        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-    ),
 }
 client.Domains.PurchasePrivacy(
     context.TODO(),
@@ -1231,14 +1217,6 @@ client.Domains.PurchasePrivacy(
 <dd>
 
 **domainName:** `string` — DomainName is the domain to purchase Whois Privacy for.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**idempotencyKey:** `*string` — A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
     
 </dd>
 </dl>
@@ -4503,9 +4481,6 @@ This endpoint supports idempotent requests via the `X-Idempotency-Key` header. I
 
 ```go
 request := &coreapigo.RefundRequest{
-    IdempotencyKey: coreapigo.String(
-        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-    ),
     OrderID: 123456,
     OrderItemIDs: []int{
         987654,
@@ -4525,14 +4500,6 @@ client.Refunds.ProcessRefund(
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**idempotencyKey:** `*string` — A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result. Idempotency keys are valid for 12 hours.
-    
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -5517,9 +5484,6 @@ This API is only available to approved reseller accounts. Contact name.com suppo
 ```go
 request := &coreapigo.VerifyContactRequest{
     VerificationID: 1,
-    IdempotencyKey: coreapigo.String(
-        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-    ),
     Body: &coreapigo.EmptyObject{},
 }
 client.ContactVerification.VerifyContact(
@@ -5541,14 +5505,6 @@ client.ContactVerification.VerifyContact(
 <dd>
 
 **verificationID:** `int` — The VerificationId required to verify a specific contact.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**idempotencyKey:** `*string` — A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
     
 </dd>
 </dl>
@@ -5606,9 +5562,6 @@ On `429`, the response uses the standard error envelope, and `details` contains 
 ```go
 request := &coreapigo.ResendContactVerificationEmailRequest{
     VerificationID: 1,
-    IdempotencyKey: coreapigo.String(
-        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-    ),
     Body: &coreapigo.EmptyObject{},
 }
 client.ContactVerification.ResendContactVerificationEmail(
@@ -5630,14 +5583,6 @@ client.ContactVerification.ResendContactVerificationEmail(
 <dd>
 
 **verificationID:** `int` — The verificationId for the pending contact verification record.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**idempotencyKey:** `*string` — A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
     
 </dd>
 </dl>

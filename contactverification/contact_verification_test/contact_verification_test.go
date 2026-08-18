@@ -121,10 +121,7 @@ func TestContactVerificationVerifyContactWithWireMock(
 	)
 	request := &coreapigo.VerifyContactRequest{
 		VerificationID: 1,
-		IdempotencyKey: coreapigo.String(
-			"083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-		),
-		Body: &coreapigo.EmptyObject{},
+		Body:           &coreapigo.EmptyObject{},
 	}
 	invocationErr := client.ContactVerification.VerifyContact(
 		context.TODO(),
@@ -151,10 +148,7 @@ func TestContactVerificationResendContactVerificationEmailWithWireMock(
 	)
 	request := &coreapigo.ResendContactVerificationEmailRequest{
 		VerificationID: 1,
-		IdempotencyKey: coreapigo.String(
-			"083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-		),
-		Body: &coreapigo.EmptyObject{},
+		Body:           &coreapigo.EmptyObject{},
 	}
 	_, invocationErr := client.ContactVerification.ResendContactVerificationEmail(
 		context.TODO(),

@@ -57,9 +57,6 @@ func NewClient(options *core.RequestOptions) *Client {
 // Example:
 //
 //	request := &coreapigo.RefundRequest{
-//	    IdempotencyKey: coreapigo.String(
-//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-//	    ),
 //	    OrderID: 123456,
 //	    OrderItemIDs: []int{
 //	        987654,
@@ -72,7 +69,7 @@ func NewClient(options *core.RequestOptions) *Client {
 func (c *Client) ProcessRefund(
 	ctx context.Context,
 	request *coreapigo.RefundRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*coreapigo.RefundResponse, error) {
 	response, err := c.WithRawResponse.ProcessRefund(
 		ctx,

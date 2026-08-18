@@ -35,9 +35,9 @@ func NewRawClient(options *core.RequestOptions) *RawClient {
 func (r *RawClient) ProcessRefund(
 	ctx context.Context,
 	request *coreapigo.RefundRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*core.Response[*coreapigo.RefundResponse], error) {
-	options := core.NewRequestOptions(opts...)
+	options := core.NewIdempotentRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
@@ -48,9 +48,6 @@ func (r *RawClient) ProcessRefund(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
-		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
-	}
 	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.RefundResponse
 	raw, err := r.caller.Call(

@@ -68,20 +68,17 @@ func (a *AvailabilityRequest) MarshalJSON() ([]byte, error) {
 }
 
 var (
-	createDomainRequestFieldIdempotencyKey  = big.NewInt(1 << 0)
-	createDomainRequestFieldDomain          = big.NewInt(1 << 1)
-	createDomainRequestFieldPurchasePrice   = big.NewInt(1 << 2)
-	createDomainRequestFieldPurchaseType    = big.NewInt(1 << 3)
-	createDomainRequestFieldTldRequirements = big.NewInt(1 << 4)
-	createDomainRequestFieldClaims          = big.NewInt(1 << 5)
-	createDomainRequestFieldYears           = big.NewInt(1 << 6)
-	createDomainRequestFieldPromoCode       = big.NewInt(1 << 7)
+	createDomainRequestFieldDomain          = big.NewInt(1 << 0)
+	createDomainRequestFieldPurchasePrice   = big.NewInt(1 << 1)
+	createDomainRequestFieldPurchaseType    = big.NewInt(1 << 2)
+	createDomainRequestFieldTldRequirements = big.NewInt(1 << 3)
+	createDomainRequestFieldClaims          = big.NewInt(1 << 4)
+	createDomainRequestFieldYears           = big.NewInt(1 << 5)
+	createDomainRequestFieldPromoCode       = big.NewInt(1 << 6)
 )
 
 type CreateDomainRequest struct {
-	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
-	IdempotencyKey *string              `json:"-" url:"-"`
-	Domain         *DomainCreatePayload `json:"domain" url:"-"`
+	Domain *DomainCreatePayload `json:"domain" url:"-"`
 	// PurchasePrice is the price in USD for purchasing this domain for the minimum time period (typically 1 year). PurchasePrice is required if purchaseType is not "registration" or if it is a premium domain. If privacyEnabled is set, the regular price for Whois Privacy protection will be added automatically. If VAT tax applies, it will also be added automatically.
 	PurchasePrice *float64 `json:"purchasePrice,omitempty" url:"-"`
 	// PurchaseType indicates what kind of purchase this domain create is for. Defaults to `registration` if omitted. **Recommended:** Use `registration` unless you support acquisition types (aftermarket, expiring, backorder) — see the [Domain purchase pricing guide](/guides/domain-pricing). This value should be copied from the [Search](/api/v1/reference/domains/search) or [Check Availability](/api/v1/reference/domains/check-availability) result. The value `registration` covers both standard and **registry premium** domains — use the `premium` flag from the discovery result to tell them apart. Aftermarket, expiring, and backorder types use flat acquisition fees from Search or Check Availability; see the [Domain pricing guide](/guides/domain-pricing).
@@ -106,13 +103,6 @@ func (c *CreateDomainRequest) require(field *big.Int) {
 		c.explicitFields = big.NewInt(0)
 	}
 	c.explicitFields.Or(c.explicitFields, field)
-}
-
-// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *CreateDomainRequest) SetIdempotencyKey(idempotencyKey *string) {
-	c.IdempotencyKey = idempotencyKey
-	c.require(createDomainRequestFieldIdempotencyKey)
 }
 
 // SetDomain sets the Domain field and marks it as non-optional;
@@ -670,15 +660,12 @@ func (l *LockDomainRequest) MarshalJSON() ([]byte, error) {
 }
 
 var (
-	domainsPurchasePrivacyBodyFieldIdempotencyKey = big.NewInt(1 << 0)
-	domainsPurchasePrivacyBodyFieldDomainName     = big.NewInt(1 << 1)
-	domainsPurchasePrivacyBodyFieldPurchasePrice  = big.NewInt(1 << 2)
-	domainsPurchasePrivacyBodyFieldYears          = big.NewInt(1 << 3)
+	domainsPurchasePrivacyBodyFieldDomainName    = big.NewInt(1 << 0)
+	domainsPurchasePrivacyBodyFieldPurchasePrice = big.NewInt(1 << 1)
+	domainsPurchasePrivacyBodyFieldYears         = big.NewInt(1 << 2)
 )
 
 type DomainsPurchasePrivacyBody struct {
-	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
-	IdempotencyKey *string `json:"-" url:"-"`
 	// DomainName is the domain to purchase Whois Privacy for.
 	DomainName string `json:"-" url:"-"`
 	// PurchasePrice is the (prorated) amount you expect to pay.
@@ -695,13 +682,6 @@ func (d *DomainsPurchasePrivacyBody) require(field *big.Int) {
 		d.explicitFields = big.NewInt(0)
 	}
 	d.explicitFields.Or(d.explicitFields, field)
-}
-
-// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (d *DomainsPurchasePrivacyBody) SetIdempotencyKey(idempotencyKey *string) {
-	d.IdempotencyKey = idempotencyKey
-	d.require(domainsPurchasePrivacyBodyFieldIdempotencyKey)
 }
 
 // SetDomainName sets the DomainName field and marks it as non-optional;

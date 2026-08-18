@@ -89,9 +89,6 @@ func TestRefundsProcessRefundWithWireMock(
 		option.WithBasicAuth("test-username", "test-password"),
 	)
 	request := &coreapigo.RefundRequest{
-		IdempotencyKey: coreapigo.String(
-			"083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-		),
 		OrderID: 123456,
 		OrderItemIDs: []int{
 			987654,

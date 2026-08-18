@@ -11,13 +11,10 @@ import (
 )
 
 var (
-	resendContactVerificationEmailRequestFieldIdempotencyKey = big.NewInt(1 << 0)
-	resendContactVerificationEmailRequestFieldVerificationID = big.NewInt(1 << 1)
+	resendContactVerificationEmailRequestFieldVerificationID = big.NewInt(1 << 0)
 )
 
 type ResendContactVerificationEmailRequest struct {
-	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
-	IdempotencyKey *string `json:"-" url:"-"`
 	// The verificationId for the pending contact verification record.
 	VerificationID int          `json:"-" url:"-"`
 	Body           *EmptyObject `json:"-" url:"-"`
@@ -31,13 +28,6 @@ func (r *ResendContactVerificationEmailRequest) require(field *big.Int) {
 		r.explicitFields = big.NewInt(0)
 	}
 	r.explicitFields.Or(r.explicitFields, field)
-}
-
-// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (r *ResendContactVerificationEmailRequest) SetIdempotencyKey(idempotencyKey *string) {
-	r.IdempotencyKey = idempotencyKey
-	r.require(resendContactVerificationEmailRequestFieldIdempotencyKey)
 }
 
 // SetVerificationID sets the VerificationID field and marks it as non-optional;
@@ -97,13 +87,10 @@ func (u *UnverifiedContactsListRequest) SetPage(page *int) {
 }
 
 var (
-	verifyContactRequestFieldIdempotencyKey = big.NewInt(1 << 0)
-	verifyContactRequestFieldVerificationID = big.NewInt(1 << 1)
+	verifyContactRequestFieldVerificationID = big.NewInt(1 << 0)
 )
 
 type VerifyContactRequest struct {
-	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result.
-	IdempotencyKey *string `json:"-" url:"-"`
 	// The VerificationId required to verify a specific contact.
 	VerificationID int          `json:"-" url:"-"`
 	Body           *EmptyObject `json:"-" url:"-"`
@@ -117,13 +104,6 @@ func (v *VerifyContactRequest) require(field *big.Int) {
 		v.explicitFields = big.NewInt(0)
 	}
 	v.explicitFields.Or(v.explicitFields, field)
-}
-
-// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (v *VerifyContactRequest) SetIdempotencyKey(idempotencyKey *string) {
-	v.IdempotencyKey = idempotencyKey
-	v.require(verifyContactRequestFieldIdempotencyKey)
 }
 
 // SetVerificationID sets the VerificationID field and marks it as non-optional;

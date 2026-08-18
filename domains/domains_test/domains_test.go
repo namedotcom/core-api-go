@@ -113,9 +113,6 @@ func TestDomainsCreateDomainWithWireMock(
 		option.WithBasicAuth("test-username", "test-password"),
 	)
 	request := &coreapigo.CreateDomainRequest{
-		IdempotencyKey: coreapigo.String(
-			"083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-		),
 		Domain: &coreapigo.DomainCreatePayload{
 			DomainName: coreapigo.String(
 				"example.com",
@@ -394,9 +391,6 @@ func TestDomainsPurchasePrivacyWithWireMock(
 	)
 	request := &coreapigo.DomainsPurchasePrivacyBody{
 		DomainName: "domainName",
-		IdempotencyKey: coreapigo.String(
-			"083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-		),
 	}
 	_, invocationErr := client.Domains.PurchasePrivacy(
 		context.TODO(),

@@ -10,14 +10,11 @@ import (
 )
 
 var (
-	refundRequestFieldIdempotencyKey = big.NewInt(1 << 0)
-	refundRequestFieldOrderID        = big.NewInt(1 << 1)
-	refundRequestFieldOrderItemIDs   = big.NewInt(1 << 2)
+	refundRequestFieldOrderID      = big.NewInt(1 << 0)
+	refundRequestFieldOrderItemIDs = big.NewInt(1 << 1)
 )
 
 type RefundRequest struct {
-	// A unique string (e.g., a UUID v4) to make the request idempotent. This key ensures that if the request is retried, the operation will not be performed multiple times. Subsequent requests with the same key will return the original result. Idempotency keys are valid for 12 hours.
-	IdempotencyKey *string `json:"-" url:"-"`
 	// The unique identifier of the order containing the item(s) to be refunded. Use the List Orders endpoint to retrieve order IDs.
 	OrderID int `json:"orderId" url:"-"`
 	// An array of order item IDs to be refunded. All items must belong to the specified order. Use the List Orders endpoint to retrieve order item IDs.
@@ -32,13 +29,6 @@ func (r *RefundRequest) require(field *big.Int) {
 		r.explicitFields = big.NewInt(0)
 	}
 	r.explicitFields.Or(r.explicitFields, field)
-}
-
-// SetIdempotencyKey sets the IdempotencyKey field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (r *RefundRequest) SetIdempotencyKey(idempotencyKey *string) {
-	r.IdempotencyKey = idempotencyKey
-	r.require(refundRequestFieldIdempotencyKey)
 }
 
 // SetOrderID sets the OrderID field and marks it as non-optional;

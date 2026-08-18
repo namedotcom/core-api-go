@@ -74,9 +74,6 @@ func (c *Client) UnverifiedContactsList(
 //
 //	request := &coreapigo.VerifyContactRequest{
 //	    VerificationID: 1,
-//	    IdempotencyKey: coreapigo.String(
-//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-//	    ),
 //	    Body: &coreapigo.EmptyObject{},
 //	}
 //	client.ContactVerification.VerifyContact(
@@ -86,7 +83,7 @@ func (c *Client) UnverifiedContactsList(
 func (c *Client) VerifyContact(
 	ctx context.Context,
 	request *coreapigo.VerifyContactRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) error {
 	_, err := c.WithRawResponse.VerifyContact(
 		ctx,
@@ -114,9 +111,6 @@ func (c *Client) VerifyContact(
 //
 //	request := &coreapigo.ResendContactVerificationEmailRequest{
 //	    VerificationID: 1,
-//	    IdempotencyKey: coreapigo.String(
-//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-//	    ),
 //	    Body: &coreapigo.EmptyObject{},
 //	}
 //	client.ContactVerification.ResendContactVerificationEmail(
@@ -126,7 +120,7 @@ func (c *Client) VerifyContact(
 func (c *Client) ResendContactVerificationEmail(
 	ctx context.Context,
 	request *coreapigo.ResendContactVerificationEmailRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*coreapigo.ContactVerificationResendResponse, error) {
 	response, err := c.WithRawResponse.ResendContactVerificationEmail(
 		ctx,

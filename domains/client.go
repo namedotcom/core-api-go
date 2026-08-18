@@ -100,9 +100,6 @@ func (c *Client) ListDomains(
 // Example:
 //
 //	request := &coreapigo.CreateDomainRequest{
-//	    IdempotencyKey: coreapigo.String(
-//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-//	    ),
 //	    Domain: &coreapigo.DomainCreatePayload{
 //	        DomainName: coreapigo.String(
 //	            "example.com",
@@ -116,7 +113,7 @@ func (c *Client) ListDomains(
 func (c *Client) CreateDomain(
 	ctx context.Context,
 	request *coreapigo.CreateDomainRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*coreapigo.CreateDomainResponse, error) {
 	response, err := c.WithRawResponse.CreateDomain(
 		ctx,
@@ -403,9 +400,6 @@ func (c *Client) LockDomain(
 //
 //	request := &coreapigo.DomainsPurchasePrivacyBody{
 //	    DomainName: "domainName",
-//	    IdempotencyKey: coreapigo.String(
-//	        "083910ef-04e4-4bd1-a0bf-3737fe005ca8",
-//	    ),
 //	}
 //	client.Domains.PurchasePrivacy(
 //	    context.TODO(),
@@ -414,7 +408,7 @@ func (c *Client) LockDomain(
 func (c *Client) PurchasePrivacy(
 	ctx context.Context,
 	request *coreapigo.DomainsPurchasePrivacyBody,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*coreapigo.PrivacyResponse, error) {
 	response, err := c.WithRawResponse.PurchasePrivacy(
 		ctx,

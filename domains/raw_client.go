@@ -84,9 +84,9 @@ func (r *RawClient) ListDomains(
 func (r *RawClient) CreateDomain(
 	ctx context.Context,
 	request *coreapigo.CreateDomainRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*core.Response[*coreapigo.CreateDomainResponse], error) {
-	options := core.NewRequestOptions(opts...)
+	options := core.NewIdempotentRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
@@ -97,9 +97,6 @@ func (r *RawClient) CreateDomain(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
-		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
-	}
 	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.CreateDomainResponse
 	raw, err := r.caller.Call(
@@ -555,9 +552,9 @@ func (r *RawClient) LockDomain(
 func (r *RawClient) PurchasePrivacy(
 	ctx context.Context,
 	request *coreapigo.DomainsPurchasePrivacyBody,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*core.Response[*coreapigo.PrivacyResponse], error) {
-	options := core.NewRequestOptions(opts...)
+	options := core.NewIdempotentRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
@@ -571,9 +568,6 @@ func (r *RawClient) PurchasePrivacy(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
-		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
-	}
 	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.PrivacyResponse
 	raw, err := r.caller.Call(

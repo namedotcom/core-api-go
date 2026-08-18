@@ -84,9 +84,9 @@ func (r *RawClient) UnverifiedContactsList(
 func (r *RawClient) VerifyContact(
 	ctx context.Context,
 	request *coreapigo.VerifyContactRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*core.Response[any], error) {
-	options := core.NewRequestOptions(opts...)
+	options := core.NewIdempotentRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
@@ -100,9 +100,6 @@ func (r *RawClient) VerifyContact(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
-		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
-	}
 	headers.Add("Content-Type", "application/json")
 	raw, err := r.caller.Call(
 		ctx,
@@ -132,9 +129,9 @@ func (r *RawClient) VerifyContact(
 func (r *RawClient) ResendContactVerificationEmail(
 	ctx context.Context,
 	request *coreapigo.ResendContactVerificationEmailRequest,
-	opts ...option.RequestOption,
+	opts ...option.IdempotentRequestOption,
 ) (*core.Response[*coreapigo.ContactVerificationResendResponse], error) {
-	options := core.NewRequestOptions(opts...)
+	options := core.NewIdempotentRequestOptions(opts...)
 	baseURL := internal.ResolveBaseURL(
 		options.BaseURL,
 		r.baseURL,
@@ -148,9 +145,6 @@ func (r *RawClient) ResendContactVerificationEmail(
 		r.options.ToHeader(),
 		options.ToHeader(),
 	)
-	if request.IdempotencyKey != nil {
-		headers.Add("X-Idempotency-Key", *request.IdempotencyKey)
-	}
 	headers.Add("Content-Type", "application/json")
 	var response *coreapigo.ContactVerificationResendResponse
 	raw, err := r.caller.Call(
