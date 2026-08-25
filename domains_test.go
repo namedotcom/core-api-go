@@ -3494,6 +3494,14 @@ func TestSettersMarkExplicitDomainClaimsInfo(t *testing.T) {
 }
 
 func TestSettersDomainCreatePayload(t *testing.T) {
+	t.Run("SetPrivacyEnabled", func(t *testing.T) {
+		obj := &DomainCreatePayload{}
+		var fernTestValuePrivacyEnabled *bool
+		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
+		assert.Equal(t, fernTestValuePrivacyEnabled, obj.PrivacyEnabled)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 	t.Run("SetContacts", func(t *testing.T) {
 		obj := &DomainCreatePayload{}
 		var fernTestValueContacts *ContactsRequest
@@ -3558,14 +3566,6 @@ func TestSettersDomainCreatePayload(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
-	t.Run("SetPrivacyEnabled", func(t *testing.T) {
-		obj := &DomainCreatePayload{}
-		var fernTestValuePrivacyEnabled *bool
-		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
-		assert.Equal(t, fernTestValuePrivacyEnabled, obj.PrivacyEnabled)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
 	t.Run("SetNameservers", func(t *testing.T) {
 		obj := &DomainCreatePayload{}
 		var fernTestValueNameservers []string
@@ -3585,6 +3585,39 @@ func TestSettersDomainCreatePayload(t *testing.T) {
 }
 
 func TestGettersDomainCreatePayload(t *testing.T) {
+	t.Run("GetPrivacyEnabled", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &DomainCreatePayload{}
+		var expected *bool
+		obj.PrivacyEnabled = expected
+
+		// Act & Assert
+		assert.Equal(t, expected, obj.GetPrivacyEnabled(), "getter should return the property value")
+	})
+
+	t.Run("GetPrivacyEnabled_NilValue", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &DomainCreatePayload{}
+		obj.PrivacyEnabled = nil
+
+		// Act & Assert
+		assert.Nil(t, obj.GetPrivacyEnabled(), "getter should return nil when property is nil")
+	})
+
+	t.Run("GetPrivacyEnabled_NilReceiver", func(t *testing.T) {
+		t.Parallel()
+		var obj *DomainCreatePayload
+		// Should not panic - getters should handle nil receiver gracefully
+		defer func() {
+			if r := recover(); r != nil {
+				t.Errorf("Getter panicked on nil receiver: %v", r)
+			}
+		}()
+		_ = obj.GetPrivacyEnabled() // Should return zero value
+	})
+
 	t.Run("GetContacts", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -3849,39 +3882,6 @@ func TestGettersDomainCreatePayload(t *testing.T) {
 		_ = obj.GetTransferLockExpiresAt() // Should return zero value
 	})
 
-	t.Run("GetPrivacyEnabled", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &DomainCreatePayload{}
-		var expected *bool
-		obj.PrivacyEnabled = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetPrivacyEnabled(), "getter should return the property value")
-	})
-
-	t.Run("GetPrivacyEnabled_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &DomainCreatePayload{}
-		obj.PrivacyEnabled = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetPrivacyEnabled(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetPrivacyEnabled_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *DomainCreatePayload
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetPrivacyEnabled() // Should return zero value
-	})
-
 	t.Run("GetNameservers", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -3951,6 +3951,37 @@ func TestGettersDomainCreatePayload(t *testing.T) {
 }
 
 func TestSettersMarkExplicitDomainCreatePayload(t *testing.T) {
+	t.Run("SetPrivacyEnabled_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &DomainCreatePayload{}
+		var fernTestValuePrivacyEnabled *bool
+
+		// Act
+		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
 	t.Run("SetContacts_MarksExplicit", func(t *testing.T) {
 		t.Parallel()
 		// Arrange
@@ -4176,37 +4207,6 @@ func TestSettersMarkExplicitDomainCreatePayload(t *testing.T) {
 
 		// Act
 		obj.SetTransferLockExpiresAt(fernTestValueTransferLockExpiresAt)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-	t.Run("SetPrivacyEnabled_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &DomainCreatePayload{}
-		var fernTestValuePrivacyEnabled *bool
-
-		// Act
-		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)

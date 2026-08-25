@@ -79,7 +79,7 @@ var (
 
 type CreateDomainRequest struct {
 	Domain *DomainCreatePayload `json:"domain" url:"-"`
-	// PurchasePrice is the price in USD for purchasing this domain for the minimum time period (typically 1 year). PurchasePrice is required if purchaseType is not "registration" or if it is a premium domain. If privacyEnabled is set, the regular price for Whois Privacy protection will be added automatically. If VAT tax applies, it will also be added automatically.
+	// PurchasePrice is the price in USD for purchasing this domain for the minimum time period (typically 1 year). PurchasePrice is required if purchaseType is not "registration" or if it is a premium domain. Whois Privacy is free and does not affect purchasePrice. If privacyEnabled is omitted, the account default from account settings is used. If VAT tax applies, it will also be added automatically.
 	PurchasePrice *float64 `json:"purchasePrice,omitempty" url:"-"`
 	// PurchaseType indicates what kind of purchase this domain create is for. Defaults to `registration` if omitted. **Recommended:** Use `registration` unless you support acquisition types (aftermarket, expiring, backorder) — see the [Domain purchase pricing guide](/guides/domain-pricing). This value should be copied from the [Search](/api/v1/reference/domains/search) or [Check Availability](/api/v1/reference/domains/check-availability) result. The value `registration` covers both standard and **registry premium** domains — use the `premium` flag from the discovery result to tell them apart. Aftermarket, expiring, and backorder types use flat acquisition fees from Search or Check Availability; see the [Domain pricing guide](/guides/domain-pricing).
 	PurchaseType *string `json:"purchaseType,omitempty" url:"-"`
@@ -666,11 +666,11 @@ var (
 )
 
 type DomainsPurchasePrivacyBody struct {
-	// DomainName is the domain to purchase Whois Privacy for.
+	// DomainName is the domain to enable or extend Whois Privacy for.
 	DomainName string `json:"-" url:"-"`
-	// PurchasePrice is the (prorated) amount you expect to pay.
+	// WHOIS privacy is free for API users. This field does not add a privacy fee.
 	PurchasePrice *float64 `json:"purchasePrice,omitempty" url:"-"`
-	// Years is the number of years you wish to purchase Whois Privacy for. Years defaults to 1 and cannot be more then the domain expiration date.
+	// Years is the number of years to enable or extend Whois Privacy for. Years defaults to 1 and cannot be more then the domain expiration date.
 	Years *int `json:"years,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1218,7 +1218,7 @@ type CreateDomainResponse struct {
 	Domain *DomainResponsePayload `json:"domain" url:"domain"`
 	// Order is an identifier for this purchase.
 	Order int `json:"order" url:"order"`
-	// TotalPaid is the total amount paid, including VAT and Whois privacy protection.
+	// TotalPaid is the total amount paid, including VAT when applicable. Whois Privacy is free and is not included in this amount.
 	TotalPaid float64 `json:"totalPaid" url:"totalPaid"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
@@ -1731,21 +1731,23 @@ func (d *DomainClaimsInfo) String() string {
 
 // The payload to be sent for when making a request to purchase a domain.
 var (
-	domainCreatePayloadFieldContacts              = big.NewInt(1 << 0)
-	domainCreatePayloadFieldDomainName            = big.NewInt(1 << 1)
-	domainCreatePayloadFieldCreateDate            = big.NewInt(1 << 2)
-	domainCreatePayloadFieldExpireDate            = big.NewInt(1 << 3)
-	domainCreatePayloadFieldAutorenewEnabled      = big.NewInt(1 << 4)
-	domainCreatePayloadFieldLocked                = big.NewInt(1 << 5)
-	domainCreatePayloadFieldLocks                 = big.NewInt(1 << 6)
-	domainCreatePayloadFieldTransferLockExpiresAt = big.NewInt(1 << 7)
-	domainCreatePayloadFieldPrivacyEnabled        = big.NewInt(1 << 8)
+	domainCreatePayloadFieldPrivacyEnabled        = big.NewInt(1 << 0)
+	domainCreatePayloadFieldContacts              = big.NewInt(1 << 1)
+	domainCreatePayloadFieldDomainName            = big.NewInt(1 << 2)
+	domainCreatePayloadFieldCreateDate            = big.NewInt(1 << 3)
+	domainCreatePayloadFieldExpireDate            = big.NewInt(1 << 4)
+	domainCreatePayloadFieldAutorenewEnabled      = big.NewInt(1 << 5)
+	domainCreatePayloadFieldLocked                = big.NewInt(1 << 6)
+	domainCreatePayloadFieldLocks                 = big.NewInt(1 << 7)
+	domainCreatePayloadFieldTransferLockExpiresAt = big.NewInt(1 << 8)
 	domainCreatePayloadFieldNameservers           = big.NewInt(1 << 9)
 	domainCreatePayloadFieldRenewalPrice          = big.NewInt(1 << 10)
 )
 
 type DomainCreatePayload struct {
-	Contacts *ContactsRequest `json:"contacts,omitempty" url:"contacts,omitempty"`
+	// Whether to include Whois Privacy with the registration. Whois Privacy is free. If omitted, the account default from account settings is used. Privacy is only added when the TLD supports it.
+	PrivacyEnabled *bool            `json:"privacyEnabled,omitempty" url:"privacyEnabled,omitempty"`
+	Contacts       *ContactsRequest `json:"contacts,omitempty" url:"contacts,omitempty"`
 	// The punycode-encoded value of the domain name.
 	DomainName *string `json:"domainName,omitempty" url:"domainName,omitempty"`
 	// The date and time when the domain was created at the registry.
@@ -1760,8 +1762,6 @@ type DomainCreatePayload struct {
 	Locks []string `json:"locks,omitempty" url:"locks,omitempty"`
 	// When present, the domain has an active ICANN-mandated transfer lock (new registration, transfer-in, or material registrant contact change) that blocks client unlock via the API until this time. When omitted, there is no active policy transfer lock with a known expiry — the domain may still be locked (`locked: true`) due to a voluntary user lock. Does not represent RegistrarLock, AccountLock, verification holds, trademark-claim locks, or admin TransferLock with no expiry date.
 	TransferLockExpiresAt *time.Time `json:"transferLockExpiresAt,omitempty" url:"transferLockExpiresAt,omitempty"`
-	// Indicates if Whois Privacy is enabled for this domain.
-	PrivacyEnabled *bool `json:"privacyEnabled,omitempty" url:"privacyEnabled,omitempty"`
 	// The list of nameservers assigned to this domain. If unspecified, it defaults to the account's default nameservers.
 	Nameservers []string `json:"nameservers,omitempty" url:"nameservers,omitempty"`
 	// The cost to renew the domain. This may be required for the RenewDomain operation.
@@ -1772,6 +1772,13 @@ type DomainCreatePayload struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
+}
+
+func (d *DomainCreatePayload) GetPrivacyEnabled() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.PrivacyEnabled
 }
 
 func (d *DomainCreatePayload) GetContacts() *ContactsRequest {
@@ -1830,13 +1837,6 @@ func (d *DomainCreatePayload) GetTransferLockExpiresAt() *time.Time {
 	return d.TransferLockExpiresAt
 }
 
-func (d *DomainCreatePayload) GetPrivacyEnabled() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.PrivacyEnabled
-}
-
 func (d *DomainCreatePayload) GetNameservers() []string {
 	if d == nil {
 		return nil
@@ -1863,6 +1863,13 @@ func (d *DomainCreatePayload) require(field *big.Int) {
 		d.explicitFields = big.NewInt(0)
 	}
 	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetPrivacyEnabled sets the PrivacyEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainCreatePayload) SetPrivacyEnabled(privacyEnabled *bool) {
+	d.PrivacyEnabled = privacyEnabled
+	d.require(domainCreatePayloadFieldPrivacyEnabled)
 }
 
 // SetContacts sets the Contacts field and marks it as non-optional;
@@ -1919,13 +1926,6 @@ func (d *DomainCreatePayload) SetLocks(locks []string) {
 func (d *DomainCreatePayload) SetTransferLockExpiresAt(transferLockExpiresAt *time.Time) {
 	d.TransferLockExpiresAt = transferLockExpiresAt
 	d.require(domainCreatePayloadFieldTransferLockExpiresAt)
-}
-
-// SetPrivacyEnabled sets the PrivacyEnabled field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (d *DomainCreatePayload) SetPrivacyEnabled(privacyEnabled *bool) {
-	d.PrivacyEnabled = privacyEnabled
-	d.require(domainCreatePayloadFieldPrivacyEnabled)
 }
 
 // SetNameservers sets the Nameservers field and marks it as non-optional;
@@ -2309,7 +2309,7 @@ func (p *PricingResponse) String() string {
 	return fmt.Sprintf("%#v", p)
 }
 
-// PrivacyResponse contains the updated domain info as well as the order info for the newly purchased Whois Privacy.
+// PrivacyResponse contains the updated domain info as well as the order info for the Whois Privacy that was enabled or extended.
 var (
 	privacyResponseFieldDomain    = big.NewInt(1 << 0)
 	privacyResponseFieldOrder     = big.NewInt(1 << 1)
@@ -2320,7 +2320,7 @@ type PrivacyResponse struct {
 	Domain *DomainResponsePayload `json:"domain,omitempty" url:"domain,omitempty"`
 	// Order is an identifier for this purchase.
 	Order int `json:"order" url:"order"`
-	// TotalPaid is the total amount paid, including VAT.
+	// TotalPaid is the total amount paid, including VAT when applicable. Whois Privacy is free and is not included in this amount.
 	TotalPaid float64 `json:"totalPaid" url:"totalPaid"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted

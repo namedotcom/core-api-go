@@ -168,7 +168,7 @@ type CreateTransferRequest struct {
 	AuthCode string `json:"authCode" url:"-"`
 	// DomainName is the domain you want to transfer to name.com.
 	DomainName string `json:"domainName" url:"-"`
-	// PrivacyEnabled is a flag on whether to purchase Whois Privacy with the transfer. If this flag is omitted from the request, the system will check the account's Whois Privacy auto-add settings. If auto-add is enabled in your account settings, Whois Privacy will be added by default, provided the TLD supports it.
+	// Whether to include Whois Privacy with the transfer. Whois Privacy is free. If omitted, the account default from account settings is used. Privacy is only added when the TLD supports it.
 	PrivacyEnabled *bool `json:"privacyEnabled,omitempty" url:"-"`
 	// PurchasePrice is the USD inbound transfer fee, before VAT. VAT is applied when applicable and must not be included here. If sent, must match Get Pricing `transferPrice` exactly or the request will fail.. **Omit** for standard (non-premium) transfers. **Required** for premium transfers — use `transferPrice` from [Get Pricing](/api/v1/reference/domains/get-pricing-for-domain).
 	PurchasePrice *float64 `json:"purchasePrice,omitempty" url:"-"`
@@ -455,7 +455,7 @@ var (
 type CreateTransferResponse struct {
 	// Order is an identifier for this purchase.
 	Order int `json:"order" url:"order"`
-	// TotalPaid is the total amount paid, including VAT and Whois Privacy.
+	// TotalPaid is the total amount paid, including VAT when applicable. Whois Privacy is free and is not included in this amount.
 	TotalPaid float64   `json:"totalPaid" url:"totalPaid"`
 	Transfer  *Transfer `json:"transfer" url:"transfer"`
 	// Optional transfer warnings surfaced by the API when non-blocking registry statuses are detected.

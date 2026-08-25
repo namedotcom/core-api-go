@@ -133,6 +133,38 @@ func do() {
             "<password>",
         ),
     )
+    request := &coreapigo.CreateDomainRequest{
+        Domain: &coreapigo.DomainCreatePayload{
+            DomainName: coreapigo.String(
+                "example.com",
+            ),
+        },
+    }
+    client.Domains.CreateDomain(
+        context.TODO(),
+        request,
+    )
+}
+```
+
+```go
+package example
+
+import (
+    context "context"
+
+    coreapigo "github.com/namedotcom/core-api-go"
+    client "github.com/namedotcom/core-api-go/client"
+    option "github.com/namedotcom/core-api-go/option"
+)
+
+func do() {
+    client := client.NewNamecom(
+        option.WithBasicAuth(
+            "<username>",
+            "<password>",
+        ),
+    )
     request := &coreapigo.ListDomainsRequest{}
     client.Domains.ListDomains(
         context.TODO(),
@@ -248,7 +280,7 @@ with the `errors.Is` and `errors.As` APIs, so you can access the error like so:
 response, err := client.Hello(...)
 if err != nil {
     var apiError *core.APIError
-    if errors.As(err, apiError) {
+    if errors.As(err, &apiError) {
         // Do something with the API error ...
     }
     return err
@@ -270,7 +302,7 @@ specified on the client so that they're applied on every request, or for an indi
 ```go
 // Specify default options applied on every request.
 client := client.NewClient(
-    option.WithToken("<YOUR_API_KEY>"),
+    option.WithBasicAuth("<YOUR_USERNAME>", "<YOUR_PASSWORD>"),
     option.WithHTTPClient(
         &http.Client{
             Timeout: 5 * time.Second,
@@ -281,7 +313,7 @@ client := client.NewClient(
 // Specify options for an individual request.
 response, err := client.Hello(
     ...,
-    option.WithToken("<YOUR_API_KEY>"),
+    option.WithBasicAuth("<YOUR_USERNAME>", "<YOUR_PASSWORD>"),
 )
 ```
 
