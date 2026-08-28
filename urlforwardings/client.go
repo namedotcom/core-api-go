@@ -71,13 +71,11 @@ func (c *Client) ListURLForwardings(
 //
 // Example:
 //
-//	request := &coreapigo.CreateURLForwardingRequest{
+//	request := &coreapigo.URLForwardingInput{
 //	    DomainName: "example.com",
-//	    Body: &coreapigo.URLForwardingInput{
-//	        ForwardsTo: "https://destination-site.com",
-//	        Host: "www",
-//	        Type: coreapigo.URLForwardingInputTypeMasked,
-//	    },
+//	    ForwardsTo: "https://destination-site.com",
+//	    Host: "www",
+//	    Type: coreapigo.URLForwardingInputTypeMasked,
 //	}
 //	client.URLForwardings.CreateURLForwarding(
 //	    context.TODO(),
@@ -85,7 +83,7 @@ func (c *Client) ListURLForwardings(
 //	)
 func (c *Client) CreateURLForwarding(
 	ctx context.Context,
-	request *coreapigo.CreateURLForwardingRequest,
+	request *coreapigo.URLForwardingInput,
 	opts ...option.RequestOption,
 ) (*coreapigo.URLForwardingResponse, error) {
 	response, err := c.WithRawResponse.CreateURLForwarding(
@@ -134,11 +132,7 @@ func (c *Client) GetURLForwarding(
 //	request := &coreapigo.UpdateURLForwardingRequest{
 //	    DomainName: "example.com",
 //	    Host: "www.example.org",
-//	    Body: &coreapigo.URLForwardingInput{
-//	        ForwardsTo: "https://destination-site.com",
-//	        Host: "www",
-//	        Type: coreapigo.URLForwardingInputTypeMasked,
-//	    },
+//	    Body: &coreapigo.URLForwardingUpdate{},
 //	}
 //	client.URLForwardings.UpdateURLForwarding(
 //	    context.TODO(),
@@ -284,11 +278,7 @@ func (c *Client) DeleteURLForwardingByID(
 //	request := &coreapigo.UpdateURLForwardingByIDRequest{
 //	    DomainName: "example.com",
 //	    ID: 12345,
-//	    Body: &coreapigo.URLForwardingInput{
-//	        ForwardsTo: "https://destination-site.com",
-//	        Host: "www",
-//	        Type: coreapigo.URLForwardingInputTypeMasked,
-//	    },
+//	    Body: &coreapigo.URLForwardingUpdate{},
 //	}
 //	client.URLForwardings.UpdateURLForwardingByID(
 //	    context.TODO(),

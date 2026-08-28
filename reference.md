@@ -3040,13 +3040,11 @@ Sets up a new URL forwarding (redirect) for a domain or subdomain. If this is th
 <dd>
 
 ```go
-request := &coreapigo.CreateURLForwardingRequest{
+request := &coreapigo.URLForwardingInput{
     DomainName: "example.com",
-    Body: &coreapigo.URLForwardingInput{
-        ForwardsTo: "https://destination-site.com",
-        Host: "www",
-        Type: coreapigo.URLForwardingInputTypeMasked,
-    },
+    ForwardsTo: "https://destination-site.com",
+    Host: "www",
+    Type: coreapigo.URLForwardingInputTypeMasked,
 }
 client.URLForwardings.CreateURLForwarding(
     context.TODO(),
@@ -3074,7 +3072,51 @@ client.URLForwardings.CreateURLForwarding(
 <dl>
 <dd>
 
-**request:** `*coreapigo.URLForwardingInput` 
+**forwardsTo:** `string` — The destination URL to which this hostname will be forwarded.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**host:** `string` — The subdomain portion of the hostname that is being forwarded. Use an empty string for the apex.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**meta:** `*string` 
+
+Meta tags to include in the HTML page when using "masked" forwarding.
+Ignored for other forwarding types.
+Example: `<meta name='keywords' content='fish, denver, platte'>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**title:** `*string` 
+
+The title to be used for the HTML page when using "masked" forwarding.
+Ignored for other forwarding types.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**type_:** `*coreapigo.URLForwardingInputType` 
+
+The type of URL forwarding. Valid values:
+  - `masked`: Retains the original domain in the address bar, preventing the user from seeing the actual destination URL. Sometimes called iframe forwarding.
+  - `redirect`: Uses a standard HTTP redirect (301), which changes the address bar to the destination URL.
+  - `302`: Uses a temporary HTTP redirect (302), which changes the address bar to the destination URL but indicates the resource is temporarily located elsewhere.
     
 </dd>
 </dl>
@@ -3185,11 +3227,7 @@ Modifies an existing URL forwarding rule. Changes may take up to 24 hours to ful
 request := &coreapigo.UpdateURLForwardingRequest{
     DomainName: "example.com",
     Host: "www.example.org",
-    Body: &coreapigo.URLForwardingInput{
-        ForwardsTo: "https://destination-site.com",
-        Host: "www",
-        Type: coreapigo.URLForwardingInputTypeMasked,
-    },
+    Body: &coreapigo.URLForwardingUpdate{},
 }
 client.URLForwardings.UpdateURLForwarding(
     context.TODO(),
@@ -3225,7 +3263,7 @@ client.URLForwardings.UpdateURLForwarding(
 <dl>
 <dd>
 
-**request:** `*coreapigo.URLForwardingInput` 
+**request:** `*coreapigo.URLForwardingUpdate` 
     
 </dd>
 </dl>
@@ -3556,11 +3594,7 @@ Modifies an existing URL forwarding rule by ID.  The domain must be owned by the
 request := &coreapigo.UpdateURLForwardingByIDRequest{
     DomainName: "example.com",
     ID: 12345,
-    Body: &coreapigo.URLForwardingInput{
-        ForwardsTo: "https://destination-site.com",
-        Host: "www",
-        Type: coreapigo.URLForwardingInputTypeMasked,
-    },
+    Body: &coreapigo.URLForwardingUpdate{},
 }
 client.URLForwardings.UpdateURLForwardingByID(
     context.TODO(),
@@ -3596,7 +3630,7 @@ client.URLForwardings.UpdateURLForwardingByID(
 <dl>
 <dd>
 
-**request:** `*coreapigo.URLForwardingInput` 
+**request:** `*coreapigo.URLForwardingUpdate` 
     
 </dd>
 </dl>

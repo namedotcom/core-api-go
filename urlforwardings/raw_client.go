@@ -86,7 +86,7 @@ func (r *RawClient) ListURLForwardings(
 
 func (r *RawClient) CreateURLForwarding(
 	ctx context.Context,
-	request *coreapigo.CreateURLForwardingRequest,
+	request *coreapigo.URLForwardingInput,
 	opts ...option.RequestOption,
 ) (*core.Response[*coreapigo.URLForwardingResponse], error) {
 	options := core.NewRequestOptions(opts...)

@@ -11,7 +11,7 @@
     "enableWireTests": true
   },
   "invokedBy": "ci",
-  "requestedVersion": "1.33.3",
+  "requestedVersion": "1.33.4",
   "ciProvider": "gitlab",
-  "sdkVersion": "v1.33.3"
+  "sdkVersion": "v1.33.4"
 }

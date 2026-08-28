@@ -120,13 +120,11 @@ func TestURLForwardingsCreateURLForwardingWithWireMock(
 		option.WithBaseURL(WireMockBaseURL),
 		option.WithBasicAuth("test-username", "test-password"),
 	)
-	request := &coreapigo.CreateURLForwardingRequest{
+	request := &coreapigo.URLForwardingInput{
 		DomainName: "example.com",
-		Body: &coreapigo.URLForwardingInput{
-			ForwardsTo: "https://destination-site.com",
-			Host:       "www",
-			Type:       coreapigo.URLForwardingInputTypeMasked,
-		},
+		ForwardsTo: "https://destination-site.com",
+		Host:       "www",
+		Type:       coreapigo.URLForwardingInputTypeMasked,
 	}
 	_, invocationErr := client.URLForwardings.CreateURLForwarding(
 		context.TODO(),
@@ -181,11 +179,7 @@ func TestURLForwardingsUpdateURLForwardingWithWireMock(
 	request := &coreapigo.UpdateURLForwardingRequest{
 		DomainName: "example.com",
 		Host:       "www.example.org",
-		Body: &coreapigo.URLForwardingInput{
-			ForwardsTo: "https://destination-site.com",
-			Host:       "www",
-			Type:       coreapigo.URLForwardingInputTypeMasked,
-		},
+		Body:       &coreapigo.URLForwardingUpdate{},
 	}
 	_, invocationErr := client.URLForwardings.UpdateURLForwarding(
 		context.TODO(),
@@ -326,11 +320,7 @@ func TestURLForwardingsUpdateURLForwardingByIDWithWireMock(
 	request := &coreapigo.UpdateURLForwardingByIDRequest{
 		DomainName: "example.com",
 		ID:         12345,
-		Body: &coreapigo.URLForwardingInput{
-			ForwardsTo: "https://destination-site.com",
-			Host:       "www",
-			Type:       coreapigo.URLForwardingInputTypeMasked,
-		},
+		Body:       &coreapigo.URLForwardingUpdate{},
 	}
 	_, invocationErr := client.URLForwardings.UpdateURLForwardingByID(
 		context.TODO(),
