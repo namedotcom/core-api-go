@@ -1187,34 +1187,40 @@ func (c *Contact) String() string {
 
 // Contact contains all relevant contact data for a domain registrant.  This schema is used for creating and updating contacts (POST/PUT requests) and includes all validation requirements. All fields listed in the `required` array must be provided and cannot be null or empty.
 var (
-	contactRequestFieldFirstName      = big.NewInt(1 << 0)
-	contactRequestFieldLastName       = big.NewInt(1 << 1)
-	contactRequestFieldAddress1       = big.NewInt(1 << 2)
-	contactRequestFieldCity           = big.NewInt(1 << 3)
-	contactRequestFieldState          = big.NewInt(1 << 4)
-	contactRequestFieldZip            = big.NewInt(1 << 5)
-	contactRequestFieldCountry        = big.NewInt(1 << 6)
-	contactRequestFieldEmail          = big.NewInt(1 << 7)
-	contactRequestFieldPhone          = big.NewInt(1 << 8)
-	contactRequestFieldFax            = big.NewInt(1 << 9)
-	contactRequestFieldCompanyName    = big.NewInt(1 << 10)
-	contactRequestFieldAddress2       = big.NewInt(1 << 11)
+	contactRequestFieldFax            = big.NewInt(1 << 0)
+	contactRequestFieldFirstName      = big.NewInt(1 << 1)
+	contactRequestFieldLastName       = big.NewInt(1 << 2)
+	contactRequestFieldCompanyName    = big.NewInt(1 << 3)
+	contactRequestFieldAddress1       = big.NewInt(1 << 4)
+	contactRequestFieldAddress2       = big.NewInt(1 << 5)
+	contactRequestFieldCity           = big.NewInt(1 << 6)
+	contactRequestFieldState          = big.NewInt(1 << 7)
+	contactRequestFieldZip            = big.NewInt(1 << 8)
+	contactRequestFieldCountry        = big.NewInt(1 << 9)
+	contactRequestFieldEmail          = big.NewInt(1 << 10)
+	contactRequestFieldPhone          = big.NewInt(1 << 11)
 	contactRequestFieldIsVerified     = big.NewInt(1 << 12)
 	contactRequestFieldVerificationID = big.NewInt(1 << 13)
 )
 
 type ContactRequest struct {
+	// Fax number of the contact. Should follow the E.164 international format: "+[country code][number]".
+	Fax *string `json:"fax,omitempty" url:"fax,omitempty"`
 	// First name of the contact.
 	FirstName *string `json:"firstName,omitempty" url:"firstName,omitempty"`
 	// Last name of the contact.
 	LastName *string `json:"lastName,omitempty" url:"lastName,omitempty"`
+	// Company name of the contact. Leave blank if the contact is an individual, as some registries may assume it is a corporate entity otherwise.
+	CompanyName *string `json:"companyName,omitempty" url:"companyName,omitempty"`
 	// The first line of the contact's address.
 	Address1 *string `json:"address1,omitempty" url:"address1,omitempty"`
+	// The second line of the contact's address (optional).
+	Address2 *string `json:"address2,omitempty" url:"address2,omitempty"`
 	// City of the contact's address.
 	City *string `json:"city,omitempty" url:"city,omitempty"`
 	// State or Province of the contact's address.
 	State *string `json:"state,omitempty" url:"state,omitempty"`
-	// ZIP or Postal Code of the contact's address. This field is required and must be a non-empty string.
+	// ZIP or Postal Code of the contact's address.
 	Zip *string `json:"zip,omitempty" url:"zip,omitempty"`
 	// Country code for the contact's address. Must be an ISO 3166-1 alpha-2 country code.
 	Country *string `json:"country,omitempty" url:"country,omitempty"`
@@ -1222,12 +1228,6 @@ type ContactRequest struct {
 	Email *string `json:"email,omitempty" url:"email,omitempty"`
 	// Phone number of the contact. Should follow the E.164 international format: "+[country code][number]".
 	Phone *string `json:"phone,omitempty" url:"phone,omitempty"`
-	// Fax number of the contact. Should follow the E.164 international format: "+[country code][number]".
-	Fax *string `json:"fax,omitempty" url:"fax,omitempty"`
-	// Company name of the contact. Leave blank if the contact is an individual, as some registries may assume it is a corporate entity otherwise.
-	CompanyName *string `json:"companyName,omitempty" url:"companyName,omitempty"`
-	// The second line of the contact's address (optional).
-	Address2 *string `json:"address2,omitempty" url:"address2,omitempty"`
 	// Indicates if the contact has been verified as per ICANN requirements. If the value is `false` it indicates that the contact has not completed the required verification process. This property is read-only and will be included in responses but should not be included in requests.
 	IsVerified *bool `json:"isVerified,omitempty" url:"isVerified,omitempty"`
 	// When the contact is unverified, this is the ID of the pending verification record. Use this ID with the resend verification email and verify contact endpoints. Omitted or null when the contact is verified.
@@ -1238,6 +1238,13 @@ type ContactRequest struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
+}
+
+func (c *ContactRequest) GetFax() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Fax
 }
 
 func (c *ContactRequest) GetFirstName() *string {
@@ -1254,11 +1261,25 @@ func (c *ContactRequest) GetLastName() *string {
 	return c.LastName
 }
 
+func (c *ContactRequest) GetCompanyName() *string {
+	if c == nil {
+		return nil
+	}
+	return c.CompanyName
+}
+
 func (c *ContactRequest) GetAddress1() *string {
 	if c == nil {
 		return nil
 	}
 	return c.Address1
+}
+
+func (c *ContactRequest) GetAddress2() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Address2
 }
 
 func (c *ContactRequest) GetCity() *string {
@@ -1303,27 +1324,6 @@ func (c *ContactRequest) GetPhone() *string {
 	return c.Phone
 }
 
-func (c *ContactRequest) GetFax() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Fax
-}
-
-func (c *ContactRequest) GetCompanyName() *string {
-	if c == nil {
-		return nil
-	}
-	return c.CompanyName
-}
-
-func (c *ContactRequest) GetAddress2() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Address2
-}
-
 func (c *ContactRequest) GetIsVerified() *bool {
 	if c == nil {
 		return nil
@@ -1352,6 +1352,13 @@ func (c *ContactRequest) require(field *big.Int) {
 	c.explicitFields.Or(c.explicitFields, field)
 }
 
+// SetFax sets the Fax field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContactRequest) SetFax(fax *string) {
+	c.Fax = fax
+	c.require(contactRequestFieldFax)
+}
+
 // SetFirstName sets the FirstName field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (c *ContactRequest) SetFirstName(firstName *string) {
@@ -1366,11 +1373,25 @@ func (c *ContactRequest) SetLastName(lastName *string) {
 	c.require(contactRequestFieldLastName)
 }
 
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContactRequest) SetCompanyName(companyName *string) {
+	c.CompanyName = companyName
+	c.require(contactRequestFieldCompanyName)
+}
+
 // SetAddress1 sets the Address1 field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (c *ContactRequest) SetAddress1(address1 *string) {
 	c.Address1 = address1
 	c.require(contactRequestFieldAddress1)
+}
+
+// SetAddress2 sets the Address2 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *ContactRequest) SetAddress2(address2 *string) {
+	c.Address2 = address2
+	c.require(contactRequestFieldAddress2)
 }
 
 // SetCity sets the City field and marks it as non-optional;
@@ -1413,27 +1434,6 @@ func (c *ContactRequest) SetEmail(email *string) {
 func (c *ContactRequest) SetPhone(phone *string) {
 	c.Phone = phone
 	c.require(contactRequestFieldPhone)
-}
-
-// SetFax sets the Fax field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContactRequest) SetFax(fax *string) {
-	c.Fax = fax
-	c.require(contactRequestFieldFax)
-}
-
-// SetCompanyName sets the CompanyName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContactRequest) SetCompanyName(companyName *string) {
-	c.CompanyName = companyName
-	c.require(contactRequestFieldCompanyName)
-}
-
-// SetAddress2 sets the Address2 field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (c *ContactRequest) SetAddress2(address2 *string) {
-	c.Address2 = address2
-	c.require(contactRequestFieldAddress2)
 }
 
 // SetIsVerified sets the IsVerified field and marks it as non-optional;
@@ -5514,34 +5514,40 @@ func (r *RegistrantContact) String() string {
 
 // Contact contains all relevant contact data for a domain registrant.  This schema is used for creating and updating contacts (POST/PUT requests) and includes all validation requirements. All fields listed in the `required` array must be provided and cannot be null or empty.
 var (
-	registrantContactRequestFieldFirstName      = big.NewInt(1 << 0)
-	registrantContactRequestFieldLastName       = big.NewInt(1 << 1)
-	registrantContactRequestFieldAddress1       = big.NewInt(1 << 2)
-	registrantContactRequestFieldCity           = big.NewInt(1 << 3)
-	registrantContactRequestFieldState          = big.NewInt(1 << 4)
-	registrantContactRequestFieldZip            = big.NewInt(1 << 5)
-	registrantContactRequestFieldCountry        = big.NewInt(1 << 6)
-	registrantContactRequestFieldEmail          = big.NewInt(1 << 7)
-	registrantContactRequestFieldPhone          = big.NewInt(1 << 8)
-	registrantContactRequestFieldFax            = big.NewInt(1 << 9)
-	registrantContactRequestFieldCompanyName    = big.NewInt(1 << 10)
-	registrantContactRequestFieldAddress2       = big.NewInt(1 << 11)
+	registrantContactRequestFieldFax            = big.NewInt(1 << 0)
+	registrantContactRequestFieldFirstName      = big.NewInt(1 << 1)
+	registrantContactRequestFieldLastName       = big.NewInt(1 << 2)
+	registrantContactRequestFieldCompanyName    = big.NewInt(1 << 3)
+	registrantContactRequestFieldAddress1       = big.NewInt(1 << 4)
+	registrantContactRequestFieldAddress2       = big.NewInt(1 << 5)
+	registrantContactRequestFieldCity           = big.NewInt(1 << 6)
+	registrantContactRequestFieldState          = big.NewInt(1 << 7)
+	registrantContactRequestFieldZip            = big.NewInt(1 << 8)
+	registrantContactRequestFieldCountry        = big.NewInt(1 << 9)
+	registrantContactRequestFieldEmail          = big.NewInt(1 << 10)
+	registrantContactRequestFieldPhone          = big.NewInt(1 << 11)
 	registrantContactRequestFieldIsVerified     = big.NewInt(1 << 12)
 	registrantContactRequestFieldVerificationID = big.NewInt(1 << 13)
 )
 
 type RegistrantContactRequest struct {
+	// Fax number of the contact. Should follow the E.164 international format: "+[country code][number]".
+	Fax *string `json:"fax,omitempty" url:"fax,omitempty"`
 	// First name of the contact.
 	FirstName *string `json:"firstName,omitempty" url:"firstName,omitempty"`
 	// Last name of the contact.
 	LastName *string `json:"lastName,omitempty" url:"lastName,omitempty"`
+	// Company name of the contact. Leave blank if the contact is an individual. Please be advised that ICANN policy links the "Company Name" field (Organization) in your domain's contact details to its legal ownership. If this field contains information, the listed organization is considered the legal "Registered Name Holder" (domain owner).
+	CompanyName *string `json:"companyName,omitempty" url:"companyName,omitempty"`
 	// The first line of the contact's address.
 	Address1 *string `json:"address1,omitempty" url:"address1,omitempty"`
+	// The second line of the contact's address (optional).
+	Address2 *string `json:"address2,omitempty" url:"address2,omitempty"`
 	// City of the contact's address.
 	City *string `json:"city,omitempty" url:"city,omitempty"`
 	// State or Province of the contact's address.
 	State *string `json:"state,omitempty" url:"state,omitempty"`
-	// ZIP or Postal Code of the contact's address. This field is required and must be a non-empty string.
+	// ZIP or Postal Code of the contact's address.
 	Zip *string `json:"zip,omitempty" url:"zip,omitempty"`
 	// Country code for the contact's address. Must be an ISO 3166-1 alpha-2 country code.
 	Country *string `json:"country,omitempty" url:"country,omitempty"`
@@ -5549,12 +5555,6 @@ type RegistrantContactRequest struct {
 	Email *string `json:"email,omitempty" url:"email,omitempty"`
 	// Phone number of the contact. Should follow the E.164 international format: "+[country code][number]".
 	Phone *string `json:"phone,omitempty" url:"phone,omitempty"`
-	// Fax number of the contact. Should follow the E.164 international format: "+[country code][number]".
-	Fax *string `json:"fax,omitempty" url:"fax,omitempty"`
-	// Company name of the contact. Leave blank if the contact is an individual. Please be advised that ICANN policy links the "Company Name" field (Organization) in your domain's contact details to its legal ownership. If this field contains information, the listed organization is considered the legal "Registered Name Holder" (domain owner).
-	CompanyName *string `json:"companyName,omitempty" url:"companyName,omitempty"`
-	// The second line of the contact's address (optional).
-	Address2 *string `json:"address2,omitempty" url:"address2,omitempty"`
 	// Indicates if the contact has been verified as per ICANN requirements. If the value is `false` it indicates that the contact has not completed the required verification process. This property is read-only and will be included in responses but should not be included in requests.
 	IsVerified *bool `json:"isVerified,omitempty" url:"isVerified,omitempty"`
 	// When the contact is unverified, this is the ID of the pending verification record. Use this ID with the resend verification email and verify contact endpoints. Omitted or null when the contact is verified.
@@ -5565,6 +5565,13 @@ type RegistrantContactRequest struct {
 
 	extraProperties map[string]interface{}
 	rawJSON         json.RawMessage
+}
+
+func (r *RegistrantContactRequest) GetFax() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Fax
 }
 
 func (r *RegistrantContactRequest) GetFirstName() *string {
@@ -5581,11 +5588,25 @@ func (r *RegistrantContactRequest) GetLastName() *string {
 	return r.LastName
 }
 
+func (r *RegistrantContactRequest) GetCompanyName() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CompanyName
+}
+
 func (r *RegistrantContactRequest) GetAddress1() *string {
 	if r == nil {
 		return nil
 	}
 	return r.Address1
+}
+
+func (r *RegistrantContactRequest) GetAddress2() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Address2
 }
 
 func (r *RegistrantContactRequest) GetCity() *string {
@@ -5630,27 +5651,6 @@ func (r *RegistrantContactRequest) GetPhone() *string {
 	return r.Phone
 }
 
-func (r *RegistrantContactRequest) GetFax() *string {
-	if r == nil {
-		return nil
-	}
-	return r.Fax
-}
-
-func (r *RegistrantContactRequest) GetCompanyName() *string {
-	if r == nil {
-		return nil
-	}
-	return r.CompanyName
-}
-
-func (r *RegistrantContactRequest) GetAddress2() *string {
-	if r == nil {
-		return nil
-	}
-	return r.Address2
-}
-
 func (r *RegistrantContactRequest) GetIsVerified() *bool {
 	if r == nil {
 		return nil
@@ -5679,6 +5679,13 @@ func (r *RegistrantContactRequest) require(field *big.Int) {
 	r.explicitFields.Or(r.explicitFields, field)
 }
 
+// SetFax sets the Fax field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RegistrantContactRequest) SetFax(fax *string) {
+	r.Fax = fax
+	r.require(registrantContactRequestFieldFax)
+}
+
 // SetFirstName sets the FirstName field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (r *RegistrantContactRequest) SetFirstName(firstName *string) {
@@ -5693,11 +5700,25 @@ func (r *RegistrantContactRequest) SetLastName(lastName *string) {
 	r.require(registrantContactRequestFieldLastName)
 }
 
+// SetCompanyName sets the CompanyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RegistrantContactRequest) SetCompanyName(companyName *string) {
+	r.CompanyName = companyName
+	r.require(registrantContactRequestFieldCompanyName)
+}
+
 // SetAddress1 sets the Address1 field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
 func (r *RegistrantContactRequest) SetAddress1(address1 *string) {
 	r.Address1 = address1
 	r.require(registrantContactRequestFieldAddress1)
+}
+
+// SetAddress2 sets the Address2 field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (r *RegistrantContactRequest) SetAddress2(address2 *string) {
+	r.Address2 = address2
+	r.require(registrantContactRequestFieldAddress2)
 }
 
 // SetCity sets the City field and marks it as non-optional;
@@ -5740,27 +5761,6 @@ func (r *RegistrantContactRequest) SetEmail(email *string) {
 func (r *RegistrantContactRequest) SetPhone(phone *string) {
 	r.Phone = phone
 	r.require(registrantContactRequestFieldPhone)
-}
-
-// SetFax sets the Fax field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (r *RegistrantContactRequest) SetFax(fax *string) {
-	r.Fax = fax
-	r.require(registrantContactRequestFieldFax)
-}
-
-// SetCompanyName sets the CompanyName field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (r *RegistrantContactRequest) SetCompanyName(companyName *string) {
-	r.CompanyName = companyName
-	r.require(registrantContactRequestFieldCompanyName)
-}
-
-// SetAddress2 sets the Address2 field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (r *RegistrantContactRequest) SetAddress2(address2 *string) {
-	r.Address2 = address2
-	r.require(registrantContactRequestFieldAddress2)
 }
 
 // SetIsVerified sets the IsVerified field and marks it as non-optional;

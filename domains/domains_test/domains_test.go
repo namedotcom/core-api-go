@@ -170,11 +170,6 @@ func TestDomainsUpdateDomainWithWireMock(
 	)
 	request := &coreapigo.UpdateDomainRequest{
 		DomainName: "domainName",
-		Body: &coreapigo.UpdateDomainRequestBody{
-			UpdateDomainRequestBodyAutorenewEnabled: &coreapigo.UpdateDomainRequestBodyAutorenewEnabled{
-				AutorenewEnabled: true,
-			},
-		},
 	}
 	_, invocationErr := client.Domains.UpdateDomain(
 		context.TODO(),

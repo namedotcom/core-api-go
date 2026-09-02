@@ -159,11 +159,6 @@ func (c *Client) GetDomain(
 //
 //	request := &coreapigo.UpdateDomainRequest{
 //	    DomainName: "domainName",
-//	    Body: &coreapigo.UpdateDomainRequestBody{
-//	        UpdateDomainRequestBodyAutorenewEnabled: &coreapigo.UpdateDomainRequestBodyAutorenewEnabled{
-//	            AutorenewEnabled: true,
-//	        },
-//	    },
 //	}
 //	client.Domains.UpdateDomain(
 //	    context.TODO(),

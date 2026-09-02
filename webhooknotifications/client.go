@@ -101,11 +101,6 @@ func (c *Client) SubscribeToNotification(
 //
 //	request := &coreapigo.ModifySubscriptionRequest{
 //	    ID: 1,
-//	    Body: &coreapigo.ModifySubscriptionRequestBody{
-//	        ModifySubscriptionRequestBodyURL: &coreapigo.ModifySubscriptionRequestBodyURL{
-//	            URL: "url",
-//	        },
-//	    },
 //	}
 //	client.WebhookNotifications.ModifySubscription(
 //	    context.TODO(),

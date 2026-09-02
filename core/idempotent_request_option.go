@@ -53,7 +53,7 @@ func (x *XIdempotencyKeyOption) applyIdempotentRequestOptions(opts *IdempotentRe
 func (i *IdempotentRequestOptions) ToHeader() http.Header {
 	header := i.RequestOptions.ToHeader()
 	if i.XIdempotencyKey != nil {
-		header.Set("X-Idempotency-Key", fmt.Sprintf("*%v", *i.XIdempotencyKey))
+		header.Set("X-Idempotency-Key", fmt.Sprintf("%v", *i.XIdempotencyKey))
 	}
 	return header
 }

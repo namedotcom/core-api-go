@@ -1025,13 +1025,21 @@ func (u *UnlockDomainRequest) MarshalJSON() ([]byte, error) {
 }
 
 var (
-	updateDomainRequestFieldDomainName = big.NewInt(1 << 0)
+	updateDomainRequestFieldDomainName       = big.NewInt(1 << 0)
+	updateDomainRequestFieldAutorenewEnabled = big.NewInt(1 << 1)
+	updateDomainRequestFieldPrivacyEnabled   = big.NewInt(1 << 2)
+	updateDomainRequestFieldLocked           = big.NewInt(1 << 3)
 )
 
 type UpdateDomainRequest struct {
 	// DomainName is the domain to update.
-	DomainName string                   `json:"-" url:"-"`
-	Body       *UpdateDomainRequestBody `json:"-" url:"-"`
+	DomainName string `json:"-" url:"-"`
+	// Enable or disable automatic renewal for the domain.
+	AutorenewEnabled *bool `json:"autorenewEnabled,omitempty" url:"-"`
+	// Enable or disable Whois privacy for the domain.
+	PrivacyEnabled *bool `json:"privacyEnabled,omitempty" url:"-"`
+	// Set the transfer lock status for the domain
+	Locked *bool `json:"locked,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -1051,17 +1059,46 @@ func (u *UpdateDomainRequest) SetDomainName(domainName string) {
 	u.require(updateDomainRequestFieldDomainName)
 }
 
+// SetAutorenewEnabled sets the AutorenewEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateDomainRequest) SetAutorenewEnabled(autorenewEnabled *bool) {
+	u.AutorenewEnabled = autorenewEnabled
+	u.require(updateDomainRequestFieldAutorenewEnabled)
+}
+
+// SetPrivacyEnabled sets the PrivacyEnabled field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateDomainRequest) SetPrivacyEnabled(privacyEnabled *bool) {
+	u.PrivacyEnabled = privacyEnabled
+	u.require(updateDomainRequestFieldPrivacyEnabled)
+}
+
+// SetLocked sets the Locked field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (u *UpdateDomainRequest) SetLocked(locked *bool) {
+	u.Locked = locked
+	u.require(updateDomainRequestFieldLocked)
+}
+
 func (u *UpdateDomainRequest) UnmarshalJSON(data []byte) error {
-	body := new(UpdateDomainRequestBody)
+	type unmarshaler UpdateDomainRequest
+	var body unmarshaler
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
-	u.Body = body
+	*u = UpdateDomainRequest(body)
 	return nil
 }
 
 func (u *UpdateDomainRequest) MarshalJSON() ([]byte, error) {
-	return json.Marshal(u.Body)
+	type embed UpdateDomainRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*u),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -3122,339 +3159,4 @@ func (z *ZoneCheckResult) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", z)
-}
-
-type UpdateDomainRequestBody struct {
-	UpdateDomainRequestBodyAutorenewEnabled *UpdateDomainRequestBodyAutorenewEnabled
-	UpdateDomainRequestBodyPrivacyEnabled   *UpdateDomainRequestBodyPrivacyEnabled
-	UpdateDomainRequestBodyLocked           *UpdateDomainRequestBodyLocked
-
-	typ string
-}
-
-func (u *UpdateDomainRequestBody) GetUpdateDomainRequestBodyAutorenewEnabled() *UpdateDomainRequestBodyAutorenewEnabled {
-	if u == nil {
-		return nil
-	}
-	return u.UpdateDomainRequestBodyAutorenewEnabled
-}
-
-func (u *UpdateDomainRequestBody) GetUpdateDomainRequestBodyPrivacyEnabled() *UpdateDomainRequestBodyPrivacyEnabled {
-	if u == nil {
-		return nil
-	}
-	return u.UpdateDomainRequestBodyPrivacyEnabled
-}
-
-func (u *UpdateDomainRequestBody) GetUpdateDomainRequestBodyLocked() *UpdateDomainRequestBodyLocked {
-	if u == nil {
-		return nil
-	}
-	return u.UpdateDomainRequestBodyLocked
-}
-
-func (u *UpdateDomainRequestBody) UnmarshalJSON(data []byte) error {
-	valueUpdateDomainRequestBodyAutorenewEnabled := new(UpdateDomainRequestBodyAutorenewEnabled)
-	if err := json.Unmarshal(data, &valueUpdateDomainRequestBodyAutorenewEnabled); err == nil {
-		u.typ = "UpdateDomainRequestBodyAutorenewEnabled"
-		u.UpdateDomainRequestBodyAutorenewEnabled = valueUpdateDomainRequestBodyAutorenewEnabled
-		return nil
-	}
-	valueUpdateDomainRequestBodyPrivacyEnabled := new(UpdateDomainRequestBodyPrivacyEnabled)
-	if err := json.Unmarshal(data, &valueUpdateDomainRequestBodyPrivacyEnabled); err == nil {
-		u.typ = "UpdateDomainRequestBodyPrivacyEnabled"
-		u.UpdateDomainRequestBodyPrivacyEnabled = valueUpdateDomainRequestBodyPrivacyEnabled
-		return nil
-	}
-	valueUpdateDomainRequestBodyLocked := new(UpdateDomainRequestBodyLocked)
-	if err := json.Unmarshal(data, &valueUpdateDomainRequestBodyLocked); err == nil {
-		u.typ = "UpdateDomainRequestBodyLocked"
-		u.UpdateDomainRequestBodyLocked = valueUpdateDomainRequestBodyLocked
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, u)
-}
-
-func (u UpdateDomainRequestBody) MarshalJSON() ([]byte, error) {
-	if u.typ == "UpdateDomainRequestBodyAutorenewEnabled" || u.UpdateDomainRequestBodyAutorenewEnabled != nil {
-		return json.Marshal(u.UpdateDomainRequestBodyAutorenewEnabled)
-	}
-	if u.typ == "UpdateDomainRequestBodyPrivacyEnabled" || u.UpdateDomainRequestBodyPrivacyEnabled != nil {
-		return json.Marshal(u.UpdateDomainRequestBodyPrivacyEnabled)
-	}
-	if u.typ == "UpdateDomainRequestBodyLocked" || u.UpdateDomainRequestBodyLocked != nil {
-		return json.Marshal(u.UpdateDomainRequestBodyLocked)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", u)
-}
-
-type UpdateDomainRequestBodyVisitor interface {
-	VisitUpdateDomainRequestBodyAutorenewEnabled(*UpdateDomainRequestBodyAutorenewEnabled) error
-	VisitUpdateDomainRequestBodyPrivacyEnabled(*UpdateDomainRequestBodyPrivacyEnabled) error
-	VisitUpdateDomainRequestBodyLocked(*UpdateDomainRequestBodyLocked) error
-}
-
-func (u *UpdateDomainRequestBody) Accept(visitor UpdateDomainRequestBodyVisitor) error {
-	if u.typ == "UpdateDomainRequestBodyAutorenewEnabled" || u.UpdateDomainRequestBodyAutorenewEnabled != nil {
-		return visitor.VisitUpdateDomainRequestBodyAutorenewEnabled(u.UpdateDomainRequestBodyAutorenewEnabled)
-	}
-	if u.typ == "UpdateDomainRequestBodyPrivacyEnabled" || u.UpdateDomainRequestBodyPrivacyEnabled != nil {
-		return visitor.VisitUpdateDomainRequestBodyPrivacyEnabled(u.UpdateDomainRequestBodyPrivacyEnabled)
-	}
-	if u.typ == "UpdateDomainRequestBodyLocked" || u.UpdateDomainRequestBodyLocked != nil {
-		return visitor.VisitUpdateDomainRequestBodyLocked(u.UpdateDomainRequestBodyLocked)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", u)
-}
-
-var (
-	updateDomainRequestBodyAutorenewEnabledFieldAutorenewEnabled = big.NewInt(1 << 0)
-)
-
-type UpdateDomainRequestBodyAutorenewEnabled struct {
-	AutorenewEnabled bool `json:"autorenewEnabled" url:"autorenewEnabled"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (u *UpdateDomainRequestBodyAutorenewEnabled) GetAutorenewEnabled() bool {
-	if u == nil {
-		return false
-	}
-	return u.AutorenewEnabled
-}
-
-func (u *UpdateDomainRequestBodyAutorenewEnabled) GetExtraProperties() map[string]interface{} {
-	if u == nil {
-		return nil
-	}
-	return u.extraProperties
-}
-
-func (u *UpdateDomainRequestBodyAutorenewEnabled) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
-	}
-	u.explicitFields.Or(u.explicitFields, field)
-}
-
-// SetAutorenewEnabled sets the AutorenewEnabled field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateDomainRequestBodyAutorenewEnabled) SetAutorenewEnabled(autorenewEnabled bool) {
-	u.AutorenewEnabled = autorenewEnabled
-	u.require(updateDomainRequestBodyAutorenewEnabledFieldAutorenewEnabled)
-}
-
-func (u *UpdateDomainRequestBodyAutorenewEnabled) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateDomainRequestBodyAutorenewEnabled
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*u = UpdateDomainRequestBodyAutorenewEnabled(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *u)
-	if err != nil {
-		return err
-	}
-	u.extraProperties = extraProperties
-	u.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (u *UpdateDomainRequestBodyAutorenewEnabled) MarshalJSON() ([]byte, error) {
-	type embed UpdateDomainRequestBodyAutorenewEnabled
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*u),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (u *UpdateDomainRequestBodyAutorenewEnabled) String() string {
-	if u == nil {
-		return "<nil>"
-	}
-	if len(u.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(u); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", u)
-}
-
-var (
-	updateDomainRequestBodyLockedFieldLocked = big.NewInt(1 << 0)
-)
-
-type UpdateDomainRequestBodyLocked struct {
-	Locked bool `json:"locked" url:"locked"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (u *UpdateDomainRequestBodyLocked) GetLocked() bool {
-	if u == nil {
-		return false
-	}
-	return u.Locked
-}
-
-func (u *UpdateDomainRequestBodyLocked) GetExtraProperties() map[string]interface{} {
-	if u == nil {
-		return nil
-	}
-	return u.extraProperties
-}
-
-func (u *UpdateDomainRequestBodyLocked) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
-	}
-	u.explicitFields.Or(u.explicitFields, field)
-}
-
-// SetLocked sets the Locked field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateDomainRequestBodyLocked) SetLocked(locked bool) {
-	u.Locked = locked
-	u.require(updateDomainRequestBodyLockedFieldLocked)
-}
-
-func (u *UpdateDomainRequestBodyLocked) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateDomainRequestBodyLocked
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*u = UpdateDomainRequestBodyLocked(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *u)
-	if err != nil {
-		return err
-	}
-	u.extraProperties = extraProperties
-	u.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (u *UpdateDomainRequestBodyLocked) MarshalJSON() ([]byte, error) {
-	type embed UpdateDomainRequestBodyLocked
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*u),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (u *UpdateDomainRequestBodyLocked) String() string {
-	if u == nil {
-		return "<nil>"
-	}
-	if len(u.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(u); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", u)
-}
-
-var (
-	updateDomainRequestBodyPrivacyEnabledFieldPrivacyEnabled = big.NewInt(1 << 0)
-)
-
-type UpdateDomainRequestBodyPrivacyEnabled struct {
-	PrivacyEnabled bool `json:"privacyEnabled" url:"privacyEnabled"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (u *UpdateDomainRequestBodyPrivacyEnabled) GetPrivacyEnabled() bool {
-	if u == nil {
-		return false
-	}
-	return u.PrivacyEnabled
-}
-
-func (u *UpdateDomainRequestBodyPrivacyEnabled) GetExtraProperties() map[string]interface{} {
-	if u == nil {
-		return nil
-	}
-	return u.extraProperties
-}
-
-func (u *UpdateDomainRequestBodyPrivacyEnabled) require(field *big.Int) {
-	if u.explicitFields == nil {
-		u.explicitFields = big.NewInt(0)
-	}
-	u.explicitFields.Or(u.explicitFields, field)
-}
-
-// SetPrivacyEnabled sets the PrivacyEnabled field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (u *UpdateDomainRequestBodyPrivacyEnabled) SetPrivacyEnabled(privacyEnabled bool) {
-	u.PrivacyEnabled = privacyEnabled
-	u.require(updateDomainRequestBodyPrivacyEnabledFieldPrivacyEnabled)
-}
-
-func (u *UpdateDomainRequestBodyPrivacyEnabled) UnmarshalJSON(data []byte) error {
-	type unmarshaler UpdateDomainRequestBodyPrivacyEnabled
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*u = UpdateDomainRequestBodyPrivacyEnabled(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *u)
-	if err != nil {
-		return err
-	}
-	u.extraProperties = extraProperties
-	u.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (u *UpdateDomainRequestBodyPrivacyEnabled) MarshalJSON() ([]byte, error) {
-	type embed UpdateDomainRequestBodyPrivacyEnabled
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*u),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, u.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (u *UpdateDomainRequestBodyPrivacyEnabled) String() string {
-	if u == nil {
-		return "<nil>"
-	}
-	if len(u.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(u.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(u); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", u)
 }

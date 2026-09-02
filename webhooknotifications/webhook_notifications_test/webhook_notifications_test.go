@@ -140,11 +140,6 @@ func TestWebhookNotificationsModifySubscriptionWithWireMock(
 	)
 	request := &coreapigo.ModifySubscriptionRequest{
 		ID: 1,
-		Body: &coreapigo.ModifySubscriptionRequestBody{
-			ModifySubscriptionRequestBodyURL: &coreapigo.ModifySubscriptionRequestBodyURL{
-				URL: "url",
-			},
-		},
 	}
 	_, invocationErr := client.WebhookNotifications.ModifySubscription(
 		context.TODO(),

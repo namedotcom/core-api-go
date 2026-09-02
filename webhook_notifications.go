@@ -36,13 +36,18 @@ func (d *DeleteSubscriptionRequest) SetID(id int) {
 }
 
 var (
-	modifySubscriptionRequestFieldID = big.NewInt(1 << 0)
+	modifySubscriptionRequestFieldID     = big.NewInt(1 << 0)
+	modifySubscriptionRequestFieldURL    = big.NewInt(1 << 1)
+	modifySubscriptionRequestFieldActive = big.NewInt(1 << 2)
 )
 
 type ModifySubscriptionRequest struct {
 	// ID of the subscription to update.
-	ID   int                            `json:"-" url:"-"`
-	Body *ModifySubscriptionRequestBody `json:"-" url:"-"`
+	ID int `json:"-" url:"-"`
+	// Optionally update the URL we send the webhook data to
+	URL *string `json:"url,omitempty" url:"-"`
+	// Optionally update if the subscription is currently active
+	Active *bool `json:"active,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -62,17 +67,39 @@ func (m *ModifySubscriptionRequest) SetID(id int) {
 	m.require(modifySubscriptionRequestFieldID)
 }
 
+// SetURL sets the URL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (m *ModifySubscriptionRequest) SetURL(url *string) {
+	m.URL = url
+	m.require(modifySubscriptionRequestFieldURL)
+}
+
+// SetActive sets the Active field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (m *ModifySubscriptionRequest) SetActive(active *bool) {
+	m.Active = active
+	m.require(modifySubscriptionRequestFieldActive)
+}
+
 func (m *ModifySubscriptionRequest) UnmarshalJSON(data []byte) error {
-	body := new(ModifySubscriptionRequestBody)
+	type unmarshaler ModifySubscriptionRequest
+	var body unmarshaler
 	if err := json.Unmarshal(data, &body); err != nil {
 		return err
 	}
-	m.Body = body
+	*m = ModifySubscriptionRequest(body)
 	return nil
 }
 
 func (m *ModifySubscriptionRequest) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.Body)
+	type embed ModifySubscriptionRequest
+	var marshaler = struct {
+		embed
+	}{
+		embed: embed(*m),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
+	return json.Marshal(explicitMarshaler)
 }
 
 var (
@@ -602,234 +629,4 @@ func (s *SubscriptionRecord) String() string {
 		return value
 	}
 	return fmt.Sprintf("%#v", s)
-}
-
-type ModifySubscriptionRequestBody struct {
-	ModifySubscriptionRequestBodyURL    *ModifySubscriptionRequestBodyURL
-	ModifySubscriptionRequestBodyActive *ModifySubscriptionRequestBodyActive
-
-	typ string
-}
-
-func (m *ModifySubscriptionRequestBody) GetModifySubscriptionRequestBodyURL() *ModifySubscriptionRequestBodyURL {
-	if m == nil {
-		return nil
-	}
-	return m.ModifySubscriptionRequestBodyURL
-}
-
-func (m *ModifySubscriptionRequestBody) GetModifySubscriptionRequestBodyActive() *ModifySubscriptionRequestBodyActive {
-	if m == nil {
-		return nil
-	}
-	return m.ModifySubscriptionRequestBodyActive
-}
-
-func (m *ModifySubscriptionRequestBody) UnmarshalJSON(data []byte) error {
-	valueModifySubscriptionRequestBodyURL := new(ModifySubscriptionRequestBodyURL)
-	if err := json.Unmarshal(data, &valueModifySubscriptionRequestBodyURL); err == nil {
-		m.typ = "ModifySubscriptionRequestBodyURL"
-		m.ModifySubscriptionRequestBodyURL = valueModifySubscriptionRequestBodyURL
-		return nil
-	}
-	valueModifySubscriptionRequestBodyActive := new(ModifySubscriptionRequestBodyActive)
-	if err := json.Unmarshal(data, &valueModifySubscriptionRequestBodyActive); err == nil {
-		m.typ = "ModifySubscriptionRequestBodyActive"
-		m.ModifySubscriptionRequestBodyActive = valueModifySubscriptionRequestBodyActive
-		return nil
-	}
-	return fmt.Errorf("%s cannot be deserialized as a %T", data, m)
-}
-
-func (m ModifySubscriptionRequestBody) MarshalJSON() ([]byte, error) {
-	if m.typ == "ModifySubscriptionRequestBodyURL" || m.ModifySubscriptionRequestBodyURL != nil {
-		return json.Marshal(m.ModifySubscriptionRequestBodyURL)
-	}
-	if m.typ == "ModifySubscriptionRequestBodyActive" || m.ModifySubscriptionRequestBodyActive != nil {
-		return json.Marshal(m.ModifySubscriptionRequestBodyActive)
-	}
-	return nil, fmt.Errorf("type %T does not include a non-empty union type", m)
-}
-
-type ModifySubscriptionRequestBodyVisitor interface {
-	VisitModifySubscriptionRequestBodyURL(*ModifySubscriptionRequestBodyURL) error
-	VisitModifySubscriptionRequestBodyActive(*ModifySubscriptionRequestBodyActive) error
-}
-
-func (m *ModifySubscriptionRequestBody) Accept(visitor ModifySubscriptionRequestBodyVisitor) error {
-	if m.typ == "ModifySubscriptionRequestBodyURL" || m.ModifySubscriptionRequestBodyURL != nil {
-		return visitor.VisitModifySubscriptionRequestBodyURL(m.ModifySubscriptionRequestBodyURL)
-	}
-	if m.typ == "ModifySubscriptionRequestBodyActive" || m.ModifySubscriptionRequestBodyActive != nil {
-		return visitor.VisitModifySubscriptionRequestBodyActive(m.ModifySubscriptionRequestBodyActive)
-	}
-	return fmt.Errorf("type %T does not include a non-empty union type", m)
-}
-
-var (
-	modifySubscriptionRequestBodyActiveFieldActive = big.NewInt(1 << 0)
-)
-
-type ModifySubscriptionRequestBodyActive struct {
-	Active bool `json:"active" url:"active"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (m *ModifySubscriptionRequestBodyActive) GetActive() bool {
-	if m == nil {
-		return false
-	}
-	return m.Active
-}
-
-func (m *ModifySubscriptionRequestBodyActive) GetExtraProperties() map[string]interface{} {
-	if m == nil {
-		return nil
-	}
-	return m.extraProperties
-}
-
-func (m *ModifySubscriptionRequestBodyActive) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
-	}
-	m.explicitFields.Or(m.explicitFields, field)
-}
-
-// SetActive sets the Active field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *ModifySubscriptionRequestBodyActive) SetActive(active bool) {
-	m.Active = active
-	m.require(modifySubscriptionRequestBodyActiveFieldActive)
-}
-
-func (m *ModifySubscriptionRequestBodyActive) UnmarshalJSON(data []byte) error {
-	type unmarshaler ModifySubscriptionRequestBodyActive
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = ModifySubscriptionRequestBodyActive(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-	m.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *ModifySubscriptionRequestBodyActive) MarshalJSON() ([]byte, error) {
-	type embed ModifySubscriptionRequestBodyActive
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*m),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (m *ModifySubscriptionRequestBodyActive) String() string {
-	if m == nil {
-		return "<nil>"
-	}
-	if len(m.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
-}
-
-var (
-	modifySubscriptionRequestBodyURLFieldURL = big.NewInt(1 << 0)
-)
-
-type ModifySubscriptionRequestBodyURL struct {
-	URL string `json:"url" url:"url"`
-
-	// Private bitmask of fields set to an explicit value and therefore not to be omitted
-	explicitFields *big.Int `json:"-" url:"-"`
-
-	extraProperties map[string]interface{}
-	rawJSON         json.RawMessage
-}
-
-func (m *ModifySubscriptionRequestBodyURL) GetURL() string {
-	if m == nil {
-		return ""
-	}
-	return m.URL
-}
-
-func (m *ModifySubscriptionRequestBodyURL) GetExtraProperties() map[string]interface{} {
-	if m == nil {
-		return nil
-	}
-	return m.extraProperties
-}
-
-func (m *ModifySubscriptionRequestBodyURL) require(field *big.Int) {
-	if m.explicitFields == nil {
-		m.explicitFields = big.NewInt(0)
-	}
-	m.explicitFields.Or(m.explicitFields, field)
-}
-
-// SetURL sets the URL field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (m *ModifySubscriptionRequestBodyURL) SetURL(url string) {
-	m.URL = url
-	m.require(modifySubscriptionRequestBodyURLFieldURL)
-}
-
-func (m *ModifySubscriptionRequestBodyURL) UnmarshalJSON(data []byte) error {
-	type unmarshaler ModifySubscriptionRequestBodyURL
-	var value unmarshaler
-	if err := json.Unmarshal(data, &value); err != nil {
-		return err
-	}
-	*m = ModifySubscriptionRequestBodyURL(value)
-	extraProperties, err := internal.ExtractExtraProperties(data, *m)
-	if err != nil {
-		return err
-	}
-	m.extraProperties = extraProperties
-	m.rawJSON = json.RawMessage(data)
-	return nil
-}
-
-func (m *ModifySubscriptionRequestBodyURL) MarshalJSON() ([]byte, error) {
-	type embed ModifySubscriptionRequestBodyURL
-	var marshaler = struct {
-		embed
-	}{
-		embed: embed(*m),
-	}
-	explicitMarshaler := internal.HandleExplicitFields(marshaler, m.explicitFields)
-	return json.Marshal(explicitMarshaler)
-}
-
-func (m *ModifySubscriptionRequestBodyURL) String() string {
-	if m == nil {
-		return "<nil>"
-	}
-	if len(m.rawJSON) > 0 {
-		if value, err := internal.StringifyJSON(m.rawJSON); err == nil {
-			return value
-		}
-	}
-	if value, err := internal.StringifyJSON(m); err == nil {
-		return value
-	}
-	return fmt.Sprintf("%#v", m)
 }

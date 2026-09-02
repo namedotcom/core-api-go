@@ -2110,6 +2110,30 @@ func TestSettersUpdateDomainRequest(t *testing.T) {
 		assert.NotNil(t, obj.explicitFields)
 	})
 
+	t.Run("SetAutorenewEnabled", func(t *testing.T) {
+		obj := &UpdateDomainRequest{}
+		var fernTestValueAutorenewEnabled *bool
+		obj.SetAutorenewEnabled(fernTestValueAutorenewEnabled)
+		assert.Equal(t, fernTestValueAutorenewEnabled, obj.AutorenewEnabled)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetPrivacyEnabled", func(t *testing.T) {
+		obj := &UpdateDomainRequest{}
+		var fernTestValuePrivacyEnabled *bool
+		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
+		assert.Equal(t, fernTestValuePrivacyEnabled, obj.PrivacyEnabled)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
+	t.Run("SetLocked", func(t *testing.T) {
+		obj := &UpdateDomainRequest{}
+		var fernTestValueLocked *bool
+		obj.SetLocked(fernTestValueLocked)
+		assert.Equal(t, fernTestValueLocked, obj.Locked)
+		assert.NotNil(t, obj.explicitFields)
+	})
+
 }
 
 func TestSettersMarkExplicitUpdateDomainRequest(t *testing.T) {
@@ -2121,6 +2145,99 @@ func TestSettersMarkExplicitUpdateDomainRequest(t *testing.T) {
 
 		// Act
 		obj.SetDomainName(fernTestValueDomainName)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetAutorenewEnabled_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateDomainRequest{}
+		var fernTestValueAutorenewEnabled *bool
+
+		// Act
+		obj.SetAutorenewEnabled(fernTestValueAutorenewEnabled)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetPrivacyEnabled_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateDomainRequest{}
+		var fernTestValuePrivacyEnabled *bool
+
+		// Act
+		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
+
+		// Assert - object with explicitly set field can be marshaled/unmarshaled
+		bytes, err := json.Marshal(obj)
+		require.NoError(t, err, "marshaling should succeed for test setup")
+
+		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
+		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
+		if len(bytes) > 0 && bytes[0] == '{' {
+			// JSON object - unmarshal into map
+			var unmarshaled map[string]interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		} else {
+			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
+			var unmarshaled interface{}
+			err = json.Unmarshal(bytes, &unmarshaled)
+			require.NoError(t, err, "unmarshaling should succeed for test verification")
+		}
+
+		// Note: This does not explicitly assert the presence of a specific JSON field
+		// It verifies that setting a field via setter allows successful JSON round-trip
+	})
+
+	t.Run("SetLocked_MarksExplicit", func(t *testing.T) {
+		t.Parallel()
+		// Arrange
+		obj := &UpdateDomainRequest{}
+		var fernTestValueLocked *bool
+
+		// Act
+		obj.SetLocked(fernTestValueLocked)
 
 		// Assert - object with explicitly set field can be marshaled/unmarshaled
 		bytes, err := json.Marshal(obj)
@@ -6478,321 +6595,6 @@ func TestSettersMarkExplicitZoneCheckResult(t *testing.T) {
 
 }
 
-func TestGettersUpdateDomainRequestBody(t *testing.T) {
-	t.Run("GetUpdateDomainRequestBodyAutorenewEnabled", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBody{}
-		var expected *UpdateDomainRequestBodyAutorenewEnabled
-		obj.UpdateDomainRequestBodyAutorenewEnabled = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetUpdateDomainRequestBodyAutorenewEnabled(), "getter should return the property value")
-	})
-
-	t.Run("GetUpdateDomainRequestBodyAutorenewEnabled_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBody{}
-		obj.UpdateDomainRequestBodyAutorenewEnabled = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetUpdateDomainRequestBodyAutorenewEnabled(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetUpdateDomainRequestBodyAutorenewEnabled_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetUpdateDomainRequestBodyAutorenewEnabled() // Should return zero value
-	})
-
-	t.Run("GetUpdateDomainRequestBodyPrivacyEnabled", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBody{}
-		var expected *UpdateDomainRequestBodyPrivacyEnabled
-		obj.UpdateDomainRequestBodyPrivacyEnabled = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetUpdateDomainRequestBodyPrivacyEnabled(), "getter should return the property value")
-	})
-
-	t.Run("GetUpdateDomainRequestBodyPrivacyEnabled_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBody{}
-		obj.UpdateDomainRequestBodyPrivacyEnabled = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetUpdateDomainRequestBodyPrivacyEnabled(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetUpdateDomainRequestBodyPrivacyEnabled_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetUpdateDomainRequestBodyPrivacyEnabled() // Should return zero value
-	})
-
-	t.Run("GetUpdateDomainRequestBodyLocked", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBody{}
-		var expected *UpdateDomainRequestBodyLocked
-		obj.UpdateDomainRequestBodyLocked = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetUpdateDomainRequestBodyLocked(), "getter should return the property value")
-	})
-
-	t.Run("GetUpdateDomainRequestBodyLocked_NilValue", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBody{}
-		obj.UpdateDomainRequestBodyLocked = nil
-
-		// Act & Assert
-		assert.Nil(t, obj.GetUpdateDomainRequestBodyLocked(), "getter should return nil when property is nil")
-	})
-
-	t.Run("GetUpdateDomainRequestBodyLocked_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBody
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetUpdateDomainRequestBodyLocked() // Should return zero value
-	})
-
-}
-
-func TestSettersUpdateDomainRequestBodyAutorenewEnabled(t *testing.T) {
-	t.Run("SetAutorenewEnabled", func(t *testing.T) {
-		obj := &UpdateDomainRequestBodyAutorenewEnabled{}
-		var fernTestValueAutorenewEnabled bool
-		obj.SetAutorenewEnabled(fernTestValueAutorenewEnabled)
-		assert.Equal(t, fernTestValueAutorenewEnabled, obj.AutorenewEnabled)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersUpdateDomainRequestBodyAutorenewEnabled(t *testing.T) {
-	t.Run("GetAutorenewEnabled", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyAutorenewEnabled{}
-		var expected bool
-		obj.AutorenewEnabled = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetAutorenewEnabled(), "getter should return the property value")
-	})
-
-	t.Run("GetAutorenewEnabled_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyAutorenewEnabled
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetAutorenewEnabled() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitUpdateDomainRequestBodyAutorenewEnabled(t *testing.T) {
-	t.Run("SetAutorenewEnabled_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyAutorenewEnabled{}
-		var fernTestValueAutorenewEnabled bool
-
-		// Act
-		obj.SetAutorenewEnabled(fernTestValueAutorenewEnabled)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-}
-
-func TestSettersUpdateDomainRequestBodyLocked(t *testing.T) {
-	t.Run("SetLocked", func(t *testing.T) {
-		obj := &UpdateDomainRequestBodyLocked{}
-		var fernTestValueLocked bool
-		obj.SetLocked(fernTestValueLocked)
-		assert.Equal(t, fernTestValueLocked, obj.Locked)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersUpdateDomainRequestBodyLocked(t *testing.T) {
-	t.Run("GetLocked", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyLocked{}
-		var expected bool
-		obj.Locked = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetLocked(), "getter should return the property value")
-	})
-
-	t.Run("GetLocked_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyLocked
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetLocked() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitUpdateDomainRequestBodyLocked(t *testing.T) {
-	t.Run("SetLocked_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyLocked{}
-		var fernTestValueLocked bool
-
-		// Act
-		obj.SetLocked(fernTestValueLocked)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-}
-
-func TestSettersUpdateDomainRequestBodyPrivacyEnabled(t *testing.T) {
-	t.Run("SetPrivacyEnabled", func(t *testing.T) {
-		obj := &UpdateDomainRequestBodyPrivacyEnabled{}
-		var fernTestValuePrivacyEnabled bool
-		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
-		assert.Equal(t, fernTestValuePrivacyEnabled, obj.PrivacyEnabled)
-		assert.NotNil(t, obj.explicitFields)
-	})
-
-}
-
-func TestGettersUpdateDomainRequestBodyPrivacyEnabled(t *testing.T) {
-	t.Run("GetPrivacyEnabled", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyPrivacyEnabled{}
-		var expected bool
-		obj.PrivacyEnabled = expected
-
-		// Act & Assert
-		assert.Equal(t, expected, obj.GetPrivacyEnabled(), "getter should return the property value")
-	})
-
-	t.Run("GetPrivacyEnabled_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyPrivacyEnabled
-		// Should not panic - getters should handle nil receiver gracefully
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("Getter panicked on nil receiver: %v", r)
-			}
-		}()
-		_ = obj.GetPrivacyEnabled() // Should return zero value
-	})
-
-}
-
-func TestSettersMarkExplicitUpdateDomainRequestBodyPrivacyEnabled(t *testing.T) {
-	t.Run("SetPrivacyEnabled_MarksExplicit", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyPrivacyEnabled{}
-		var fernTestValuePrivacyEnabled bool
-
-		// Act
-		obj.SetPrivacyEnabled(fernTestValuePrivacyEnabled)
-
-		// Assert - object with explicitly set field can be marshaled/unmarshaled
-		bytes, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed for test setup")
-
-		// This test ensures JSON marshaling and unmarshaling succeed when the field has a zero/nil value
-		// Detect if marshaled JSON is an object or primitive to use correct unmarshal target
-		if len(bytes) > 0 && bytes[0] == '{' {
-			// JSON object - unmarshal into map
-			var unmarshaled map[string]interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		} else {
-			// JSON primitive (string, number, boolean, null) - unmarshal into interface{}
-			var unmarshaled interface{}
-			err = json.Unmarshal(bytes, &unmarshaled)
-			require.NoError(t, err, "unmarshaling should succeed for test verification")
-		}
-
-		// Note: This does not explicitly assert the presence of a specific JSON field
-		// It verifies that setting a field via setter allows successful JSON round-trip
-	})
-
-}
-
 func TestJSONMarshalingAuthCodeResponse(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -7156,105 +6958,6 @@ func TestJSONMarshalingSearchResult(t *testing.T) {
 	})
 }
 
-func TestJSONMarshalingUpdateDomainRequestBodyAutorenewEnabled(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyAutorenewEnabled{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled UpdateDomainRequestBodyAutorenewEnabled
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateDomainRequestBodyAutorenewEnabled
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateDomainRequestBodyAutorenewEnabled
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingUpdateDomainRequestBodyLocked(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyLocked{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled UpdateDomainRequestBodyLocked
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateDomainRequestBodyLocked
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateDomainRequestBodyLocked
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
-func TestJSONMarshalingUpdateDomainRequestBodyPrivacyEnabled(t *testing.T) {
-	t.Run("MarshalUnmarshal", func(t *testing.T) {
-		t.Parallel()
-		// Arrange
-		obj := &UpdateDomainRequestBodyPrivacyEnabled{}
-
-		// Act - Marshal to JSON
-		data, err := json.Marshal(obj)
-		require.NoError(t, err, "marshaling should succeed")
-		assert.NotNil(t, data, "marshaled data should not be nil")
-		assert.NotEmpty(t, data, "marshaled data should not be empty")
-
-		// Unmarshal back and verify round-trip
-		var unmarshaled UpdateDomainRequestBodyPrivacyEnabled
-		err = json.Unmarshal(data, &unmarshaled)
-		assert.NoError(t, err, "round-trip unmarshal should succeed")
-	})
-
-	t.Run("UnmarshalInvalidJSON", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateDomainRequestBodyPrivacyEnabled
-		err := json.Unmarshal([]byte(`{invalid json}`), &obj)
-		assert.Error(t, err, "unmarshaling invalid JSON should return an error")
-	})
-
-	t.Run("UnmarshalEmptyObject", func(t *testing.T) {
-		t.Parallel()
-		var obj UpdateDomainRequestBodyPrivacyEnabled
-		err := json.Unmarshal([]byte(`{}`), &obj)
-		assert.NoError(t, err, "unmarshaling empty object should succeed")
-	})
-}
-
 func TestJSONMarshalingZoneCheckResponse(t *testing.T) {
 	t.Run("MarshalUnmarshal", func(t *testing.T) {
 		t.Parallel()
@@ -7492,54 +7195,6 @@ func TestStringSearchResult(t *testing.T) {
 	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *SearchResult
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringUpdateDomainRequestBodyAutorenewEnabled(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateDomainRequestBodyAutorenewEnabled{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyAutorenewEnabled
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringUpdateDomainRequestBodyLocked(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateDomainRequestBodyLocked{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyLocked
-		result := obj.String()
-		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
-	})
-}
-
-func TestStringUpdateDomainRequestBodyPrivacyEnabled(t *testing.T) {
-	t.Run("StringMethod", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateDomainRequestBodyPrivacyEnabled{}
-		result := obj.String()
-		assert.NotEmpty(t, result, "String() should return a non-empty representation")
-	})
-
-	t.Run("StringMethod_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyPrivacyEnabled
 		result := obj.String()
 		assert.Equal(t, "<nil>", result, "String() should return <nil> for nil receiver")
 	})
@@ -7882,75 +7537,6 @@ func TestExtraPropertiesSearchResult(t *testing.T) {
 	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
 		t.Parallel()
 		var obj *SearchResult
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesUpdateDomainRequestBodyAutorenewEnabled(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateDomainRequestBodyAutorenewEnabled{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyAutorenewEnabled
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesUpdateDomainRequestBodyLocked(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateDomainRequestBodyLocked{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyLocked
-		extraProps := obj.GetExtraProperties()
-		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
-	})
-}
-
-func TestExtraPropertiesUpdateDomainRequestBodyPrivacyEnabled(t *testing.T) {
-	t.Run("GetExtraProperties", func(t *testing.T) {
-		t.Parallel()
-		obj := &UpdateDomainRequestBodyPrivacyEnabled{}
-		// Should not panic when calling GetExtraProperties()
-		defer func() {
-			if r := recover(); r != nil {
-				t.Errorf("GetExtraProperties() panicked: %v", r)
-			}
-		}()
-		extraProps := obj.GetExtraProperties()
-		// Result can be nil or an empty/non-empty map
-		_ = extraProps
-	})
-
-	t.Run("GetExtraProperties_NilReceiver", func(t *testing.T) {
-		t.Parallel()
-		var obj *UpdateDomainRequestBodyPrivacyEnabled
 		extraProps := obj.GetExtraProperties()
 		assert.Nil(t, extraProps, "nil receiver should return nil without panicking")
 	})

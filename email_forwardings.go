@@ -18,7 +18,7 @@ var (
 type CreateEmailForwardingRequest struct {
 	// DomainName is the domain part of the email address to forward.
 	DomainName string `json:"-" url:"-"`
-	// EmailBox is the user portion of the email address to forward. If your email is "admin@example.com", it would just be "admin"
+	// EmailBox is the user portion of the email address to forward. If your email is "admin@example.com", it would just be "admin". Wildcard and catch-all values (such as "*") are not supported.
 	EmailBox string `json:"emailBox" url:"-"`
 	// EmailTo is the entire email address to forward email to.
 	EmailTo string `json:"emailTo" url:"-"`
