@@ -451,6 +451,7 @@ func (c *Client) RenewDomain(
 //
 //	request := &coreapigo.DomainsSetContactsBody{
 //	    DomainName: "example.com",
+//	    Contacts: &coreapigo.ContactsRequest{},
 //	}
 //	client.Domains.SetContacts(
 //	    context.TODO(),

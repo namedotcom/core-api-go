@@ -438,6 +438,7 @@ func TestDomainsSetContactsWithWireMock(
 	)
 	request := &coreapigo.DomainsSetContactsBody{
 		DomainName: "example.com",
+		Contacts:   &coreapigo.ContactsRequest{},
 	}
 	_, invocationErr := client.Domains.SetContacts(
 		context.TODO(),

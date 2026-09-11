@@ -131,6 +131,7 @@ func (c *Client) GetEmailForwarding(
 //	request := &coreapigo.EmailForwardingsUpdateEmailForwardingBody{
 //	    DomainName: "domainName",
 //	    EmailBox: "emailBox",
+//	    EmailTo: "emailTo",
 //	}
 //	client.EmailForwardings.UpdateEmailForwarding(
 //	    context.TODO(),

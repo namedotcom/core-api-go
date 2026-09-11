@@ -206,7 +206,7 @@ type UpdateVanityNameserverBody struct {
 	// The hostname of the vanity nameserver to update.
 	Hostname string `json:"-" url:"-"`
 	// IPs is the updated list of IP addresses to be used for glue records for this vanity nameserver. Providing an empty array will remove all existing IPs.
-	Ips []string `json:"ips,omitempty" url:"-"`
+	Ips []string `json:"ips" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`

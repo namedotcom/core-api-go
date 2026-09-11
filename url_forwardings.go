@@ -791,7 +791,7 @@ func (u URLForwardingType) Ptr() *URLForwardingType {
 	return &u
 }
 
-// Fields for updating a URL forwarding entry. Omit a property to leave it unchanged. An empty `host` string is the apex, not "unchanged".
+// Fields for updating a URL forwarding entry. Omit a property to leave it unchanged. An empty `host` string is the apex, not "unchanged". At least one property must be present; an empty body is rejected.
 var (
 	uRLForwardingUpdateFieldForwardsTo = big.NewInt(1 << 0)
 	uRLForwardingUpdateFieldHost       = big.NewInt(1 << 1)

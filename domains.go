@@ -879,7 +879,7 @@ var (
 type DomainsSetContactsBody struct {
 	// DomainName is the domain name to set the contacts for.
 	DomainName string           `json:"-" url:"-"`
-	Contacts   *ContactsRequest `json:"contacts,omitempty" url:"-"`
+	Contacts   *ContactsRequest `json:"contacts" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`

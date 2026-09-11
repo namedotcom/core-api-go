@@ -442,7 +442,7 @@ func TestSettersEmailForwardingsUpdateEmailForwardingBody(t *testing.T) {
 
 	t.Run("SetEmailTo", func(t *testing.T) {
 		obj := &EmailForwardingsUpdateEmailForwardingBody{}
-		var fernTestValueEmailTo *string
+		var fernTestValueEmailTo string
 		obj.SetEmailTo(fernTestValueEmailTo)
 		assert.Equal(t, fernTestValueEmailTo, obj.EmailTo)
 		assert.NotNil(t, obj.explicitFields)
@@ -517,7 +517,7 @@ func TestSettersMarkExplicitEmailForwardingsUpdateEmailForwardingBody(t *testing
 		t.Parallel()
 		// Arrange
 		obj := &EmailForwardingsUpdateEmailForwardingBody{}
-		var fernTestValueEmailTo *string
+		var fernTestValueEmailTo string
 
 		// Act
 		obj.SetEmailTo(fernTestValueEmailTo)

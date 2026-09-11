@@ -206,7 +206,7 @@ type EmailForwardingsUpdateEmailForwardingBody struct {
 	// EmailBox is the user portion of the email address to forward.
 	EmailBox string `json:"-" url:"-"`
 	// EmailTo is the entire email address to forward email to.
-	EmailTo *string `json:"emailTo,omitempty" url:"-"`
+	EmailTo string `json:"emailTo" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -235,7 +235,7 @@ func (e *EmailForwardingsUpdateEmailForwardingBody) SetEmailBox(emailBox string)
 
 // SetEmailTo sets the EmailTo field and marks it as non-optional;
 // this prevents an empty or null value for this field from being omitted during serialization.
-func (e *EmailForwardingsUpdateEmailForwardingBody) SetEmailTo(emailTo *string) {
+func (e *EmailForwardingsUpdateEmailForwardingBody) SetEmailTo(emailTo string) {
 	e.EmailTo = emailTo
 	e.require(emailForwardingsUpdateEmailForwardingBodyFieldEmailTo)
 }

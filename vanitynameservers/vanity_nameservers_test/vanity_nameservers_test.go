@@ -181,6 +181,10 @@ func TestVanityNameserversUpdateVanityNameserverWithWireMock(
 	request := &coreapigo.UpdateVanityNameserverBody{
 		DomainName: "example.com",
 		Hostname:   "ns1.example.com",
+		Ips: []string{
+			"192.168.1.10",
+			"2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+		},
 	}
 	_, invocationErr := client.VanityNameservers.UpdateVanityNameserver(
 		context.TODO(),

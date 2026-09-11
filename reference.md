@@ -1362,6 +1362,7 @@ When registrant contact information is updated, validation may be triggered if t
 ```go
 request := &coreapigo.DomainsSetContactsBody{
     DomainName: "example.com",
+    Contacts: &coreapigo.ContactsRequest{},
 }
 client.Domains.SetContacts(
     context.TODO(),
@@ -2358,6 +2359,7 @@ Updates the destination email address for an existing forwarding rule.
 request := &coreapigo.EmailForwardingsUpdateEmailForwardingBody{
     DomainName: "domainName",
     EmailBox: "emailBox",
+    EmailTo: "emailTo",
 }
 client.EmailForwardings.UpdateEmailForwarding(
     context.TODO(),
@@ -2393,7 +2395,7 @@ client.EmailForwardings.UpdateEmailForwarding(
 <dl>
 <dd>
 
-**emailTo:** `*string` — EmailTo is the entire email address to forward email to.
+**emailTo:** `string` — EmailTo is the entire email address to forward email to.
     
 </dd>
 </dl>
@@ -3916,6 +3918,10 @@ Updates the glue record IP addresses for a vanity nameserver.
 request := &coreapigo.UpdateVanityNameserverBody{
     DomainName: "example.com",
     Hostname: "ns1.example.com",
+    Ips: []string{
+        "192.168.1.10",
+        "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+    },
 }
 client.VanityNameservers.UpdateVanityNameserver(
     context.TODO(),

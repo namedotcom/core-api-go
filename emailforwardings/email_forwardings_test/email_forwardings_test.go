@@ -178,6 +178,7 @@ func TestEmailForwardingsUpdateEmailForwardingWithWireMock(
 	request := &coreapigo.EmailForwardingsUpdateEmailForwardingBody{
 		DomainName: "domainName",
 		EmailBox:   "emailBox",
+		EmailTo:    "emailTo",
 	}
 	_, invocationErr := client.EmailForwardings.UpdateEmailForwarding(
 		context.TODO(),
