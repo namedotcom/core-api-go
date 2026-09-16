@@ -181,6 +181,7 @@ const (
 	AvailableWebhooksDomainTransferInternalIn        AvailableWebhooks = "domain.transfer.internal_in"
 	AvailableWebhooksDomainTransferInternalOut       AvailableWebhooks = "domain.transfer.internal_out"
 	AvailableWebhooksDomainRegistryRejection         AvailableWebhooks = "domain.registry.rejection"
+	AvailableWebhooksDomainRegistryComplianceNotice  AvailableWebhooks = "domain.registry.compliance_notice"
 	AvailableWebhooksDomainExpiration                AvailableWebhooks = "domain.expiration"
 )
 
@@ -204,6 +205,8 @@ func NewAvailableWebhooksFromString(s string) (AvailableWebhooks, error) {
 		return AvailableWebhooksDomainTransferInternalOut, nil
 	case "domain.registry.rejection":
 		return AvailableWebhooksDomainRegistryRejection, nil
+	case "domain.registry.compliance_notice":
+		return AvailableWebhooksDomainRegistryComplianceNotice, nil
 	case "domain.expiration":
 		return AvailableWebhooksDomainExpiration, nil
 	}

@@ -2581,6 +2581,384 @@ func (d DomainLockStatusChangeLockType) Ptr() *DomainLockStatusChangeLockType {
 // The punycode-encoded value of the domain name.
 type DomainName = string
 
+// Payload sent when a registry reports that a domain must remediate a policy compliance issue before a deadline. By default, name.com emails the registrant; subscribing replaces that email so you can notify the end user from these fields. If you have signed an addendum to assume all email responsibility, name.com does not send the email and this webhook is the only delivery path. Whitelabeled branding is applied to the email when your account has it configured.
+var (
+	domainRegistryComplianceNoticeFieldEventName                 = big.NewInt(1 << 0)
+	domainRegistryComplianceNoticeFieldDomainName                = big.NewInt(1 << 1)
+	domainRegistryComplianceNoticeFieldPolicy                    = big.NewInt(1 << 2)
+	domainRegistryComplianceNoticeFieldPolicyName                = big.NewInt(1 << 3)
+	domainRegistryComplianceNoticeFieldPolicyURL                 = big.NewInt(1 << 4)
+	domainRegistryComplianceNoticeFieldRegistryName              = big.NewInt(1 << 5)
+	domainRegistryComplianceNoticeFieldRegistryEmail             = big.NewInt(1 << 6)
+	domainRegistryComplianceNoticeFieldOriginalMessageID         = big.NewInt(1 << 7)
+	domainRegistryComplianceNoticeFieldIssueDescription          = big.NewInt(1 << 8)
+	domainRegistryComplianceNoticeFieldRemediationInstructions   = big.NewInt(1 << 9)
+	domainRegistryComplianceNoticeFieldAgreementReminder         = big.NewInt(1 << 10)
+	domainRegistryComplianceNoticeFieldNoncomplianceConsequences = big.NewInt(1 << 11)
+	domainRegistryComplianceNoticeFieldContactInstructions       = big.NewInt(1 << 12)
+	domainRegistryComplianceNoticeFieldComplianceDeadline        = big.NewInt(1 << 13)
+	domainRegistryComplianceNoticeFieldRemediationPeriodDays     = big.NewInt(1 << 14)
+)
+
+type DomainRegistryComplianceNotice struct {
+	// The name of the subscription event.
+	EventName DomainRegistryComplianceNoticeEventName `json:"eventName" url:"eventName"`
+	// The domain subject to the registry compliance notice.
+	DomainName string `json:"domainName" url:"domainName"`
+	// Stable, namespaced identifier for the registry policy requiring remediation. Branch on this value rather than any human-readable field.
+	Policy DomainRegistryComplianceNoticePolicy `json:"policy" url:"policy"`
+	// Human-readable name of the registration policy associated with the compliance requirement.
+	PolicyName string `json:"policyName" url:"policyName"`
+	// URL of the registration policy associated with the compliance requirement.
+	PolicyURL string `json:"policyUrl" url:"policyUrl"`
+	// Human-readable name of the registry that issued the compliance notice.
+	RegistryName string `json:"registryName" url:"registryName"`
+	// Registry mailbox for evidence and questions, when the registry publishes one. Include it in the message body when notifying the registrant. Omitted when the registry does not publish a contact address.
+	RegistryEmail *string `json:"registryEmail,omitempty" url:"registryEmail,omitempty"`
+	// RFC 5322 Message-ID of the registry's original notice, when available. Omitted when the registry notice had no Message-ID.
+	OriginalMessageID *string `json:"originalMessageId,omitempty" url:"originalMessageId,omitempty"`
+	// Human-readable explanation of the compliance issue identified by the registry. Suitable for forwarding to the registrant. The wording may change; do not branch on this text.
+	IssueDescription string `json:"issueDescription" url:"issueDescription"`
+	// Human-readable instructions for resolving the compliance issue. Suitable for forwarding to the registrant. The wording may change; do not branch on this text.
+	RemediationInstructions string `json:"remediationInstructions" url:"remediationInstructions"`
+	// Human-readable reminder that the registrant agreed to the applicable registration policy. Suitable for forwarding to the registrant. The wording may change; do not branch on this text.
+	AgreementReminder string `json:"agreementReminder" url:"agreementReminder"`
+	// Human-readable explanation of what the registry may do if the issue is not remediated by `complianceDeadline`. Suitable for forwarding to the registrant.
+	NoncomplianceConsequences string `json:"noncomplianceConsequences" url:"noncomplianceConsequences"`
+	// Human-readable instruction for the registrant to contact the registry (not the registrar) if they believe the domain is compliant or need to submit evidence. Suitable for forwarding.
+	ContactInstructions string `json:"contactInstructions" url:"contactInstructions"`
+	// The deadline by which the compliance issue must be remediated.
+	ComplianceDeadline time.Time `json:"complianceDeadline" url:"complianceDeadline"`
+	// The remediation period supplied by the registry, in days.
+	RemediationPeriodDays int `json:"remediationPeriodDays" url:"remediationPeriodDays"`
+
+	// Private bitmask of fields set to an explicit value and therefore not to be omitted
+	explicitFields *big.Int `json:"-" url:"-"`
+
+	extraProperties map[string]interface{}
+	rawJSON         json.RawMessage
+}
+
+func (d *DomainRegistryComplianceNotice) GetEventName() DomainRegistryComplianceNoticeEventName {
+	if d == nil {
+		return ""
+	}
+	return d.EventName
+}
+
+func (d *DomainRegistryComplianceNotice) GetDomainName() string {
+	if d == nil {
+		return ""
+	}
+	return d.DomainName
+}
+
+func (d *DomainRegistryComplianceNotice) GetPolicy() DomainRegistryComplianceNoticePolicy {
+	if d == nil {
+		return ""
+	}
+	return d.Policy
+}
+
+func (d *DomainRegistryComplianceNotice) GetPolicyName() string {
+	if d == nil {
+		return ""
+	}
+	return d.PolicyName
+}
+
+func (d *DomainRegistryComplianceNotice) GetPolicyURL() string {
+	if d == nil {
+		return ""
+	}
+	return d.PolicyURL
+}
+
+func (d *DomainRegistryComplianceNotice) GetRegistryName() string {
+	if d == nil {
+		return ""
+	}
+	return d.RegistryName
+}
+
+func (d *DomainRegistryComplianceNotice) GetRegistryEmail() *string {
+	if d == nil {
+		return nil
+	}
+	return d.RegistryEmail
+}
+
+func (d *DomainRegistryComplianceNotice) GetOriginalMessageID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.OriginalMessageID
+}
+
+func (d *DomainRegistryComplianceNotice) GetIssueDescription() string {
+	if d == nil {
+		return ""
+	}
+	return d.IssueDescription
+}
+
+func (d *DomainRegistryComplianceNotice) GetRemediationInstructions() string {
+	if d == nil {
+		return ""
+	}
+	return d.RemediationInstructions
+}
+
+func (d *DomainRegistryComplianceNotice) GetAgreementReminder() string {
+	if d == nil {
+		return ""
+	}
+	return d.AgreementReminder
+}
+
+func (d *DomainRegistryComplianceNotice) GetNoncomplianceConsequences() string {
+	if d == nil {
+		return ""
+	}
+	return d.NoncomplianceConsequences
+}
+
+func (d *DomainRegistryComplianceNotice) GetContactInstructions() string {
+	if d == nil {
+		return ""
+	}
+	return d.ContactInstructions
+}
+
+func (d *DomainRegistryComplianceNotice) GetComplianceDeadline() time.Time {
+	if d == nil {
+		return time.Time{}
+	}
+	return d.ComplianceDeadline
+}
+
+func (d *DomainRegistryComplianceNotice) GetRemediationPeriodDays() int {
+	if d == nil {
+		return 0
+	}
+	return d.RemediationPeriodDays
+}
+
+func (d *DomainRegistryComplianceNotice) GetExtraProperties() map[string]interface{} {
+	if d == nil {
+		return nil
+	}
+	return d.extraProperties
+}
+
+func (d *DomainRegistryComplianceNotice) require(field *big.Int) {
+	if d.explicitFields == nil {
+		d.explicitFields = big.NewInt(0)
+	}
+	d.explicitFields.Or(d.explicitFields, field)
+}
+
+// SetEventName sets the EventName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetEventName(eventName DomainRegistryComplianceNoticeEventName) {
+	d.EventName = eventName
+	d.require(domainRegistryComplianceNoticeFieldEventName)
+}
+
+// SetDomainName sets the DomainName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetDomainName(domainName string) {
+	d.DomainName = domainName
+	d.require(domainRegistryComplianceNoticeFieldDomainName)
+}
+
+// SetPolicy sets the Policy field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetPolicy(policy DomainRegistryComplianceNoticePolicy) {
+	d.Policy = policy
+	d.require(domainRegistryComplianceNoticeFieldPolicy)
+}
+
+// SetPolicyName sets the PolicyName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetPolicyName(policyName string) {
+	d.PolicyName = policyName
+	d.require(domainRegistryComplianceNoticeFieldPolicyName)
+}
+
+// SetPolicyURL sets the PolicyURL field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetPolicyURL(policyURL string) {
+	d.PolicyURL = policyURL
+	d.require(domainRegistryComplianceNoticeFieldPolicyURL)
+}
+
+// SetRegistryName sets the RegistryName field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetRegistryName(registryName string) {
+	d.RegistryName = registryName
+	d.require(domainRegistryComplianceNoticeFieldRegistryName)
+}
+
+// SetRegistryEmail sets the RegistryEmail field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetRegistryEmail(registryEmail *string) {
+	d.RegistryEmail = registryEmail
+	d.require(domainRegistryComplianceNoticeFieldRegistryEmail)
+}
+
+// SetOriginalMessageID sets the OriginalMessageID field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetOriginalMessageID(originalMessageID *string) {
+	d.OriginalMessageID = originalMessageID
+	d.require(domainRegistryComplianceNoticeFieldOriginalMessageID)
+}
+
+// SetIssueDescription sets the IssueDescription field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetIssueDescription(issueDescription string) {
+	d.IssueDescription = issueDescription
+	d.require(domainRegistryComplianceNoticeFieldIssueDescription)
+}
+
+// SetRemediationInstructions sets the RemediationInstructions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetRemediationInstructions(remediationInstructions string) {
+	d.RemediationInstructions = remediationInstructions
+	d.require(domainRegistryComplianceNoticeFieldRemediationInstructions)
+}
+
+// SetAgreementReminder sets the AgreementReminder field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetAgreementReminder(agreementReminder string) {
+	d.AgreementReminder = agreementReminder
+	d.require(domainRegistryComplianceNoticeFieldAgreementReminder)
+}
+
+// SetNoncomplianceConsequences sets the NoncomplianceConsequences field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetNoncomplianceConsequences(noncomplianceConsequences string) {
+	d.NoncomplianceConsequences = noncomplianceConsequences
+	d.require(domainRegistryComplianceNoticeFieldNoncomplianceConsequences)
+}
+
+// SetContactInstructions sets the ContactInstructions field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetContactInstructions(contactInstructions string) {
+	d.ContactInstructions = contactInstructions
+	d.require(domainRegistryComplianceNoticeFieldContactInstructions)
+}
+
+// SetComplianceDeadline sets the ComplianceDeadline field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetComplianceDeadline(complianceDeadline time.Time) {
+	d.ComplianceDeadline = complianceDeadline
+	d.require(domainRegistryComplianceNoticeFieldComplianceDeadline)
+}
+
+// SetRemediationPeriodDays sets the RemediationPeriodDays field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainRegistryComplianceNotice) SetRemediationPeriodDays(remediationPeriodDays int) {
+	d.RemediationPeriodDays = remediationPeriodDays
+	d.require(domainRegistryComplianceNoticeFieldRemediationPeriodDays)
+}
+
+func (d *DomainRegistryComplianceNotice) UnmarshalJSON(data []byte) error {
+	type embed DomainRegistryComplianceNotice
+	var unmarshaler = struct {
+		embed
+		ComplianceDeadline *internal.DateTime `json:"complianceDeadline"`
+	}{
+		embed: embed(*d),
+	}
+	if err := json.Unmarshal(data, &unmarshaler); err != nil {
+		return err
+	}
+	*d = DomainRegistryComplianceNotice(unmarshaler.embed)
+	d.ComplianceDeadline = unmarshaler.ComplianceDeadline.Time()
+	extraProperties, err := internal.ExtractExtraProperties(data, *d)
+	if err != nil {
+		return err
+	}
+	d.extraProperties = extraProperties
+	d.rawJSON = json.RawMessage(data)
+	return nil
+}
+
+func (d *DomainRegistryComplianceNotice) MarshalJSON() ([]byte, error) {
+	type embed DomainRegistryComplianceNotice
+	var marshaler = struct {
+		embed
+		ComplianceDeadline *internal.DateTime `json:"complianceDeadline"`
+	}{
+		embed:              embed(*d),
+		ComplianceDeadline: internal.NewDateTime(d.ComplianceDeadline),
+	}
+	explicitMarshaler := internal.HandleExplicitFields(marshaler, d.explicitFields)
+	return json.Marshal(explicitMarshaler)
+}
+
+func (d *DomainRegistryComplianceNotice) String() string {
+	if d == nil {
+		return "<nil>"
+	}
+	if len(d.rawJSON) > 0 {
+		if value, err := internal.StringifyJSON(d.rawJSON); err == nil {
+			return value
+		}
+	}
+	if value, err := internal.StringifyJSON(d); err == nil {
+		return value
+	}
+	return fmt.Sprintf("%#v", d)
+}
+
+// The name of the subscription event.
+type DomainRegistryComplianceNoticeEventName string
+
+const (
+	DomainRegistryComplianceNoticeEventNameDomainRegistryComplianceNotice DomainRegistryComplianceNoticeEventName = "domain.registry.compliance_notice"
+)
+
+func NewDomainRegistryComplianceNoticeEventNameFromString(s string) (DomainRegistryComplianceNoticeEventName, error) {
+	switch s {
+	case "domain.registry.compliance_notice":
+		return DomainRegistryComplianceNoticeEventNameDomainRegistryComplianceNotice, nil
+	}
+	var t DomainRegistryComplianceNoticeEventName
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DomainRegistryComplianceNoticeEventName) Ptr() *DomainRegistryComplianceNoticeEventName {
+	return &d
+}
+
+// Stable, namespaced identifier for the registry policy requiring remediation. Branch on this value rather than any human-readable field.
+type DomainRegistryComplianceNoticePolicy string
+
+const (
+	DomainRegistryComplianceNoticePolicyNewResolvesWithin100Days DomainRegistryComplianceNoticePolicy = "new_resolves_within_100_days"
+	DomainRegistryComplianceNoticePolicyNewUsedForAction         DomainRegistryComplianceNoticePolicy = "new_used_for_action"
+	DomainRegistryComplianceNoticePolicyNewAccountForReview      DomainRegistryComplianceNoticePolicy = "new_account_for_review"
+)
+
+func NewDomainRegistryComplianceNoticePolicyFromString(s string) (DomainRegistryComplianceNoticePolicy, error) {
+	switch s {
+	case "new_resolves_within_100_days":
+		return DomainRegistryComplianceNoticePolicyNewResolvesWithin100Days, nil
+	case "new_used_for_action":
+		return DomainRegistryComplianceNoticePolicyNewUsedForAction, nil
+	case "new_account_for_review":
+		return DomainRegistryComplianceNoticePolicyNewAccountForReview, nil
+	}
+	var t DomainRegistryComplianceNoticePolicy
+	return "", fmt.Errorf("%s is not a valid %T", s, t)
+}
+
+func (d DomainRegistryComplianceNoticePolicy) Ptr() *DomainRegistryComplianceNoticePolicy {
+	return &d
+}
+
 // Payload sent when a domain create request fails after asynchronous registry processing. Most domain creates succeed immediately; this event covers the case where the registry initially accepts processing but later rejects or fails the registration.
 var (
 	domainRegistryRejectionFieldEventName   = big.NewInt(1 << 0)
