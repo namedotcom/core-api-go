@@ -4057,6 +4057,7 @@ var (
 	domainTransferStatusChangeFieldEventName  = big.NewInt(1 << 0)
 	domainTransferStatusChangeFieldDomainName = big.NewInt(1 << 1)
 	domainTransferStatusChangeFieldStatus     = big.NewInt(1 << 2)
+	domainTransferStatusChangeFieldWarning    = big.NewInt(1 << 3)
 )
 
 type DomainTransferStatusChange struct {
@@ -4065,6 +4066,8 @@ type DomainTransferStatusChange struct {
 	// The domain that the transfer status has changed for
 	DomainName string         `json:"domainName" url:"domainName"`
 	Status     TransferStatus `json:"status" url:"status"`
+	// Included only when `status` is `completed` and one or more submitted contacts could not be applied and were replaced by account default contacts.  Omitted otherwise.
+	Warning *string `json:"warning,omitempty" url:"warning,omitempty"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -4092,6 +4095,13 @@ func (d *DomainTransferStatusChange) GetStatus() TransferStatus {
 		return ""
 	}
 	return d.Status
+}
+
+func (d *DomainTransferStatusChange) GetWarning() *string {
+	if d == nil {
+		return nil
+	}
+	return d.Warning
 }
 
 func (d *DomainTransferStatusChange) GetExtraProperties() map[string]interface{} {
@@ -4127,6 +4137,13 @@ func (d *DomainTransferStatusChange) SetDomainName(domainName string) {
 func (d *DomainTransferStatusChange) SetStatus(status TransferStatus) {
 	d.Status = status
 	d.require(domainTransferStatusChangeFieldStatus)
+}
+
+// SetWarning sets the Warning field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (d *DomainTransferStatusChange) SetWarning(warning *string) {
+	d.Warning = warning
+	d.require(domainTransferStatusChangeFieldWarning)
 }
 
 func (d *DomainTransferStatusChange) UnmarshalJSON(data []byte) error {

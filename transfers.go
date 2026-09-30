@@ -161,6 +161,7 @@ var (
 	createTransferRequestFieldDomainName     = big.NewInt(1 << 1)
 	createTransferRequestFieldPrivacyEnabled = big.NewInt(1 << 2)
 	createTransferRequestFieldPurchasePrice  = big.NewInt(1 << 3)
+	createTransferRequestFieldContacts       = big.NewInt(1 << 4)
 )
 
 type CreateTransferRequest struct {
@@ -172,6 +173,8 @@ type CreateTransferRequest struct {
 	PrivacyEnabled *bool `json:"privacyEnabled,omitempty" url:"-"`
 	// PurchasePrice is the USD inbound transfer fee, before VAT. VAT is applied when applicable and must not be included here. If sent, must match Get Pricing `transferPrice` exactly or the request will fail.. **Omit** for standard (non-premium) transfers. **Required** for premium transfers — use `transferPrice` from [Get Pricing](/api/v1/reference/domains/get-pricing-for-domain).
 	PurchasePrice *float64 `json:"purchasePrice,omitempty" url:"-"`
+	// WHOIS contacts to apply when the domain lands in the account. If omitted, the gaining account's default contacts are applied. If provided, include any roles to override; omitted roles use the gaining account's default contacts. Each supplied role must include complete contact fields. A registrar contact-change transfer lock may apply according to the gaining account's settings.
+	Contacts *ContactsRequest `json:"contacts,omitempty" url:"-"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -210,6 +213,13 @@ func (c *CreateTransferRequest) SetPrivacyEnabled(privacyEnabled *bool) {
 func (c *CreateTransferRequest) SetPurchasePrice(purchasePrice *float64) {
 	c.PurchasePrice = purchasePrice
 	c.require(createTransferRequestFieldPurchasePrice)
+}
+
+// SetContacts sets the Contacts field and marks it as non-optional;
+// this prevents an empty or null value for this field from being omitted during serialization.
+func (c *CreateTransferRequest) SetContacts(contacts *ContactsRequest) {
+	c.Contacts = contacts
+	c.require(createTransferRequestFieldContacts)
 }
 
 func (c *CreateTransferRequest) UnmarshalJSON(data []byte) error {
