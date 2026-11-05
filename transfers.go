@@ -867,16 +867,13 @@ func (l *ListTransfersResponse) String() string {
 // Transfer contains all relevant data for a domain transfer to name.com.
 var (
 	transferFieldDomainName = big.NewInt(1 << 0)
-	transferFieldEmail      = big.NewInt(1 << 1)
-	transferFieldStatus     = big.NewInt(1 << 2)
+	transferFieldStatus     = big.NewInt(1 << 1)
 )
 
 type Transfer struct {
 	// DomainName is the domain to be transfered to name.com.
-	DomainName string `json:"domainName" url:"domainName"`
-	// Email is the email address that the approval email was sent to. Not every TLD requries an approval email. This is usually pulled from Whois.
-	Email  *string        `json:"email,omitempty" url:"email,omitempty"`
-	Status TransferStatus `json:"status" url:"status"`
+	DomainName string         `json:"domainName" url:"domainName"`
+	Status     TransferStatus `json:"status" url:"status"`
 
 	// Private bitmask of fields set to an explicit value and therefore not to be omitted
 	explicitFields *big.Int `json:"-" url:"-"`
@@ -890,13 +887,6 @@ func (t *Transfer) GetDomainName() string {
 		return ""
 	}
 	return t.DomainName
-}
-
-func (t *Transfer) GetEmail() *string {
-	if t == nil {
-		return nil
-	}
-	return t.Email
 }
 
 func (t *Transfer) GetStatus() TransferStatus {
@@ -925,13 +915,6 @@ func (t *Transfer) require(field *big.Int) {
 func (t *Transfer) SetDomainName(domainName string) {
 	t.DomainName = domainName
 	t.require(transferFieldDomainName)
-}
-
-// SetEmail sets the Email field and marks it as non-optional;
-// this prevents an empty or null value for this field from being omitted during serialization.
-func (t *Transfer) SetEmail(email *string) {
-	t.Email = email
-	t.require(transferFieldEmail)
 }
 
 // SetStatus sets the Status field and marks it as non-optional;

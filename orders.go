@@ -347,7 +347,7 @@ var (
 type Order struct {
 	// AuthAmount is the amount authorized to complete the order purchase.
 	AuthAmount *float64 `json:"authAmount,omitempty" url:"authAmount,omitempty"`
-	// CreateDate is the date the order was placed.
+	// CreateDate is the UTC date and time the order was placed.
 	CreateDate *string `json:"createDate,omitempty" url:"createDate,omitempty"`
 	// Currency indicates currency of the order ('USD', 'CNY').
 	Currency *string `json:"currency,omitempty" url:"currency,omitempty"`
